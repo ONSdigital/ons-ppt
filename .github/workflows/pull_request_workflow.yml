@@ -1,0 +1,39 @@
+name: "Pull Request Workflow"
+on:
+  pull_request:
+    # The specific activity types are listed here to include "labeled" and "unlabeled"
+    # (which are not included by default for the "pull_request" trigger).
+    # This is needed to allow skipping enforcement of the changelog in PRs with specific labels,
+    # as defined in the (optional) "skipLabels" property.
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+
+jobs:
+  # Enforces the update of a changelog file on every pull request.
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+    # checks for updates to CHANGELOG.md
+    # https://github.com/marketplace/actions/changelog-enforcer
+    - uses: dangoslen/changelog-enforcer@v3
+
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Install lintr (R linter)
+        run: Rscript -e 'install.packages("lintr", repos="https://cloud.r-project.org")'
+
+      - name: Run pre-commit checks
+        run: pre-commit run --all-files
