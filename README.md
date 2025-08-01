@@ -83,6 +83,6 @@ ons-ppt/
 
 ## 🛡️ Contributing
 
-1. Please do **not** push directly to the `main` branch.  
+1. Please do **not** push directly to the `main` branch.
 2. Submit changes via a pull request.
 3. Ensure all pre-commit checks pass before submitting.
