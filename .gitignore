@@ -20,6 +20,11 @@ pythonenv*
 pyvenv.cfg
 pip-selfcheck.json
 
+# R build files
+.Rproj.user
+.Rhistory
+.RData
+
 # mkdocs documentation
 /site
 
@@ -87,4 +92,3 @@ bld/
 *.[Cc]ache
 # but keep track of directories ending in .cache
 !?*.[Cc]ache/
-.Rproj.user
