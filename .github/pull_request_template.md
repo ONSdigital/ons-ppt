@@ -14,7 +14,6 @@ Please include a summary of the changes.
 
 ## Checklist:
 
-
 - [ ] **Confidentiality**: Has any sensitive data been removed from code, properly protected, anonymised, or encrypted where necessary?
 - [ ] **Clear naming conventions**: Are variables, functions, and classes named descriptively and consistently?
 - [ ] **Modularity**: Is the code divided into clear, reusable functions or modules?
