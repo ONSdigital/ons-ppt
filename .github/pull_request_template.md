@@ -14,9 +14,16 @@ Please include a summary of the changes.
 
 ## Checklist:
 
-- [ ] I have followed the [Contributing](https://github.com/ONSdigital/onsppt/CONTRIBUTING.md) guide.
-- [ ] I have merged the latest commits from the main branch
-- [ ] All the GitHub Checks are :white_check_mark:
+
+- [ ] **Confidentiality**: Has any sensitive data been removed from code, properly protected, anonymised, or encrypted where necessary?
+- [ ] **Clear naming conventions**: Are variables, functions, and classes named descriptively and consistently?
+- [ ] **Modularity**: Is the code divided into clear, reusable functions or modules?
+- [ ] **Code comments**: Are there sufficient comments explaining key parts of the logic, especially complex ones?
+- [ ] **Code formatting**: Is the code written in both R/Python language?
+- [ ] **Avoid hardcoding**: Have any hardcoded values values (like file paths or constants) hardcoded been removed?
+- [ ] **Resource management**: Does the code handle memory and processing efficiently, avoiding unnecessary data duplication or excessive memory usage?
+- [ ] **Usage instructions**: Is there documentation explaining how to set up and run the code, such as README files?
+- [ ] **Scalability**: Has the code been designed and tested to ensure it can scale efficiently for larger datasets or more complex requirements while maintaining reasonable execution time?
 
 <br>
 
