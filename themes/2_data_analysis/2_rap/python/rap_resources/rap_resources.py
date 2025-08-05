@@ -18,7 +18,7 @@ data = [
     {
         "name": "testthat",
         "language": ["R"],
-        "purpose": ["Testing", "Quality assurance"],
+        "purpose": ["Quality assurance"],
         "description": """
         A testing framework for R that makes it easy to write and run tests.
         """,
@@ -28,7 +28,7 @@ data = [
     {
         "name": "pytest",
         "language": ["Python"],
-        "purpose": ["Testing", "Quality assurance"],
+        "purpose": ["Quality assurance"],
         "description": """
         A framework that makes building simple and scalable test cases easy.
         """,
@@ -49,7 +49,7 @@ data = [
     {
         "name": "gptables",
         "language": ["Python"],
-        "purpose": ["Publication tables"],
+        "purpose": ["Publishing"],
         "description": """
         A package for generating publication-ready tables from Python data
         frames.
@@ -60,7 +60,7 @@ data = [
     {
         "name": "aftables",
         "language": ["R"],
-        "purpose": ["Publication tables"],
+        "purpose": ["Publishing"],
         "description": """
         A package for generating publication-ready tables from R data frames.
         """,
@@ -70,7 +70,7 @@ data = [
     {
         "name": "rapid.spreadsheets",
         "language": ["R"],
-        "purpose": ["Publication tables"],
+        "purpose": ["Publishing"],
         "description": (
             "A package for generating publication-ready tables from R data frames."  # noqa: E501
         ),
@@ -90,7 +90,7 @@ data = [
     {
         "name": "venv",
         "language": ["Python"],
-        "purpose": ["Environment management"],
+        "purpose": ["Dependency management"],
         "description": """
         A standard library module for creating lightweight virtual environments
         in Python; allows you to manage dependencies for different projects.
@@ -101,7 +101,7 @@ data = [
     {
         "name": "pyenv",
         "language": ["Python"],
-        "purpose": ["Environment management"],
+        "purpose": ["Dependency management"],
         "description": """
         A tool to manage multiple Python versions; allows you to switch
         between different Python versions easily.
@@ -112,7 +112,7 @@ data = [
     {
         "name": "virtualenv",
         "language": ["Python"],
-        "purpose": ["Environment management"],
+        "purpose": ["Dependency management"],
         "description": """
         A tool to create isolated Python environments; allows for different
         dependencies in different projects.
@@ -123,7 +123,7 @@ data = [
     {
         "name": "renv",
         "language": ["R"],
-        "purpose": ["Environment management"],
+        "purpose": ["Dependency management"],
         "description": """
         A package for managing R project environments; captures the state of
         your R packages and their versions.
@@ -134,7 +134,7 @@ data = [
     {
         "name": "devtools",
         "language": ["R"],
-        "purpose": ["Package development"],
+        "purpose": ["Package development", "Quality assurance"],
         "description": """
         A set of tools to make Package development easier; includes functions
         for testing, building, and installing packages.
@@ -175,7 +175,7 @@ data = [
     },
     {
         "name": "Quarto",
-        "language": ["Any"],
+        "language": ["Python", "R"],
         "purpose": ["Publishing"],
         "description": """
         A publishing system for scientific and technical documents; supports R
@@ -186,7 +186,7 @@ data = [
     },
     {
         "name": "Docker",
-        "language": ["Any"],
+        "language": ["Python", "R"],
         "purpose": ["Containerisation"],
         "description": """
         Platform for developing, shipping, and running applications in
@@ -198,7 +198,7 @@ data = [
     {
         "name": "logging",
         "language": ["Python"],
-        "purpose": ["Logging"],
+        "purpose": ["Documentation"],
         "description": """
         Standard library module for logging in Python; provides a flexible
         framework for emitting log messages from Python programs.
@@ -286,7 +286,7 @@ data = [
     {
         "name": "poetry",
         "language": ["Python"],
-        "purpose": ["Dependency Management"],
+        "purpose": ["Dependency management"],
         "description": """
         A tool for dependency management and packaging in Python; simplifies
         the management of project dependencies and virtual environments.
@@ -297,12 +297,12 @@ data = [
     {
         "name": "pip",
         "language": ["Python"],
-        "purpose": ["Dependency Management"],
+        "purpose": ["Dependency management"],
         "description": """
         Installs and manages Python packages from the Python Package index
         (PyPI); essential for adding libraries to a RAP.
         """,
-        "install": "pip install <package_name>",
+        "install": "See installation guide",
         "link": "https://pip.pypa.io/",
     },
 ]
@@ -315,21 +315,18 @@ st.write(
     "Reproducible Analytical Pipelines (RAP)."
 )
 
-# Search box
-search_query = st.text_input("Search by name or purpose:")
+# Search box in sidebar
+search_query = st.sidebar.text_input("Search by name or purpose:")
 
-# Filters below the search bar (in main area)
-col1, col2 = st.columns(2)
-with col1:
-    languages = st.multiselect(
-        "Filter by Language:",
-        sorted({lang for langs in df["language"] for lang in langs}),
-    )
-with col2:
-    purposes = st.multiselect(
-        "Filter by Purpose:",
-        sorted({purpose for purposes in df["purpose"] for purpose in purposes}),  # noqa: E501
-    )
+# Filters in sidebar
+languages = st.sidebar.multiselect(
+    "Filter by Language:",
+    sorted({lang for langs in df["language"] for lang in langs}),
+)
+purposes = st.sidebar.multiselect(
+    "Filter by Purpose:",
+    sorted({purpose for purposes in df["purpose"] for purpose in purposes}),  # noqa: E501
+)
 
 filtered = df.copy()
 
