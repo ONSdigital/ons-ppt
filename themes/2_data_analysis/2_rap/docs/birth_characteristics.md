@@ -107,7 +107,7 @@ root/
 ├── main.R
 └── uk_lookup2019.csv # Area code lookup
 ```
-> **Reflection**: Look at these questions again in the context of the RAP implementation. Have your answers changed?:
+> **Reflection**: Look at these questions again in the context of the RAP implementation:
 > * Where would you look to find information about the project and how to run the code?
 > * How easy would it be to locate and update a specific part of the code? (e.g. could you easily find where to update the code for calculating fertility rates?)
 > * How well does the structure support collaboration – could multiple analysts work on different parts at the same time easily?
