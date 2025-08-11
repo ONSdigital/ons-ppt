@@ -1,6 +1,6 @@
 # ONS PPT Code Snippets Repository
 
-This repository contains example code snippets in **Python** and **R** to support learning materials and case studies for the Pandemic Preparedness Toolkit. The content is organized by **themes**, **modules** and **units** to align with the structure of the learning resources.
+This repository contains tools and example code snippets in **Python** and **R** to support materials and case studies for the Pandemic Preparedness Toolkit (PPT). The content is organized by **themes**, **modules** and **units** to align with the structure of the website.
 
 ---
 
@@ -83,6 +83,6 @@ ons-ppt/
 
 ## 🛡️ Contributing
 
-1. Please do **not** push directly to the `main` branch.  
+1. Please do **not** push directly to the `main` branch.
 2. Submit changes via a pull request.
 3. Ensure all pre-commit checks pass before submitting.
