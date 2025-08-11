@@ -11,15 +11,18 @@ ons-ppt/
 ├── themes/
 │   ├── module1/
 │   │   ├── unit1/
+│   │   │   ├── docs/
 │   │   │   ├── python/
 │   │   │   │   └── example1.py
 │   │   │   └── r/
 │   │   │       └── example1.R
 │   │   └── unit2/
+│   │       ├── docs/
 │   │       ├── python/
 │   │       └── r/
 │   └── module2/
 │       └── unit1/
+│           ├── docs/
 │           ├── python/
 │           └── r/
 ├── requirements.txt      # Python dependencies
@@ -31,6 +34,7 @@ ons-ppt/
 ```
 
 - **themes/**: Top-level folder containing all themes.
+- **moduleX/unitY/docs/**: Documentation for a specific unit.
 - **moduleX/unitY/python/**: Python code examples for a specific unit.
 - **moduleX/unitY/r/**: R code examples for a specific unit.
 
@@ -40,7 +44,7 @@ ons-ppt/
 
 ### Python Setup
 
-1. Ensure you have Python 3.12+ installed.
+1. Ensure you have Python 3.9+ installed (You can install Python or Miniconda from the Software Center if not)
 2. (Recommended) Create a virtual environment:
    ```sh
    python -m venv venv
