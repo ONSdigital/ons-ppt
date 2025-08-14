@@ -8,5 +8,5 @@ for /f "delims=" %%p in ('python "%~dp0get_free_port.py"') do set PORT=%%p
 echo Port found: %PORT%
 
 REM Run Streamlit on that port, using the local contrast_checker.py
-streamlit run "%~dp0rap_resources.py" --server.port %PORT%
+streamlit run "%~dp0RAP_Resource_Explorer.py" --server.port %PORT%
 pause
