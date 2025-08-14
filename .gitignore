@@ -20,6 +20,11 @@ pythonenv*
 pyvenv.cfg
 pip-selfcheck.json
 
+# Excel files
+*.xlsx
+*.xls
+*.csv
+
 # mkdocs documentation
 /site
 
