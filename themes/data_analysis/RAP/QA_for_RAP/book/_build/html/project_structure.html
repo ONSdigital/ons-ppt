@@ -1,0 +1,734 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Structuring your project &#8212; Quality Assurance of Code for Analysis and Research</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
+    <link rel="stylesheet" type="text/css" href="_static/accessibility.css?v=6e02104c" />
+    <link rel="stylesheet" type="text/css" href="_static/admonitions.css?v=1956eba1" />
+    <link rel="stylesheet" type="text/css" href="_static/logo.css?v=1c56504a" />
+    <link rel="stylesheet" type="text/css" href="_static/markdown_within_tabs.css?v=d7e1104e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'project_structure';</script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Code documentation" href="code_documentation.html" />
+    <link rel="prev" title="Readable code" href="readable_code.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/duck_book_logo.svg" class="logo__image only-light" alt="Quality Assurance of Code for Analysis and Research - Home"/>
+    <script>document.write(`<img src="_static/duck_book_logo.svg" class="logo__image only-dark" alt="Quality Assurance of Code for Analysis and Research - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary of terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managers_guide.html">Managing analytical code development</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="checklists.html">Code quality assurance checklists</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="checklist_lower.html">Lower quality assurance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checklist_moderate.html">Moderate quality assurance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checklist_higher.html">Higher quality assurance</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Guidance</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="principles.html">Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modular_code.html">Modular code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readable_code.html">Readable code</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Structuring your project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html">Code documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_documentation.html">Project documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="version_control.html">Version control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peer_review.html">Peer review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing_code.html">Testing code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="continuous_integration.html">Automating code quality assurance</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Learning resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance/edit/main/book/project_structure.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance/issues/new?title=Issue%20on%20page%20%2Fproject_structure.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/project_structure.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Structuring your project</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-scripts-from-end-to-end-to-ensure-your-code-is-executed-reproducibly">Run scripts from end to end to ensure your code is executed reproducibly</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#keep-your-project-structure-clean">Keep your project structure clean</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-good-filename-conventions">Use good filename conventions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#organise-analysis-as-a-directed-acyclic-graph">Organise analysis as a Directed Acyclic Graph</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#preserve-raw-data">Preserve raw data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-that-outputs-are-disposable">Check that outputs are disposable</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-code-as-modules-and-packages">Structure code as modules and packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-project-templates">Use project templates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-version-controlled-repositories">Use version controlled repositories</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="structuring-your-project">
+<h1>Structuring your project<a class="headerlink" href="#structuring-your-project" title="Link to this heading">#</a></h1>
+<p>When you are designing your analysis it can be difficult to keep your thoughts tidy.
+Analysis is often exploratory and subject to change.
+This means that scripts and programs can become messy.
+The messier the programs, the harder they are to maintain and change in future.</p>
+<p>Good directory structure and file hygiene can go a long way to mitigate this.
+It will help others to read your code more easily, and you will write better code into the bargain.
+Some structures have been found to be generally quite effective through trial and error.
+Others are more specific, and - as with all guidelines - should not be taken as mandatory.</p>
+<section id="run-scripts-from-end-to-end-to-ensure-your-code-is-executed-reproducibly">
+<h2>Run scripts from end to end to ensure your code is executed reproducibly<a class="headerlink" href="#run-scripts-from-end-to-end-to-ensure-your-code-is-executed-reproducibly" title="Link to this heading">#</a></h2>
+<p>As you begin developing your project, it’s a good idea to save your working code in a script file.
+In R these are saved as <code class="docutils literal notranslate"><span class="pre">.R</span></code> files, and in Python as <code class="docutils literal notranslate"><span class="pre">.py</span></code>.
+You can use scripts within an Integrated Development Environment (IDE) like
+<a class="reference external" href="https://code.visualstudio.com/">Visual Studio Code</a>, <a class="reference external" href="https://rstudio.com/">RStudio</a>, or <a class="reference external" href="https://www.jetbrains.com/pycharm/">PyCharm</a>.
+Inside an IDE you can usually run through your script line-by-line, or run the whole file at once.
+This can be an easier workflow than running code in the Python or the R console and then rewriting the same code in a script later.</p>
+<p>Scripts serve as the basic units of saved code.
+Often, we like to define functions or reusable bits of code in one file and then use these in another file.
+For example we may write a few functions that help us to calculate <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">mode</span></code>, and <code class="docutils literal notranslate"><span class="pre">median</span></code> of our dataset in the <code class="docutils literal notranslate"><span class="pre">functions.R</span></code> file.
+Then we can use those functions in our main script, saved in <code class="docutils literal notranslate"><span class="pre">main.R</span></code>.</p>
+<p>Outside of an IDE you can also run your scripts using the Python or R interpreters from the command line.
+Other programs can then use your scripts because of this.
+For example you can use the <code class="docutils literal notranslate"><span class="pre">Rcmd</span> <span class="pre">&lt;script-path&gt;</span></code> command to run your R scripts or the <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">&lt;script-path&gt;</span></code> command to run your Python scripts.</p>
+<p>Running your analysis files from end to end ensures that your code is executed in the same order each time.
+It also runs the code with a clean environment, without variables or other objects from previous runs that can be a common source of errors.</p>
+</section>
+<section id="keep-your-project-structure-clean">
+<h2>Keep your project structure clean<a class="headerlink" href="#keep-your-project-structure-clean" title="Link to this heading">#</a></h2>
+<p>As your analysis project grows it becomes more important to keep your project structure clean.
+Every project is different and the right way to organise your project might differ from another project.
+However, there are some principles that are useful to consider.</p>
+<section id="use-good-filename-conventions">
+<h3>Use good filename conventions<a class="headerlink" href="#use-good-filename-conventions" title="Link to this heading">#</a></h3>
+<p>Much like the names of elements in your code, good filenames inform you of the purpose of a file.
+Within a project, you should follow a standard file naming convention.
+Good naming practices improve your ability to locate and identify the contents of files.</p>
+<p>Good naming conventions include:</p>
+<ul class="simple">
+<li><p>Consistency, above all else.</p></li>
+<li><p>Short but descriptive and human readable names.</p></li>
+<li><p>No spaces, for machine readability - underscores (<code class="docutils literal notranslate"><span class="pre">_</span></code>) or dashes (<code class="docutils literal notranslate"><span class="pre">-</span></code>) are preferred.</p></li>
+<li><p>Use of consistent date formatting (e.g. <a class="reference external" href="https://en.wikipedia.org/wiki/ISO_8601">YYYY-MM-DD</a>).</p></li>
+<li><p>Padding the left side of numbers with zeros to maintain order -  e.g. <code class="docutils literal notranslate"><span class="pre">001</span></code> instead of <code class="docutils literal notranslate"><span class="pre">1</span></code>. The number of zeros should reflect the expected number of files.</p></li>
+</ul>
+<p>When using dates or times to name files, start with the largest unit of time and work towards the smallest.
+So we would use <code class="docutils literal notranslate"><span class="pre">2020-10-15_data_input</span></code>, and not <code class="docutils literal notranslate"><span class="pre">15-10-2020_data_input</span></code>.
+This will ensure that the default ordering of these files is in chronological order.
+This makes it much easier to find the earliest or latest files.</p>
+<p>You should start filenames with numbers to order files, if ordering is logical and informative.
+For example, where the <code class="docutils literal notranslate"><span class="pre">001_introduction</span></code> should come before <code class="docutils literal notranslate"><span class="pre">002_methodology</span></code> and <code class="docutils literal notranslate"><span class="pre">003_results</span></code>.</p>
+</section>
+<section id="organise-analysis-as-a-directed-acyclic-graph">
+<h3>Organise analysis as a Directed Acyclic Graph<a class="headerlink" href="#organise-analysis-as-a-directed-acyclic-graph" title="Link to this heading">#</a></h3>
+<p>Analysis can best be thought of as a Directed Acyclic Graph (DAG).
+Don’t let the name scare you off!
+All we mean by this is that you start off with the input data, you finish with the output(s), and in between there are no lines that link backwards.</p>
+<figure class="align-default" id="dag">
+<a class="reference internal image-reference" href="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Tred-G.svg/800px-Tred-G.svg.png"><img alt="Analysis is a directed, acyclic graph that links the input data through a series of steps to the outputs." src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Tred-G.svg/800px-Tred-G.svg.png" style="width: 50%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Defining analysis as a DAG - linking the input data at (a) to the output at (e).</span><a class="headerlink" href="#dag" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>When thinking about how to structure your project it is useful to think in terms of what your project’s DAG looks like.
+Each project should be kept in its own folder, with a descriptive name.
+Most analysis will have an ingest or input stage, a processing stage, and a reporting stage.
+You should use folders within each project to separate raw data, documentation, source code (or <code class="docutils literal notranslate"><span class="pre">src</span></code>) and results.</p>
+<p>A typical analytical project folder in Python might look like:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-Ug==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Ug==" name="Ug==" role="tab" tabindex="-1">R</button></div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="o">|--</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
+<span class="o">|--</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">|--</span> <span class="n">data</span><span class="o">/</span>
+<span class="o">|</span>   <span class="o">--</span> <span class="n">incident_counts</span><span class="o">.</span><span class="n">csv</span>
+<span class="o">|--</span> <span class="n">docs</span><span class="o">/</span>
+<span class="o">|</span>   <span class="o">--</span> <span class="n">notebook</span><span class="o">.</span><span class="n">md</span>
+<span class="o">|</span>   <span class="o">--</span> <span class="n">manuscript</span><span class="o">.</span><span class="n">md</span>
+<span class="o">|</span>   <span class="o">--</span> <span class="n">changelog</span><span class="o">.</span><span class="n">md</span>
+<span class="o">|--</span> <span class="n">results</span><span class="o">/</span>
+<span class="o">|</span>   <span class="o">--</span> <span class="n">incident_counts_by_age</span><span class="o">.</span><span class="n">csv</span>
+<span class="o">|</span>   <span class="o">--</span> <span class="n">incidents_over_time</span><span class="o">.</span><span class="n">svg</span>
+<span class="o">|--</span> <span class="n">src</span><span class="o">/</span>
+<span class="o">|</span>   <span class="o">--</span> <span class="n">data_cleaning</span><span class="o">.</span><span class="n">py</span>
+<span class="o">|</span>   <span class="o">--</span> <span class="n">main_analysis</span><span class="o">.</span><span class="n">py</span>
+<span class="o">|</span>   <span class="o">--</span> <span class="n">generate_plots</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Ug==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-Ug==" name="Ug==" role="tabpanel" tabindex="0"><div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">|--</span><span class="w"> </span><span class="n">README.md</span>
+<span class="o">|--</span><span class="w"> </span><span class="n">project.Rproj</span>
+<span class="o">|--</span><span class="w"> </span><span class="n">data</span><span class="o">/</span>
+<span class="o">|</span><span class="w">   </span><span class="o">--</span><span class="w"> </span><span class="n">incident_counts.csv</span>
+<span class="o">|--</span><span class="w"> </span><span class="n">docs</span><span class="o">/</span>
+<span class="o">|</span><span class="w">   </span><span class="o">--</span><span class="w"> </span><span class="n">notebook.md</span>
+<span class="o">|</span><span class="w">   </span><span class="o">--</span><span class="w"> </span><span class="n">manuscript.md</span>
+<span class="o">|</span><span class="w">   </span><span class="o">--</span><span class="w"> </span><span class="n">changelog.md</span>
+<span class="o">|--</span><span class="w"> </span><span class="n">results</span><span class="o">/</span>
+<span class="o">|</span><span class="w">   </span><span class="o">--</span><span class="w"> </span><span class="n">incident_counts_by_age.csv</span>
+<span class="o">|</span><span class="w">   </span><span class="o">--</span><span class="w"> </span><span class="n">incidents_over_time.svg</span>
+<span class="o">|--</span><span class="w"> </span><span class="n">R</span><span class="o">/</span>
+<span class="o">|</span><span class="w">   </span><span class="o">--</span><span class="w"> </span><span class="n">data_cleaning.R</span>
+<span class="o">|</span><span class="w">   </span><span class="o">--</span><span class="w"> </span><span class="n">main_analysis.R</span>
+<span class="o">|</span><span class="w">   </span><span class="o">--</span><span class="w"> </span><span class="n">generate_plots.R</span>
+</pre></div>
+</div>
+</div></div>
+<p>Where you have written code that is used by multiple projects, this code should reside in its own separate folder.
+This will allow you to record changes to your code independent of other dependencies of each project.</p>
+</section>
+<section id="preserve-raw-data">
+<h3>Preserve raw data<a class="headerlink" href="#preserve-raw-data" title="Link to this heading">#</a></h3>
+<p>You should not alter raw data - treat it as read-only.
+You should conduct data cleaning on a copy of the raw data, so that you can document which cleaning decisions have been made.</p>
+<p>Your project structure should include an immutable store for raw data. This does not have to be inside the code repository and it is usually best to separate operational folders for inputs and outputs from the code base.</p>
+</section>
+<section id="check-that-outputs-are-disposable">
+<h3>Check that outputs are disposable<a class="headerlink" href="#check-that-outputs-are-disposable" title="Link to this heading">#</a></h3>
+<p>You should be able to dispose of your outputs, deleting them, without worrying, because you should be able to regenerate them easily by re-running your pipeline.
+If you are worried about deleting your outputs (i.e., results) then it is likely you lack confidence in reproducing your results.</p>
+<p>Frequently deleting and regenerating your outputs when developing analysis is good practice.</p>
+</section>
+</section>
+<section id="structure-code-as-modules-and-packages">
+<h2>Structure code as modules and packages<a class="headerlink" href="#structure-code-as-modules-and-packages" title="Link to this heading">#</a></h2>
+<p>Code that is complex, high risk or reusable between projects can benefit from being structured into a package.
+Modules are single files that contain one or more reusable units of code.
+A package typically contains multiple related modules.</p>
+<p>It’s likely that you’ve already used a package written by somebody else as part of your analysis.
+For example, installing additional functionality for Python using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&lt;package&gt;</span></code> on the command line or
+running <code class="docutils literal notranslate"><span class="pre">install.packages(&quot;&lt;package&gt;&quot;)</span></code> in an R interpreter.</p>
+<div class="admonition-learning admonition">
+<p class="admonition-title">Key Learning</p>
+<p><a class="reference external" href="https://python-packaging-user-guide.readthedocs.io/">The Python Packaging User Guide</a> describes good packaging practices using the most up-to-date Python tools.
+While <a class="reference external" href="https://r-pkgs.org/">the R Packages book</a> provides a comprehensive summary of packaging in R.
+<a class="reference external" href="https://devguide.ropensci.org/building.html">The rOpenSci packaging guide</a> also contains useful tips for packaging in R.</p>
+</div>
+<p>See <a class="reference internal" href="project_documentation.html"><span class="std std-doc">Project documentation</span></a> for a summary of common package and project documentation types.</p>
+</section>
+<section id="use-project-templates">
+<h2>Use project templates<a class="headerlink" href="#use-project-templates" title="Link to this heading">#</a></h2>
+<p>Many analysts choose to use similar structures for multiple projects even though project structure can be flexible.
+Consistency in structure makes it easier to navigate unfamiliar projects, especially if they use the same coding style.
+It means that members of the team can quickly orient themselves when joining an existing project or starting a new one.</p>
+<p><a class="reference external" href="https://github.com/cookiecutter/cookiecutter">Cookiecutter</a> is a command-line tool that creates projects from templates (cookiecutters).
+Using an existing cookiecutter, or creating one to meet your needs, can be a useful way to increase consistency in structure between your projects.
+Increase consistency and good practice by creating common folder structures, laying out essential documentation or even starting off your code with a basic boilerplate.
+This can also save you time. Laying out a structure to include documentation and code testing also encourages  good practices.</p>
+<p>Useful cookiecutters include:</p>
+<ul class="simple">
+<li><p>The government data science <a class="reference external" href="https://github.com/ukgovdatascience/govcookiecutter">govcookiecutter</a>, including data security features.</p></li>
+<li><p>The comprehensive Python data science project template <a class="reference external" href="http://drivendata.github.io/cookiecutter-data-science/">cookiecutter-data-science</a>.</p></li>
+<li><p>The Python package template <a class="reference external" href="https://cookiecutter-pypackage.readthedocs.io/en/latest/">cookiecutter-pypackage</a>.</p></li>
+</ul>
+<p>Rstudio provides a standard template for R packages via <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">New</span> <span class="pre">Project...</span> <span class="pre">&gt;</span> <span class="pre">New</span> <span class="pre">Directory</span> <span class="pre">&gt;</span> <span class="pre">R</span> <span class="pre">Package</span></code>.
+We have created some basic templates for an <a class="reference external" href="https://github.com/best-practice-and-impact/example-package-r">R package</a>
+and a <a class="reference external" href="https://github.com/best-practice-and-impact/example-package-python">Python package</a> that may be helpful.
+R project structures can also be set up or extended, one component at a time, using the <a class="reference external" href="https://usethis.r-lib.org/"><code class="docutils literal notranslate"><span class="pre">usethis</span></code> workflow package</a>. usethis() sets up packages that follow the structure in the R packages book.
+For example, <code class="docutils literal notranslate"><span class="pre">use_test()</span></code> will add the directories necessary for testing using <code class="docutils literal notranslate"><span class="pre">testthat</span></code> and generate basic test file templates for a given function name.</p>
+</section>
+<section id="use-version-controlled-repositories">
+<h2>Use version controlled repositories<a class="headerlink" href="#use-version-controlled-repositories" title="Link to this heading">#</a></h2>
+<p>Repositories or ‘repos’ are typically project folders that are version controlled using Git or a similar version control system.
+One repository usually contains a single project.
+Developing your project using a version controlled repository has significant benefits for reproducibility.</p>
+<p>See <a class="reference internal" href="version_control.html"><span class="std std-doc">Version control</span></a> for more information.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="readable_code.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Readable code</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="code_documentation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Code documentation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-scripts-from-end-to-end-to-ensure-your-code-is-executed-reproducibly">Run scripts from end to end to ensure your code is executed reproducibly</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#keep-your-project-structure-clean">Keep your project structure clean</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-good-filename-conventions">Use good filename conventions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#organise-analysis-as-a-directed-acyclic-graph">Organise analysis as a Directed Acyclic Graph</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#preserve-raw-data">Preserve raw data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-that-outputs-are-disposable">Check that outputs are disposable</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-code-as-modules-and-packages">Structure code as modules and packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-project-templates">Use project templates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-version-controlled-repositories">Use version controlled repositories</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>Analysis Function - Analytical Standards and Pipelines hub</p><p>This is a living document, please help use to make it grow by providing any feedback <a href='mailto:ASAP@ons.gov.uk'>by email</a> or via the <a href='https://github.com/best-practice-and-impact/qa-of-code-guidance'>GitHub repository</a>.
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

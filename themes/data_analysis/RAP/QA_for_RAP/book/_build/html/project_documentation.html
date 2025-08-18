@@ -1,0 +1,853 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Project documentation &#8212; Quality Assurance of Code for Analysis and Research</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
+    <link rel="stylesheet" type="text/css" href="_static/accessibility.css?v=6e02104c" />
+    <link rel="stylesheet" type="text/css" href="_static/admonitions.css?v=1956eba1" />
+    <link rel="stylesheet" type="text/css" href="_static/logo.css?v=1c56504a" />
+    <link rel="stylesheet" type="text/css" href="_static/markdown_within_tabs.css?v=d7e1104e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'project_documentation';</script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Version control" href="version_control.html" />
+    <link rel="prev" title="Code documentation" href="code_documentation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/duck_book_logo.svg" class="logo__image only-light" alt="Quality Assurance of Code for Analysis and Research - Home"/>
+    <script>document.write(`<img src="_static/duck_book_logo.svg" class="logo__image only-dark" alt="Quality Assurance of Code for Analysis and Research - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary of terms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="managers_guide.html">Managing analytical code development</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="checklists.html">Code quality assurance checklists</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="checklist_lower.html">Lower quality assurance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checklist_moderate.html">Moderate quality assurance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checklist_higher.html">Higher quality assurance</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Guidance</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="principles.html">Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modular_code.html">Modular code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readable_code.html">Readable code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_structure.html">Structuring your project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html">Code documentation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Project documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="version_control.html">Version control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peer_review.html">Peer review</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing_code.html">Testing code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="continuous_integration.html">Automating code quality assurance</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Resources</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="learning.html">Learning resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance/edit/main/book/project_documentation.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance/issues/new?title=Issue%20on%20page%20%2Fproject_documentation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/project_documentation.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Project documentation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#readme">README</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contributing-guidance">Contributing guidance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user-desk-instructions">User desk instructions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citation">Citation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vignettes">Vignettes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#versioning">Versioning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog">Changelog</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#copyright-and-licenses">Copyright and Licenses</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-your-code">Open source your code</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="project-documentation">
+<h1>Project documentation<a class="headerlink" href="#project-documentation" title="Link to this heading">#</a></h1>
+<p>Documenting your project will makes it much easier for others to understand your goal and ways of working, whether you’re developing a package or collaborating on a piece of analysis.</p>
+<section id="readme">
+<h2>README<a class="headerlink" href="#readme" title="Link to this heading">#</a></h2>
+<p>When working on a collaborative or open coding project, it’s good practice to describe an overview of your project in a README file.
+This allows users or developers to grasp the overall goal of your project.
+As well as a description of the project, it might include examples using your code or references to other associated projects.
+This file can be any text type, including <code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.md</span></code>, and <code class="docutils literal notranslate"><span class="pre">.rst</span></code>, and can be associated with your automated documentation.</p>
+<p>We suggest the following for a good README:</p>
+<ul class="simple">
+<li><p>Short statement of intent.</p></li>
+<li><p>Longer description describing the problem that your project solves and how it solves it.</p></li>
+<li><p>Basic installation instructions or link to installation guide.</p></li>
+<li><p>Example usage.</p></li>
+<li><p>Screenshot if your project has a graphical user interface.</p></li>
+<li><p>Links to other project guidance, for example methodological papers or document repositories.</p></li>
+<li><p>Links to related projects.</p></li>
+</ul>
+</section>
+<section id="contributing-guidance">
+<h2>Contributing guidance<a class="headerlink" href="#contributing-guidance" title="Link to this heading">#</a></h2>
+<p>When collaborating, it is also useful to set out the standards used within your project.
+This might include particular packages required for certain tasks and guidance on the <a class="reference internal" href="readable_code.html#code-style"><span class="std std-ref">code style</span></a> used in the project.
+Consider including a code of conduct if you plan to have contributors from outside your organisation.
+Please <a class="reference external" href="https://docs.github.com/en/github/building-a-strong-community/adding-a-code-of-conduct-to-your-project">see GitHub</a> for advice on creating a code of conduct.</p>
+<p>See the CONTRIBUTING file from our <a class="reference external" href="https://github.com/best-practice-and-impact/gptables/blob/master/CONTRIBUTING.md">gptables package</a> for an example:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Markdown</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">HTML</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Contributing
+
+When contributing to this repository, please first discuss the change you wish
+to make via issue, email, or any other method with the owners before making a change.
+
+## Pull/merge request process
+
+1. Branch from the `dev` branch. If you are implementing a feature name it
+`feature/name_of_feature`, if you are implementing a bugfix name it
+`bug/issue_name`.
+2. Update the README.md and other documentation with details of major changes
+to the interface, this includes new environment variables, useful file
+locations and container parameters.
+3. Once you are ready for review please open a pull/merge request to the
+`dev` branch.
+4. You may merge the Pull/Merge Request in once you have the sign-off of two
+maintainers.
+5. If you are merging `dev` to `master`, you must increment the version number
+in the VERSION file to the new version that this Pull/Merge Request would
+represent. The versioning scheme we use is [SemVer](http://semver.org/).
+
+## Code style
+
+- We name variables using few nouns in lowercase, e.g. `mapping_names`
+or `increment`.
+- We name functions using verbs in lowercase, e.g. `map_variables_to_names` or
+`change_values`.
+- We use the [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html)
+format for documenting features using docstrings.
+
+## Review process
+
+1. When we want to release the package we will request a formal review for any
+non-minor changes.
+2. The review process follows a similar process to ROpenSci.
+3. Reviewers will be requested from associated communities.
+4. The `dev` branch will only be released once reviewers are satisfied.
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><h1>Contributing</h1>
+<p>When contributing to this repository, please first discuss the change you wish
+to make via issue, email, or any other method with the owners of this
+repository before making a change.</p>
+<h2>Pull/merge request process</h2>
+<ol class="arabic simple">
+<li><p>Branch from the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch. If you are implementing a feature name it
+<code class="docutils literal notranslate"><span class="pre">feature/name_of_feature</span></code>, if you are implementing a bugfix name it
+<code class="docutils literal notranslate"><span class="pre">bug/issue_name</span></code>.</p></li>
+<li><p>Update the <a class="reference external" href="http://README.md">README.md</a> and other documentation with details of major changes
+to the interface, this includes new environment variables, useful file
+locations and container parameters.</p></li>
+<li><p>Once you are ready for review please open a pull/merge request to the
+<code class="docutils literal notranslate"><span class="pre">dev</span></code> branch.</p></li>
+<li><p>You may merge the Pull/Merge Request in once you have the sign-off of two
+maintainers.</p></li>
+<li><p>If you are merging <code class="docutils literal notranslate"><span class="pre">dev</span></code> to <code class="docutils literal notranslate"><span class="pre">master</span></code>, you must increment the version number
+in the VERSION file to the new version that this Pull/Merge Request would
+represent. The versioning scheme we use is <a class="reference external" href="http://semver.org/">SemVer</a>.</p></li>
+</ol>
+<h2>Code style</h2>
+<ul class="simple">
+<li><p>We name variables using few nouns in lowercase, e.g. <code class="docutils literal notranslate"><span class="pre">mapping_names</span></code>
+or <code class="docutils literal notranslate"><span class="pre">increment</span></code>.</p></li>
+<li><p>We name functions using verbs in lowercase, e.g. <code class="docutils literal notranslate"><span class="pre">map_variables_to_names</span></code> or
+<code class="docutils literal notranslate"><span class="pre">change_values</span></code>.</p></li>
+<li><p>We use the <a class="reference external" href="https://numpydoc.readthedocs.io/en/latest/format.html">numpydoc</a>
+format for documenting features using docstrings.</p></li>
+</ul>
+<h2>Review process</h2>
+<ol class="arabic simple">
+<li><p>When we want to release the package we will request a formal review for any
+non-minor changes.</p></li>
+<li><p>The review process follows a similar process to ROpenSci.</p></li>
+<li><p>Reviewers will be requested from associated communities.</p></li>
+<li><p>Only once reviewers are satisfied, will the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch be released.</p></li>
+</ol>
+</div></div>
+<p>In this case we have outlined our standard practices for using version control on GitHub,
+the code style that we are using in the project and the review process that we follow.
+We have used the <a class="reference external" href="https://daringfireball.net/projects/markdown/syntax">Markdown</a> (<code class="docutils literal notranslate"><span class="pre">.md</span></code>) markup language for this document,
+which is formatted into HTML when viewed on our repository.</p>
+</section>
+<section id="user-desk-instructions">
+<h2>User desk instructions<a class="headerlink" href="#user-desk-instructions" title="Link to this heading">#</a></h2>
+<p>If your project is very user focused for one particular task,
+for example, developing a statistic production pipeline for other analysts to execute,
+it is very important that the code users understand how to appropriately run your code.</p>
+<p>These instructions should include:</p>
+<ul class="simple">
+<li><p>How to set up an environment to run your code (including how to install dependencies).</p></li>
+<li><p>How to configure the project, for example how to set folders and environment variables if you use them.</p></li>
+<li><p>How to run your code.</p></li>
+<li><p>What outputs (if any) your code or system produces and how these should be interpreted.</p></li>
+<li><p>What quality assurance has been carried out and what further quality assurance of outputs is required.</p></li>
+<li><p>How to maintain your project (including how to update data sources).</p></li>
+</ul>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h2>
+<p>The environment that your code runs in includes the machine, the operating system (Windows, Mac, Linux…), the programming language, and any external packages.
+It is important to record this information to ensure reproducibility.</p>
+<p>The simplest way to document which packages your code is dependent on is to record them in a text file.
+We typically call this text file <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>.</p>
+<p>Python packages record their dependencies within their <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file, via <code class="docutils literal notranslate"><span class="pre">setup(install_requires=...)</span></code>.
+You can get a list of your installed python packages using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">freeze</span></code> in the command line.</p>
+<p><a class="reference external" href="https://r-pkgs.org/">R packages</a> and projects record their dependencies in a <a class="reference external" href="https://r-pkgs.org/description.html">DESCRIPTION</a> file.
+Packages are listed under the <code class="docutils literal notranslate"><span class="pre">Imports</span></code> key.
+You can get a list of your installed R packages using the <code class="docutils literal notranslate"><span class="pre">installed.packages()</span></code> function.</p>
+<p>You will find environment management tools, such as
+<a class="reference external" href="https://rstudio.github.io/renv/articles/renv.html"><code class="docutils literal notranslate"><span class="pre">renv</span></code></a> for R or
+<a class="reference external" href="https://github.com/pyenv/pyenv"><code class="docutils literal notranslate"><span class="pre">pyenv</span></code></a> for python useful for keeping track of software and package versions used in a project.</p>
+</section>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading">#</a></h2>
+<p>It can be helpful to provide a citation template for research or analytical code that is likely to be referenced by others.
+You can include this in your code repository as a <code class="docutils literal notranslate"><span class="pre">CITATION</span></code> file or part of your <code class="docutils literal notranslate"><span class="pre">README</span></code>.
+For example, the R package <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code> provides the following:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> To cite ggplot2 in publications, please use:
+
+ H. Wickham. ggplot2: elegant graphics for data analysis. Springer New York,
+ 2009.
+
+A BibTeX entry for LaTeX users is
+
+@Book{,
+   author = {Hadley Wickham},
+   title = {ggplot2: elegant graphics for data analysis},
+   publisher = {Springer New York},
+   year = {2009},
+   isbn = {978-0-387-98140-6},
+   url = {http://had.co.nz/ggplot2/book},
+ }
+</pre></div>
+</div>
+<p>If your project includes multiple datasets, pieces of code or outputs with their own
+<a class="reference external" href="https://en.wikipedia.org/wiki/Digital_object_identifier">DOIs</a>, this might include multiple citations.</p>
+<p>See this <a class="reference external" href="https://guides.github.com/activities/citable-code/">GitHub guide for more information on making your public code citable</a>.</p>
+</section>
+<section id="vignettes">
+<h2>Vignettes<a class="headerlink" href="#vignettes" title="Link to this heading">#</a></h2>
+<p>Vignettes are a form of supplementary documentation, containing applied examples that demonstrate the intended use of the code in your project or package.
+Docstrings may contain examples applying individual functional units, while vignettes may show multiple units being used together.
+We use the term vignette with reference to R packages, for example this introduction to the
+<a class="reference external" href="https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html"><code class="docutils literal notranslate"><span class="pre">dplyr</span></code> package</a> for data manipulation.
+However, the same long-form documentation is beneficial for projects in any programming language - for instance the
+<a class="reference external" href="https://pandas.pydata.org/docs/user_guide/basics.html"><code class="docutils literal notranslate"><span class="pre">pandas</span></code> basics guide</a>.</p>
+<p>We’ve seen that <a class="reference internal" href="code_documentation.html#docstrings"><span class="std std-ref">docstrings</span></a> can be used to describe individual functional code elements.
+Vignettes demonstrate the intended use for these classes and functions in a realistic context.
+This shows users how different code elements interact and how they might use your code in their own program.</p>
+<p>Another good example is this vignette describing <a class="reference external" href="http://r-pkgs.had.co.nz/vignettes.html">how to design vignettes</a> in Rmarkdown.
+You can produce this type of documentation in any format, though Rmarkdown is particularly effectively at combining sections of code,
+code outputs, and descriptive text.</p>
+<p>You might also consider providing examples in an interactive notebook that users can run for themselves.</p>
+</section>
+<section id="versioning">
+<h2>Versioning<a class="headerlink" href="#versioning" title="Link to this heading">#</a></h2>
+<p>Documenting the version of your code provides distinct points of reference in the code’s development.
+Recording the version of code used for analysis is important for reproducing your work.
+Combining versioning with <a class="reference internal" href="version_control.html"><span class="std std-doc">Version control</span></a> allows you to recover the exact code used to run your analysis, and thus reproduce the same results.</p>
+<p><a class="reference external" href="https://semver.org/">Semantic versioning</a> provides useful rules for versioning releases of your code.
+Follow these rules to help other users of your code  understand how changes in your code may affect their software.
+Each level of version number indicates the extent of changes to the application programming interface (API) of your code,
+i.e., the part of the code that a user interacts with directly.
+Changes to the major version number indicate changes to the API that are not compatible with use of previous versions of the code.
+While changes to the minor and patch numbers indicate changes that are either compatible or have no effect on the use of the code, respectively.</p>
+<figure class="align-default" id="semantic-versioning">
+<a class="reference internal image-reference" href="_images/semantic_versioning.png"><img alt="_images/semantic_versioning.png" src="_images/semantic_versioning.png" style="width: 70%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text"><a class="reference external" href="https://semver.org/">Semantic versioning</a></span><a class="headerlink" href="#semantic-versioning" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>You’ll see this, or a similar version numbering, on packages that you install for Python and R.</p>
+<p>Changes to this book don’t cause backwards-compatibility issues in the same sense as code.
+We’ve chosen to use a form of calender versioning (<a class="reference external" href="https://calver.org/">CalVer</a>).
+You’ll see the current version below the site’s table of contents, where the first four digits represent the year that latest changes were made.
+The incremental number following the full stop indicates how many versions of the guidance have been published in that year.
+As this guidance will change over time, this version number provides users with a reference for citing a specific state of the guidance.</p>
+</section>
+<section id="changelog">
+<h2>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h2>
+<p>A changelog records the major changes that have occurred to a project or package between versioned releases of the code.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2020-01-21
+### Added
+- `add_to_each_in_list()`
+- online sphinx-generated documentation
+- contribution guide
+
+### Removed
+- `subtract_to_each_in_list()`
+
+### Changed
+- Improved function documentation
+
+### Fixed
+- bug in `multiple_each_in_list()`, where output was not returned
+</pre></div>
+</div>
+<p>Like versioning, users find a changelog is useful to determine whether an update to your code is compatible with their work, which may depend on your code.
+It can also document which parts of your code will no longer be supported in future version and which bugs in your code you have addressed.
+Your changelog can be in any format and should be associated with your code documentation, so that it is easy for users and other contributors to find.</p>
+<p><a class="reference external" href="https://keepachangelog.com/en/1.0.0/">keep a changelog</a> provides a simple but effective template for recording changes to your code.</p>
+</section>
+<section id="copyright-and-licenses">
+<h2>Copyright and Licenses<a class="headerlink" href="#copyright-and-licenses" title="Link to this heading">#</a></h2>
+<p>Copyright indicates ownership of work.
+All material created by civil servants, ministers, government departments and their agencies are covered by
+<a class="reference external" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">Crown copyright</a>.
+It is not essential to include a copyright notice on your work, but doing so can help to avoid confusion around ownership. We recommend including one in government projects.</p>
+<p>Licenses outline the conditions under which others may use, modify and/or redistribute your work.
+As such, including a license with code is important for users and other developers alike.
+This <a class="reference external" href="https://choosealicense.com/">online tool</a> might help you to choose an appropriate license for your project.
+The Government Digital Service generally recommends using the
+<a class="reference external" href="https://opensource.org/licenses/MIT">MIT license</a> for code and the
+<a class="reference external" href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government License (OGL)</a> for documentation.</p>
+<p>Both copyright and license are usually placed in a LICENSE file in your project.
+For example, an MIT LICENSE file might look like:</p>
+<blockquote>
+<div><p>Copyright 2020, Crown copyright</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+</div></blockquote>
+</section>
+<section id="open-source-your-code">
+<h2>Open source your code<a class="headerlink" href="#open-source-your-code" title="Link to this heading">#</a></h2>
+<p>In government, we <a class="reference external" href="https://www.gov.uk/service-manual/service-standard/point-12-make-new-source-code-open">support and promote open source</a> whenever possible.
+<a class="reference external" href="https://opensource.com/resources/what-open-source">Open source</a> software is software with source code that anyone can freely inspect, modify and enhance.
+As a government analyst, you should aim to make all new source code open, unless you can justify witholding part of your source code.</p>
+<p>Open sourcing code benefits you, other government analysts, and the public.</p>
+<p>Personal benefits from open sourcing include:</p>
+<ul class="simple">
+<li><p>Attribution - coding in the open creates a public record of your contributions to analysis and software.</p></li>
+<li><p>Collaboration - you can gain experience working with analysts in other departments.</p></li>
+<li><p>Review - peers and experts in the field can provide advice on improving your analysis and coding.</p></li>
+<li><p>Feels good - we regularly benefit from open source software, so it’s nice to give something back.</p></li>
+</ul>
+<p>While the public benefit from:</p>
+<ul class="simple">
+<li><p>Transparency - stakeholders can understand and reproduce our analysis, which is a core element of the <a class="reference external" href="https://code.statisticsauthority.gov.uk/">Statistics Code of Practice</a>.</p></li>
+<li><p>Sharing value - others can benefit from our work, either through reuse or demonstration of good practices.</p></li>
+<li><p>Sharing opportunity - others can gain insight and experience from reading and possibly contributing to  your code.</p></li>
+</ul>
+<p>Please see the <a class="reference external" href="https://www.gov.uk/government/publications/open-source-guidance/when-code-should-be-open-or-closed">Government Data Service (GDS) guidance</a>
+for help deciding when code should be open or closed.
+Further
+<a class="reference external" href="https://www.gov.uk/government/publications/open-source-guidance/security-considerations-when-coding-in-the-open">GDS guidance</a> addresses security concerns for coding in the open. Additional guidance on deciding when and how to open source, the benefits, and good practice is available from the <a class="reference external" href="https://analysisfunction.civilservice.gov.uk/policy-store/open-sourcing-analytical-code/">Analysis Function</a>.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="code_documentation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Code documentation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="version_control.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Version control</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#readme">README</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contributing-guidance">Contributing guidance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user-desk-instructions">User desk instructions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citation">Citation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vignettes">Vignettes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#versioning">Versioning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog">Changelog</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#copyright-and-licenses">Copyright and Licenses</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#open-source-your-code">Open source your code</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>Analysis Function - Analytical Standards and Pipelines hub</p><p>This is a living document, please help use to make it grow by providing any feedback <a href='mailto:ASAP@ons.gov.uk'>by email</a> or via the <a href='https://github.com/best-practice-and-impact/qa-of-code-guidance'>GitHub repository</a>.
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

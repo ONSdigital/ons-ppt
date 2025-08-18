@@ -1,0 +1,29 @@
+/*
+Orange AF #ff6a00
+Blue AF #193f54
+*/
+
+/* Custom admonition, usage like:
+
+```{admonition} Key Learning
+:class: admonition-learning
+
+```
+ */
+ .admonition-learning p.admonition-title::after {
+    content: "\f5fc";
+    left: .35rem;
+    top: .5rem;
+}
+
+/* Custom admonition, usage like:
+
+```{admonition} Key Strategies
+:class: admonition-strategies
+
+```
+ */
+.admonition-strategies p.admonition-title::after {
+    content: "\f439";
+    left: .55rem;
+}

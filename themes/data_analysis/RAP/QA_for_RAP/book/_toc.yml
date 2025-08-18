@@ -1,0 +1,34 @@
+format: jb-book
+root: intro
+parts:
+- caption: Overview
+  chapters:
+  - file: glossary
+  - file: managers_guide
+  - file: checklists
+    sections:
+    - file: checklist_lower
+    - file: checklist_moderate
+    - file: checklist_higher
+
+
+- caption: Guidance
+  chapters:
+  - file: principles
+  - file: modular_code
+  - file: readable_code
+  - file: project_structure
+  - file: code_documentation
+  - file: project_documentation
+  - file: version_control
+  - file: configuration
+  - file: data
+  - file: peer_review
+  - file: testing_code
+  - file: continuous_integration
+
+
+- caption: Resources
+  chapters:
+  - file: learning
+  - file: tools
