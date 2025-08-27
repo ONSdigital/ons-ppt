@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Managing analytical code development &#8212; Quality Assurance of Code for Analysis and Research</title>
+    <title>Managing analytical code development &#8212; Quality Assurance for Reproducible Analytical Pipelines</title>
   
   
   
@@ -62,7 +62,6 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'managers_guide';</script>
-    <link rel="icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Code quality assurance checklists" href="checklists.html" />
@@ -153,14 +152,8 @@
   
   
   
-    
-    
-      
-    
-    
-    <img src="_static/duck_book_logo.svg" class="logo__image only-light" alt="Quality Assurance of Code for Analysis and Research - Home"/>
-    <script>document.write(`<img src="_static/duck_book_logo.svg" class="logo__image only-dark" alt="Quality Assurance of Code for Analysis and Research - Home"/>`);</script>
   
+    <p class="title logo__title">Quality Assurance for Reproducible Analytical Pipelines</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -189,7 +182,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Guidance</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="principles.html">Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="principles.html">1 Principles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modular_code.html">Modular code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readable_code.html">Readable code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="project_structure.html">Structuring your project</a></li>
@@ -249,67 +242,18 @@
 <div class="article-header-buttons">
 
 
-
-
-
-<div class="dropdown dropdown-source-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
-    <i class="fab fa-github"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance" target="_blank"
-   class="btn btn-sm btn-source-repository-button dropdown-item"
+<a href="https://github.com/ONSdigital/ons-ppt/tree/QA_for_RAP/themes/data_analysis/RAP/QA_for_RAP" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
    title="Source repository"
-   data-bs-placement="left" data-bs-toggle="tooltip"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
   
 
 <span class="btn__icon-container">
   <i class="fab fa-github"></i>
   </span>
-<span class="btn__text-container">Repository</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance/edit/main/book/managers_guide.md" target="_blank"
-   class="btn btn-sm btn-source-edit-button dropdown-item"
-   title="Suggest edit"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
 
-<span class="btn__icon-container">
-  <i class="fas fa-pencil-alt"></i>
-  </span>
-<span class="btn__text-container">Suggest edit</span>
 </a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance/issues/new?title=Issue%20on%20page%20%2Fmanagers_guide.html&body=Your%20issue%20content%20here." target="_blank"
-   class="btn btn-sm btn-source-issues-button dropdown-item"
-   title="Open an issue"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="btn__text-container">Open issue</span>
-</a>
-</li>
-      
-  </ul>
-</div>
 
 
 
@@ -451,19 +395,11 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="managing-analytical-code-development">
 <h1>Managing analytical code development<a class="headerlink" href="#managing-analytical-code-development" title="Link to this heading">#</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This section is a draft, while we make sure that it meets user needs.</p>
-<p>It would benefit from case studies that demonstrate how to decide what level of quality assurance a piece of analysis requires.</p>
-<p>Please get in touch with feedback or case studies to support the guidance
-<a class="reference external" href="https://github.com/best-practice-and-impact/qa-of-code-guidance/issues">by creating a GitHub Issue</a>
-or emailing us at <a class="reference external" href="mailto:ASAP&#37;&#52;&#48;ons&#46;gov&#46;uk">emailing us</a>.</p>
-</div>
 <p>This section of the guidance targets those who manage data analysis, science and engineering work in government
 or those acting as product owners for analytical products.
 We refer to processes that apply these good practices as a reproducible analytical pipelines (RAP).</p>
 <p>Before applying this guidance, you should have a basic awareness of the tools and
-techniques used to do quality analysis as code - the introduction to RAP training (LINK TO INTRO TO RAP) outlines these.
+techniques used to do quality analysis as code - the introduction to RAP training <!-- (LINK TO INTRO TO RAP) --> outlines these.
 You should also be aware of any specific tools and platforms that are used in your organisation and department.</p>
 <section id="apply-quality-assurance-proportional-to-risk">
 <h2>Apply quality assurance proportional to risk<a class="headerlink" href="#apply-quality-assurance-proportional-to-risk" title="Link to this heading">#</a></h2>
@@ -476,21 +412,21 @@ You might find the <a class="reference internal" href="checklists.html"><span cl
 When possible, you should define the target assurance level before starting the analysis.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>While quality assurance must be applied relative to the risk and complexity of the analysis, you must consider your own skills and the skills of your team. It will take time to learn to apply the necessary good practices, so you should support the gradual development of your team’s skills.</p>
-<p>Note that it is important to maintain technical skills in the analysis team for sustainability, to ensure that the analysis can be understood, updated, and maintained.</p>
+<p>While quality assurance must be applied relative to the risk and complexity of the analysis, you must consider your own skills and the skills of your team. It will take time to learn to apply the necessary good practices, so you should support the gradual development of these skills.</p>
+<p>Note that it is important to maintain technical skills for sustainability, to ensure that the analysis can be understood, updated, and maintained.</p>
 </div>
 <p>Despite the initial cost of developing technical skills,
 <a class="reference external" href="https://www.devops-research.com/research.html">evidence shows that applying good practices increases the efficiency of code development and maintainability of the code</a>.
-There are number of case studies that describe how
-<a class="reference external" href="https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/rap-case-studies/">good quality assurance practices have improved government analysis</a>.</p>
-<!-- Above line to potentially be removed/editied to point towards case studies in RAP in Action instead -->
+A number of case studies that describe how
+good quality assurance practices have improved government analysis can be found in the Introduction to RAP training <!-- Link to intro to RAP --> and RAP in Action case studies.</p>
+<!-- Link to RAP in action case studies -->
 <p>Not following good practices creates <a class="reference internal" href="glossary.html#technical-debt"><span class="std std-ref">technical debt</span></a>, which slows down further development of the analysis.
 This can be necessary for delivering to short deadlines, but you should set aside time to address this for continued development of the analysis.</p>
 <p>Where quality assurance of the code doesn’t meet your target level of assurance,
 for example where there is limited time or skill,
 then you should supplement this with more in-depth assurance of outputs.
 This might include dual running the analysis with an independent system and consistency checks across the output data.</p>
-<p>The remaining parts of this section provide questions that aim to help you assess the quality assurance practices that you (and your team) are applying in your analysis.</p>
+<p>The remaining parts of this section provide questions that aim to help you assess the quality assurance practices that you and your team are applying in your analysis.</p>
 </section>
 <section id="design-quality-analysis">
 <h2>Design quality analysis<a class="headerlink" href="#design-quality-analysis" title="Link to this heading">#</a></h2>
@@ -513,8 +449,8 @@ You and your team should be able to explain why you have chosen the analysis too
 <li><p>You should version input data so that you can reproduce analysis outputs.</p></li>
 <li><p>You should store data in an open format (e.g. CSV or ODS), not formats that are restricted to proprietary software like SAS and Stata.</p></li>
 <li><p>You should store large or complex datasets in a database.</p></li>
-<li><p>You should monitor the quality of data, following <a class="reference external" href="https://www.gov.uk/government/publications/the-government-data-quality-framework/the-government-data-quality-framework">the government data quality framework</a>.</p></li>
 </ul>
+<!-- Maybe add another bullet point in here about monitoring the quality of data and link to data quality unit? -->
 </section>
 <section id="how-will-you-keep-track-of-changes-to-the-code-and-why-they-were-made">
 <h3>How will you keep track of changes to the code and why they were made?<a class="headerlink" href="#how-will-you-keep-track-of-changes-to-the-code-and-why-they-were-made" title="Link to this heading">#</a></h3>
@@ -743,9 +679,6 @@ Large differences in the outcome of the results may indicate an issue with the a
   
   <div class="footer-item">
     
-<div class="extra_footer">
-  <p>Analysis Function - Analytical Standards and Pipelines hub</p><p>This is a living document, please help use to make it grow by providing any feedback <a href='mailto:ASAP@ons.gov.uk'>by email</a> or via the <a href='https://github.com/best-practice-and-impact/qa-of-code-guidance'>GitHub repository</a>.
-</div>
   </div>
   
 </div>

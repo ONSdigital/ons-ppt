@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modular code &#8212; Quality Assurance of Code for Analysis and Research</title>
+    <title>Modular code &#8212; Quality Assurance for Reproducible Analytical Pipelines</title>
   
   
   
@@ -64,11 +64,10 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script src="_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modular_code';</script>
-    <link rel="icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Readable code" href="readable_code.html" />
-    <link rel="prev" title="Principles" href="principles.html" />
+    <link rel="prev" title="1 Principles" href="principles.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -155,14 +154,8 @@
   
   
   
-    
-    
-      
-    
-    
-    <img src="_static/duck_book_logo.svg" class="logo__image only-light" alt="Quality Assurance of Code for Analysis and Research - Home"/>
-    <script>document.write(`<img src="_static/duck_book_logo.svg" class="logo__image only-dark" alt="Quality Assurance of Code for Analysis and Research - Home"/>`);</script>
   
+    <p class="title logo__title">Quality Assurance for Reproducible Analytical Pipelines</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -191,7 +184,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Guidance</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="principles.html">Principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="principles.html">1 Principles</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Modular code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="readable_code.html">Readable code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="project_structure.html">Structuring your project</a></li>
@@ -251,67 +244,18 @@
 <div class="article-header-buttons">
 
 
-
-
-
-<div class="dropdown dropdown-source-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
-    <i class="fab fa-github"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance" target="_blank"
-   class="btn btn-sm btn-source-repository-button dropdown-item"
+<a href="https://github.com/ONSdigital/ons-ppt/tree/QA_for_RAP/themes/data_analysis/RAP/QA_for_RAP" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
    title="Source repository"
-   data-bs-placement="left" data-bs-toggle="tooltip"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
   
 
 <span class="btn__icon-container">
   <i class="fab fa-github"></i>
   </span>
-<span class="btn__text-container">Repository</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance/edit/main/book/modular_code.md" target="_blank"
-   class="btn btn-sm btn-source-edit-button dropdown-item"
-   title="Suggest edit"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
 
-<span class="btn__icon-container">
-  <i class="fas fa-pencil-alt"></i>
-  </span>
-<span class="btn__text-container">Suggest edit</span>
 </a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/best-practice-and-impact/qa-of-code-guidance/issues/new?title=Issue%20on%20page%20%2Fmodular_code.html&body=Your%20issue%20content%20here." target="_blank"
-   class="btn btn-sm btn-source-issues-button dropdown-item"
-   title="Open an issue"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="btn__text-container">Open issue</span>
-</a>
-</li>
-      
-  </ul>
-</div>
 
 
 
@@ -443,8 +387,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="modular-code">
 <h1>Modular code<a class="headerlink" href="#modular-code" title="Link to this heading">#</a></h1>
-<p>test
-This chapter outlines principles that represent good practices for general programming and software development.
+<p>This chapter outlines principles that represent good practices for general programming and software development.
 These have been tailored to support analytical workflows.</p>
 <div class="admonition-learning admonition">
 <p class="admonition-title">Pre-requisites</p>
@@ -460,7 +403,7 @@ These have been tailored to support analytical workflows.</p>
 <section id="motivation">
 <h2>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">#</a></h2>
 <p>Even experienced programmers can find it difficult to understand code that is repetitive, disorganised, or overly complex.
-This makes assuring, testing or changing the code more burdensome.
+This makes assuring, testing or changing the code more difficult.
 You may also find it harder to spot and fix mistakes.</p>
 <p>Code that isn’t modular can cause a range of issues:</p>
 <ul class="simple">
@@ -470,16 +413,16 @@ You may also find it harder to spot and fix mistakes.</p>
 <li><p>a code base that makes it difficult to find what you’re looking for.</p></li>
 </ul>
 <p>This chapter highlights ways to write modular code that is easy to read, review, and maintain.
-These practices will also help you implement the other good coding practices you will come across in this book, such as version control, review, testing and documentation.
+These practices will also help you implement the other good coding practices you will come across in this guidance, such as version control, review, testing and documentation.
 Because of this, modular code is fundamental to making analysis more reproducible, auditable and assured.</p>
 </section>
 <section id="modular">
 <span id="id1"></span><h2>Modular code<a class="headerlink" href="#modular" title="Link to this heading">#</a></h2>
 <p>Improving readability often involves breaking your code down into smaller, more manageable chunks.
-Regardless of the language, you can containerise your code into self-contained parts such as modules, classes, or functions.</p>
+Regardless of the language, you can group your code into self-contained parts such as modules, classes, or functions.</p>
 <section id="write-re-usable-code-as-functions">
 <span id="functions"></span><h3>Write re-usable code as functions<a class="headerlink" href="#write-re-usable-code-as-functions" title="Link to this heading">#</a></h3>
-<p>In the early stages of analysis, we often copy and paste code to ‘make it work’. As the code matures, it is worth taking repetitive code and turning it into functions.
+<p>In the early stages of analysis, it is common to copy and paste code to ‘make it work’. As the code matures, it is worth taking repetitive code and turning it into functions.
 Functions allow us to make a piece of logic reusable in a consistent and readable way, and also makes it easier for us to <a class="reference internal" href="testing_code.html"><span class="std std-doc">test our logic</span></a>.</p>
 <p>When starting to write functions, you should consider what is the right level of complexity for a single function.
 A helpful starting point is to consider if the code containing the logic can be turned into a concise and readable function. Signs that the code is too complex to work as a single function are that the function is very long or you have to pass it lots of arguments to get it to work.
@@ -487,26 +430,29 @@ If this is what you find, it is usually best to break the code into multiple sma
 then use these smaller functions to build up a larger high-level function that performs the group of actions that you need.
 Smaller functions also have the advantage that you might also be able to re-use them in other places in your code. For example, in other high-level functions that perform similar tasks.</p>
 <p>This approach helps you break complex logic down into small, understandable chunks that can be documented and tested more easily.</p>
+<!-- Possible example code here? -->
 <p>When writing functions, it is also important to consider how they interact with other parts of your code.
 As a general rule of thumb, your code should run in the same way if a call to your function was replaced by the value that it would have returned.
 This is called ‘referential transparency’.</p>
 <p>In practice, this means that your functions should not depend on or affect variables that have not been explicitly fed into them as arguments.
 For instance, a function should not add columns to a data table that has not been passed as an input to the function. It should not assume that data or other functionality exists if they have not been supplied as arguments or explicitly referenced from other libraries.
 Nor should the action of a function be affected by anything other than arguments that are passed to it.
-For example, running your function twice with the same inputs should always produce the same results.</p>
-<p>Avoiding such behaviours makes your code more transparent;
+For example, running your function twice with the same inputs <strong>should always produce the same results.</strong></p>
+<p>Avoiding these behaviours makes your code more transparent;
 it is easier for users and developers to understand which functions affect which data without being concerned about hidden behaviours.
-In turn, this makes it easier to locate bugs in the code and assure its function by peer review.</p>
+This then makes it easier to locate bugs in the code and assure its function by peer review.</p>
 <p>When it is not possible or practical to follow these practices, you should ensure that any ‘side-effects’ are adequately documented for both users and developers.
 This may be the case where your code interacts with a file, database or an external service.
 Ultimately, signalling where these kind of things might happen, helps someone trying to debug issues know where to look.</p>
-<p>To summarise:</p>
+<div class="admonition-note admonition">
+<p class="admonition-title">To summarise</p>
 <ul class="simple">
 <li><p>Make sure that functions are not overcomplicated;
 break down your code into smaller functions and build up your functionality with larger functions from these small building blocks.</p></li>
 <li><p>Minimise the ‘side-effects’ of functions in order to make sure that your code is easy to debug and is transparent in its functionality.</p></li>
 <li><p>Strive to make sure that running your function with the same inputs will produce the same results every time.</p></li>
 </ul>
+</div>
 </section>
 <section id="group-data-and-methods-as-classes">
 <h3>Group data and methods as classes<a class="headerlink" href="#group-data-and-methods-as-classes" title="Link to this heading">#</a></h3>
@@ -514,7 +460,7 @@ break down your code into smaller functions and build up your functionality with
 They create an association between data (attributes of the class) and logic (methods of the class).
 Classes can be useful when representing real objects in our code, as the examples below demonstrate.</p>
 <p>Although classes exist in R, writing custom classes is less common than it is in Python (and other OOP enabling languages).
-Because of this, the following sub-section will focus primarily on Python classes. If you are coding in R, you may wish to <a class="reference internal" href="#split-complex-code-into-multiple-scripts">move to the next section.</a></p>
+Because of this, the following sub-section will focus primarily on <strong>Python classes</strong>. If you are coding in R, you may wish to <a class="reference internal" href="#split-complex-code-into-multiple-scripts">move to the next section.</a></p>
 <p>With a more complex system, OOP can help to reduce complexity by hiding low-level details from users, such as an internal state.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -748,12 +694,14 @@ For this you would usually use a script. The script helps organise and run your 
 <p class="admonition-title">Note</p>
 <p>Using a script does not guarantee that your code will run reproducibly, but it does ensure that code is run in the same way across multiple runs.</p>
 </div>
-<p>To summarise:</p>
+<div class="admonition-note admonition">
+<p class="admonition-title">To summarise</p>
 <ul class="simple">
 <li><p>Scripts are a good way to orchestrate your functions and classes in order to build a simple, yet effective pipeline.</p></li>
 <li><p>They are text documents containing source code, which makes them easily human readable and auditable.</p></li>
 <li><p>They can be broken down into sections using <a class="reference internal" href="code_documentation.html"><span class="std std-doc">comments</span></a> for readability.</p></li>
 </ul>
+</div>
 </section>
 <section id="organise-related-classes-and-functions-into-modules">
 <span id="modules"></span><h3>Organise related classes and functions into modules<a class="headerlink" href="#organise-related-classes-and-functions-into-modules" title="Link to this heading">#</a></h3>
@@ -874,7 +822,7 @@ They can then reuse the work you have put in within their own code to solve simi
 <p>Packages are self-contained collections of code written by someone else to solve a particular problem.
 For example, packages like <code class="docutils literal notranslate"><span class="pre">dplyr</span></code> and <code class="docutils literal notranslate"><span class="pre">pandas</span></code> are essential when performing data wrangling in R and Python, respectively.
 They contain a toolbox of predefined functions that allows us to avoid rewriting this functionality from scratch every time.
-Inside these packages is a set of <a class="reference internal" href="#modules"><span class="std std-ref">modules</span></a> containing relevant functions, classes and other code that someone has written.
+Inside these packages is a set of <a class="reference internal" href="#organise-related-classes-and-functions-into-modules">modules</a> containing relevant functions, classes and other code that someone has written.
 These are wrapped up into a package structure so that the programming language you use can understand, install and make available the code for you to import.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -887,12 +835,12 @@ is my code solving a problem that someone else has not already solved in my prog
 If the answer is ‘Yes’ then perhaps it is worth considering wrapping up your code and distributing it wider.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Packaging code properly will involve applying many of the recommendations from this book.</p>
+<p>Packaging code properly will involve applying many of the recommendations in this guidance.</p>
 <p>You will have to consider how to test, document and lay out your code for it to be usable and packagable.
 In the end, high quality packages are the cornerstone of open-source package ecosystems.
 However, it is not trivial to maintain and develop well-regarded open-source packages.</p>
 <p>If you feel like you are writing code that you might consider turning into a package,
-consult this book and strive to apply as many of the recommendations as you go.
+consult this guidance and strive to apply as many of the recommendations as you go.
 This will make the final polishing and packaging much simpler, and will produce packages that are easier for third-parties to trust and use.</p>
 </div>
 </section>
@@ -927,9 +875,9 @@ Here are a few suggestions to consider when refactoring code from notebooks:</p>
 <li><p>Import the required functionality from these new modules into the notebook or pipeline script.</p></li>
 <li><p>For new analysis, reuse functionality from these modules in new notebooks and continue to document your analytical thinking alongside your code in these notebooks.</p></li>
 </ul>
-<p>After this, you might turn existing notebooks into HTML to send them stakeholders, or save them as is so that analytical peers can re-run and review your notebooks.
+<p>After this, you might turn existing notebooks into HTML to send to stakeholders, or save them as they are to enable analytical peers can re-run and review your notebooks.
 The steps that you’ve taken to simplify your notebook code will make your code much easier to understand by readers.</p>
-<p>Bear in mind that other analysts can still run notebook files out of order, so they should not be used as the main method of actually generating outputs.
+<p>Keep in mind that other analysts can still run notebook files out of order, so they should not be used as the main method of actually generating outputs.
 Output generation should instead be trusted to scripts, where human decisions do not alter the order that code is run.</p>
 </section>
 </section>
@@ -971,7 +919,7 @@ Output generation should instead be trusted to scripts, where human decisions do
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Principles</p>
+        <p class="prev-next-title">1 Principles</p>
       </div>
     </a>
     <a class="right-next"
@@ -1035,9 +983,6 @@ Output generation should instead be trusted to scripts, where human decisions do
   
   <div class="footer-item">
     
-<div class="extra_footer">
-  <p>Analysis Function - Analytical Standards and Pipelines hub</p><p>This is a living document, please help use to make it grow by providing any feedback <a href='mailto:ASAP@ons.gov.uk'>by email</a> or via the <a href='https://github.com/best-practice-and-impact/qa-of-code-guidance'>GitHub repository</a>.
-</div>
   </div>
   
 </div>

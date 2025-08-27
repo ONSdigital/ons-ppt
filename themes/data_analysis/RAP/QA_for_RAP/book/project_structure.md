@@ -1,13 +1,9 @@
 # Structuring your project
 
-When you are designing your analysis it can be difficult to keep your thoughts tidy.
-Analysis is often exploratory and subject to change.
-This means that scripts and programs can become messy.
+Analysis is often exploratory and subject to change, which means that scripts and programs can become messy.
 The messier the programs, the harder they are to maintain and change in future.
 
-Good directory structure and file hygiene can go a long way to mitigate this.
-It will help others to read your code more easily, and you will write better code into the bargain.
-Some structures have been found to be generally quite effective through trial and error.
+Good directory structure and file hygiene can go a long way to mitigate this. Some structures have been found to be generally quite effective through trial and error.
 Others are more specific, and - as with all guidelines - should not be taken as mandatory.
 
 

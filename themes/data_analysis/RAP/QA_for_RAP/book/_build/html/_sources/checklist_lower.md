@@ -2,8 +2,6 @@
 
 ## Quality assurance checklist
 
-Quality assurance checklist from [the quality assurance of code for analysis and research guidance](https://best-practice-and-impact.github.io/qa-of-code-guidance/intro.html).
-
 ### Modular code
 
 - Individual pieces of logic are written as functions. Classes are used if more appropriate.
@@ -14,6 +12,7 @@ Quality assurance checklist from [the quality assurance of code for analysis and
 - Names used in the code are informative and concise.
 - Code logic is clear and avoids unnecessary complexity.
 - Code follows a standard style, e.g. [PEP8 for Python](https://www.python.org/dev/peps/pep-0008/) and [Google](https://google.github.io/styleguide/Rguide.html) or [tidyverse](https://style.tidyverse.org/) for R.
+<!-- Do we want to leave this in? These are external links but are to the main code sites so may not change? Alternatively could link them in additional resources with a caveat about them being owned by Python/R and may change?  -->
 
 ### Project structure
 
@@ -39,7 +38,7 @@ Quality assurance checklist from [the quality assurance of code for analysis and
 
 ### Version control
 
-- Code is [version controlled using Git](https://git-scm.com/).
+- Code is version controlled (e.g. using Git)
 - Code is committed regularly, preferably when a discrete unit of work has been completed.
 - An appropriate branching strategy is defined and used throughout development.
 - Code is open-sourced. Any sensitive data are omitted or replaced with dummy data.
@@ -52,14 +51,15 @@ Quality assurance checklist from [the quality assurance of code for analysis and
 
 ### Data management
 
-- Published outputs meet [accessibility regulations](https://analysisfunction.civilservice.gov.uk/area_of_work/accessibility/).
+<!-- - Published outputs meet [accessibility regulations](https://analysisfunction.civilservice.gov.uk/area_of_work/accessibility/). -->
 - All data for analysis are stored in an open format, so that specific software is not required to access them.
 - Input data are stored safely and are treated as read-only.
-- Input data are versioned. All changes to the data result in new versions being created, or [changes are recorded as new records](https://en.wikipedia.org/wiki/Slowly_changing_dimension).
+- Input data are versioned. All changes to the data result in new versions being created, or changes are recorded as new records.
 - All input data is documented in a data register, including where they come from and their importance to the analysis.
 - Outputs from your analysis are disposable and are regularly deleted and regenerated while analysis develops. Your analysis code is able to reproduce them at any time.
 - Non-sensitive data are made available to users. If data are sensitive, dummy data is made available so that the code can be run by others.
-- Data quality is monitored, as per [the government data quality framework](https://www.gov.uk/government/publications/the-government-data-quality-framework/the-government-data-quality-framework).
+- Data quality is monitored. 
+<!-- Link to unit on data quality -->
 
 ### Peer review
 
@@ -91,16 +91,14 @@ Quality assurance checklist from [the quality assurance of code for analysis and
 - An issue tracker (e.g GitHub Project, Trello or Jira) is used to record development tasks.
 - New issues or tasks are guided by users’ needs and stories.
 - Acceptance criteria are noted for issues and tasks. Fulfilment of acceptance criteria is recorded.
-- Quality assurance standards and processes for the project are defined. These are based around [the quality assurance of code for analysis and research guidance document](https://best-practice-and-impact.github.io/qa-of-code-guidance/intro.html).
+
 
 ## Template checklist
 
-You can either refer to the checklist above, or use the Markdown template below to include the checklist in your project.
+To use this checklist in your project, you can either refer to the checklist above, use the Markdown template below, or download a copy of this checklist.
 
 ```{code-block} md
 ## Quality assurance checklist
-
-Quality assurance checklist from [the quality assurance of code for analysis and research guidance](https://best-practice-and-impact.github.io/qa-of-code-guidance/intro.html).
 
 ### Modular code
 
@@ -137,7 +135,7 @@ Quality assurance checklist from [the quality assurance of code for analysis and
 
 ### Version control
 
-- [ ] Code is [version controlled using Git](https://git-scm.com/).
+- [ ] Code is version controlled (e.g. using Git)
 - [ ] Code is committed regularly, preferably when a discrete unit of work has been completed.
 - [ ] An appropriate branching strategy is defined and used throughout development.
 - [ ] Code is open-sourced. Any sensitive data are omitted or replaced with dummy data.
@@ -150,14 +148,13 @@ Quality assurance checklist from [the quality assurance of code for analysis and
 
 ### Data management
 
-- [ ] Published outputs meet [accessibility regulations](https://analysisfunction.civilservice.gov.uk/area_of_work/accessibility/).
 - [ ] All data for analysis are stored in an open format, so that specific software is not required to access them.
 - [ ] Input data are stored safely and are treated as read-only.
-- [ ] Input data are versioned. All changes to the data result in new versions being created, or [changes are recorded as new records](https://en.wikipedia.org/wiki/Slowly_changing_dimension).
+- [ ] Input data are versioned. All changes to the data result in new versions being created, or changes are recorded as new records.
 - [ ] All input data is documented in a data register, including where they come from and their importance to the analysis.
 - [ ] Outputs from your analysis are disposable and are regularly deleted and regenerated while analysis develops. Your analysis code is able to reproduce them at any time.
 - [ ] Non-sensitive data are made available to users. If data are sensitive, dummy data is made available so that the code can be run by others.
-- [ ] Data quality is monitored, as per [the government data quality framework](https://www.gov.uk/government/publications/the-government-data-quality-framework/the-government-data-quality-framework).
+- [ ] Data quality is monitored.
 
 ### Peer review
 
@@ -189,5 +186,4 @@ Quality assurance checklist from [the quality assurance of code for analysis and
 - [ ] An issue tracker (e.g GitHub Project, Trello or Jira) is used to record development tasks.
 - [ ] New issues or tasks are guided by users’ needs and stories.
 - [ ] Acceptance criteria are noted for issues and tasks. Fulfilment of acceptance criteria is recorded.
-- [ ] Quality assurance standards and processes for the project are defined. These are based around [the quality assurance of code for analysis and research guidance document](https://best-practice-and-impact.github.io/qa-of-code-guidance/intro.html).
 ```

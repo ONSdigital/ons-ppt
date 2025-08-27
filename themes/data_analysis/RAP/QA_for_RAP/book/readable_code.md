@@ -30,7 +30,7 @@ As such, it is important to empathise with these potential users and write code 
 Doing this will make for a 'self-documenting' codebase that does not need as much additional documentation.
 
 This chapter highlights good coding practices that will improve the readability and maintainability of your code.
-Here, readability refers to how easily another analyst can gain a decent understand of how your code works, within a reasonable amount of time.
+Here, readability refers to how easily another analyst can gain a decent understanding of how your code works, within a reasonable amount of time.
 Maintainability refers to how easily other analysts can understand your code well enough to modify and repair it.
 
 
@@ -95,7 +95,7 @@ my_favourite_number <- "ssh, I'm a string"
 ```
 ````
 
-Another developer, or even 'future you', would be unable to correctly interpret what these variable names to represent.
+Another developer, or even 'future you', would be unable to correctly interpret what these variable names represent.
 Therefore, you should try very hard to avoid cryptic or single-letter identifiers.
 
 That said, there are situations where some seemingly cryptic identifiers make sense.
@@ -315,7 +315,7 @@ Compare this against `bp = Reader(book_data)` then `bp.fetch()`, where there is 
 (code-style)=
 
 ``` {note}
-Writing custom classes is more common in Python than in R, as discussed in the [](modular_code.md) chapter. As such, the examples above only apply to Python. 
+Writing custom classes is more common in Python than in R, as discussed in the [](modular_code.md) chapter. Because of this, the examples above only apply to Python. 
 ```
 
 
@@ -325,7 +325,7 @@ Programming languages can differ in lots of ways.
 One way R and Python differ, for example, is their use of indentation.
 Indentation is part of the well defined syntax of Python but is not for R.
 This does not mean that you shouldn't use indentation in R to make your code more readable.
-If in doubt, you should consider consulting how to use formatting to write more readable code by finding the style guidelines for your language.
+If in doubt, consulting the style guidelines for your language can help you to understand how to use formatting to write more readable code.
 
 Generally, code style guides provide a standard or convention for formatting and laying out your code.
 The purpose of these style guides is to increase consistency across the programming community for a given language.
@@ -339,23 +339,11 @@ They might include how to appropriately:
 - provide other useful guidance regarding formatting.
 
 The existence of such style guides does not necessarily mean that each individual or team will apply these conventions to the letter.
-Organisations and developer teams often have needs that might not be addressed in a general style guidance document.
-After all, these documents aim to capture the needs of a diverse group of developers.
-Therefore, these guides are more useful as starting points in a discussion on 'how should our team be consistent internally in the way we write code?'.
+These guides are more useful as starting points in a discussion on 'how should our team be consistent internally in the way we write code?'.
 
-```{figure} ./_static/code_quality.png
----
-width: 80%
-name: code_quality
-alt: Comic strip describing a brutal code review.
----
-Code Quality, from [xkcd](https://xkcd.com/1513/)
-```
 
 The core idea around these guides is that individual teams have to either adopt them or adapt them for use while writing code.
 The goals are readability and consistency.
-This consistency between developers will most likely aid speed of development and review,
-as well as the ability of one developer to comprehend code written by their colleagues.
 
 ```{admonition} Common Style Guides
 [PEP8](https://www.python.org/dev/peps/pep-0008/) is an official Python style guide, which is widely used.
@@ -370,11 +358,7 @@ There is perhaps a misconception that following style guidelines and formatting 
 In reality, guidelines may encourage code-reviews to focus on style over more fundamental problems with the code.
 They have the potential to detract from assessment of whether the code is making the best use of a given language.
 
-The notion of style goes beyond simple spacing or capitalisation.
-In the same way that knowing and using common idioms such as 'over the moon' or 'cold feet' make you seem like a more fluent speaker of English,
-a part of being fluent in a programming language is being able to write 'idiomatic' code.
-Idiomatic stands for 'using, containing, or denoting expressions that are natural to a native speaker'.
-In Python, idiomatic approaches to writing code are commonly referred to as 'pythonic'.
+The notion of style goes beyond simple spacing or capitalisation. It also includes writing code in a way that feels natural and familiar to others who use the language.
 
 This might mean simplifying complex and perhaps hard to read patterns into a simpler, but well established alternative.
 For example, the pieces of code below are equivalent:
@@ -417,19 +401,17 @@ my_data <- (0:100) ^ 2 / 365
 ```
 ````
 
-The ability to write idiomatic code in a given language comes with time.
+The ability to write code with more R or Python language features comes with time.
 However, it is important to think about it while looking at a given piece of code: is it using everything that language 'X' has to offer?
 
-That said, we should still prefer readability over idioms that might make our code more complex.
-For example, attempting to fit too much logic into a single line of code can make it considerably harder to understand.
 
 
 (automate-style-checks)=
 #### Automate style checks
 
 Following a style guide from the beginning of a project is good practice.
-However, checking that code continues to follow a particular style, or to fix code formatting when it doesn't can be tedious.
-Hence, automated support can be sought to speed up this work,
+However, checking that code continues to follow a particular style, and fixing formatting when it doesn't can be tedious.
+Automated support can be sought to speed up this work,
 either by providing suggestions as the code is written or by reformatting your code to comply with some style.
 
 See [](linters-formatters) for further information on automating these checks.
@@ -440,19 +422,15 @@ See [](linters-formatters) for further information on automating these checks.
 
 It's important to remember that when we write code for analysis, we are developing software.
 Over many years, software engineering teams have developed good practices for creating robust software.
-These practices help to make our code simple, readable, and easier to maintain.
+These practices help to make code simple, readable, and easier to maintain.
 Analysts using code as a means to perform analysis can benefit from at least partially applying such practices in their own codebases.
 
 This chapter will try to condense key messages and guidelines from these practices, for use by analysts who write code.
-Reading and learning more about these practices will likely to benefit the quality of your code and is highly encouraged.
 
 
 ### Keep it simple
 
 The ability to convey information in a simple and clear way matters.
-
-This is particularly true when explaining concepts that are already complex.
-You are often trying to solve problems that are complex in nature when writing code.
 You should avoid introducing extra complexity to these problems, wherever possible.
 
 Here are a few tips to make sure you keep your project nice and simple:
@@ -465,20 +443,10 @@ They will most likely be better documented and won't need extra maintenance.
 - When you have a choice of alternative packages to do the same thing, use one and stick to it. For example, the R packages dplyr and sqldf both enable the use of selection and filtering operations. Stick to one unless there is a very good reason to use both. When choosing between alternatives, think about their familiarity for other coders, ease of use and efficiency.
 
 ```{note}
-It's important to capture the requirements of your code before writing it.
-This includes when your code needs to be adapted to meet changing needs.
-You should then aim to meet these requirements in the functionality that your code provides.
-
-It can be tempting to try to account for every eventuality in your program, but developing anything more than these requirements may not be beneficial.
-There's a good chance that many cases that you account for will never occur, so you should try to prioritise based on what you're certain is needed from your code.
-
-> You ain't gonna need it
-
-Remember that additional features will require more documentation and testing to ensure that they are working correctly.
-Really consider if adding these extras will make your code more or less maintainable, user-friendly and correct. 
+It's important to define what your code needs to do before you start writing it, and focus on meeting those requirements. Avoid over-engineering — handling unlikely scenarios adds complexity without clear benefit. Extra features also demand more testing and documentation, so only include what truly improves clarity, usability, or maintainability.
 ```
 
-Lastly, it is worth stressing that complex problems might require complex solutions.
+Sometimes complex problems might require complex solutions.
 In those cases make sure that you only introduce complexity where it is needed.
 You should address necessary complexity with proportionate quality assurance - through documentation, testing and review.
 For instance, if the execution time of your code is critical, then making the code more complex to achieve a faster runtime may be an acceptable trade-off.
@@ -488,14 +456,7 @@ For instance, if the execution time of your code is critical, then making the co
 
 In the section on [modular code](modular), you were encouraged to refactor your code into more self-contained components for ease of testing,
 reproducibility and reusability.
-However, it is worth stressing that 'quick and dirty' solutions often involve copy-pasted code that is functionally identical.
-This is expected and is natural in the initial stages of a project.
-Nonetheless, repetition not only wastes your time, but it also makes your code more difficult to read.
-Consider a script that contains three copies of a similar piece of code.
-If the code that is used to perform the repetitive task is found to be incorrect, or if a developer wishes to modify the task being performed by this code,
-they must implement a similar change in each of the three copies.
-If only two copies were spotted and amended, there is now a bug sleeping in the code waiting to be triggered...
-Moreover, anyone reviewing the code would need to check that the right logic is being used three times over.
+While copy-pasting code can be a quick fix early in a project, repeated code makes your script harder to read, update, and debug. If one copy needs changing, all must be updated—missing even one can introduce bugs. Refactoring into reusable components avoids this risk and simplifies maintenance.
 
 To put this in context, let us use an example where the developer wants to get the odd numbers from three different lists of numbers:
 
@@ -558,7 +519,7 @@ The example demonstrates how repetition can add confusion when trying to maintai
 
 Modifying multiple copies of a code snippet is laborious and presents a risk - some copies of the repeated code may be modified,
 while others erroneously remain the same.
-This is analogous to modifying the formula in individual cells of a spreadsheet.
+This is similar to modifying the formula in individual cells of a spreadsheet.
 If you refactor repetitive code into functions or classes, then bug fixes or modifications need only be carried out once to change all uses of that code.
 New, intended behaviour is then consistently given by each call of the function or method.
 
@@ -595,7 +556,7 @@ odd_third = get_odd(third_ten_numbers)
 ```
 ````
 
-If the functionality of `get_odd` needs to be modified, it now need only be done once.
+If the functionality of `get_odd` needs to be modified, it now only needs to be done once.
 Additionally, this code is more concise and its purpose is easier to interpret.
 
 `````{note}
@@ -678,8 +639,6 @@ If the answer is yes, you might opt to write it straight into something more mod
 
 ### Be explicit
 
-In the literary sense of the word!
-
 ```{epigraph}
 Explicit is better than implicit
 
@@ -757,27 +716,19 @@ Imagine trying to create a model of the economy, which is a complex web of inter
 Creating 'abstractions' in the form of classes or functions that try to model multiple aspects of the economy at once might seem helpful,
 but when used incorrectly might instead add to the complexity.
 
-For example, consider a class that represents a whole country (`Country`).
-This would represent a model that is trying to predict economic statistics for a country such as unemployment or inflation.
-One can imagine that this class will quickly grow into something unmanageable, as its responsibilities grow in the form of additional methods and attributes.
+Imagine trying to build a model of a country's public health system, which involves many interconnected factors—disease surveillance, healthcare access, vaccination rates, and more. Creating large, all-encompassing abstractions (like a single `PublicHealthSystem` class or function) might seem efficient, but can quickly become overwhelming and hard to manage.
 
-Based on the other chapters in this guidance, you might eventually realise that you need to break this class down further.
-If you had applied the idea of single responsibility,
-you might have broken the `Country` class down into smaller components such as `UnemploymentModel`, `InflationModel`.
-These classes would be responsible for doing specific modelling, while the `Country` class might only responsible for presenting the results to,
-let's say, a higher level economy model that tries to model cross-country trade.
+For instance, a class called `CountryHealthProfile` might aim to model everything from infection rates to hospital capacity. As more responsibilities are added, the class becomes bloated and difficult to maintain.
+
+Instead, applying the principle of single responsibility helps break this down into focused components—such as `InfectionModel`, `VaccinationTracker`, and `HospitalCapacityMonitor`. Each handles a specific aspect of public health, while the `CountryHealthProfile` class could simply coordinate these models and present a summary to a higher-level system, like a regional health dashboard.
 
 This simplicity also increases usability, by minimising the number of parameters that each function or class might require.
 
-```{note}
-If you remember the [section on interfaces](interfaces),
-the different model classes here are a prime example where defining an interface would help you make sure each `*Model` object is interchangeable.
-```
 
 The 'separation of concerns' principle captures a similar concept to single responsibility, but on a higher level.
 This principle suggests that your software should be separated into distinct sections that each address a single concern.
 
-In the previous economic modelling example, you might establish your concerns to be:
+In the previous public health modelling example, you might establish your concerns to be:
 
 - Model economy at low level: `UnemploymentModel` and `InflationModel`.
 

@@ -1,21 +1,11 @@
 # Managing analytical code development
 
-```{note}
-This section is a draft, while we make sure that it meets user needs.
-
-It would benefit from case studies that demonstrate how to decide what level of quality assurance a piece of analysis requires.
-
-Please get in touch with feedback or case studies to support the guidance
-[by creating a GitHub Issue](https://github.com/best-practice-and-impact/qa-of-code-guidance/issues)
-or emailing us at [emailing us](mailto:ASAP@ons.gov.uk).
-```
-
 This section of the guidance targets those who manage data analysis, science and engineering work in government
 or those acting as product owners for analytical products.
 We refer to processes that apply these good practices as a reproducible analytical pipelines (RAP).
 
 Before applying this guidance, you should have a basic awareness of the tools and
-techniques used to do quality analysis as code - the introduction to RAP training (LINK TO INTRO TO RAP) outlines these.
+techniques used to do quality analysis as code - the introduction to RAP training <!-- (LINK TO INTRO TO RAP) --> outlines these.
 You should also be aware of any specific tools and platforms that are used in your organisation and department.
 
 
@@ -34,16 +24,16 @@ When possible, you should define the target assurance level before starting the 
 
 ```{important}
 
-While quality assurance must be applied relative to the risk and complexity of the analysis, you must consider your own skills and the skills of your team. It will take time to learn to apply the necessary good practices, so you should support the gradual development of your team's skills.
+While quality assurance must be applied relative to the risk and complexity of the analysis, you must consider your own skills and the skills of your team. It will take time to learn to apply the necessary good practices, so you should support the gradual development of these skills.
 
-Note that it is important to maintain technical skills in the analysis team for sustainability, to ensure that the analysis can be understood, updated, and maintained.
+Note that it is important to maintain technical skills for sustainability, to ensure that the analysis can be understood, updated, and maintained.
 ```
 
 Despite the initial cost of developing technical skills,
 [evidence shows that applying good practices increases the efficiency of code development and maintainability of the code](https://www.devops-research.com/research.html).
-There are number of case studies that describe how
-[good quality assurance practices have improved government analysis](https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/rap-case-studies/).
-<!-- Above line to potentially be removed/editied to point towards case studies in RAP in Action instead -->
+A number of case studies that describe how
+good quality assurance practices have improved government analysis can be found in the Introduction to RAP training <!-- Link to intro to RAP --> and RAP in Action case studies.
+<!-- Link to RAP in action case studies -->
 
 Not following good practices creates [technical debt](glossary.md#technical-debt), which slows down further development of the analysis.
 This can be necessary for delivering to short deadlines, but you should set aside time to address this for continued development of the analysis.
@@ -53,7 +43,7 @@ for example where there is limited time or skill,
 then you should supplement this with more in-depth assurance of outputs.
 This might include dual running the analysis with an independent system and consistency checks across the output data.
 
-The remaining parts of this section provide questions that aim to help you assess the quality assurance practices that you (and your team) are applying in your analysis.
+The remaining parts of this section provide questions that aim to help you assess the quality assurance practices that you and your team are applying in your analysis.
 
 
 ## Design quality analysis
@@ -79,7 +69,7 @@ Versioning input data ensures that we can reproduce our analysis.
 * You should version input data so that you can reproduce analysis outputs.
 * You should store data in an open format (e.g. CSV or ODS), not formats that are restricted to proprietary software like SAS and Stata.
 * You should store large or complex datasets in a database.
-* You should monitor the quality of data, following [the government data quality framework](https://www.gov.uk/government/publications/the-government-data-quality-framework/the-government-data-quality-framework).
+<!-- Maybe add another bullet point in here about monitoring the quality of data and link to data quality unit? -->
 
 
 ### How will you keep track of changes to the code and why they were made?

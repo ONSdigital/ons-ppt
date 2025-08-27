@@ -19,7 +19,7 @@ There are links in the [](learning.md) section of the book to relevant training.
 ## Motivation
 
 Even experienced programmers can find it difficult to understand code that is repetitive, disorganised, or overly complex.
-This makes assuring, testing or changing the code more burdensome.
+This makes assuring, testing or changing the code more difficult.
 You may also find it harder to spot and fix mistakes.
 
 Code that isn't modular can cause a range of issues:
@@ -30,7 +30,7 @@ Code that isn't modular can cause a range of issues:
 - a code base that makes it difficult to find what you're looking for.
 
 This chapter highlights ways to write modular code that is easy to read, review, and maintain.
-These practices will also help you implement the other good coding practices you will come across in this book, such as version control, review, testing and documentation.
+These practices will also help you implement the other good coding practices you will come across in this guidance, such as version control, review, testing and documentation.
 Because of this, modular code is fundamental to making analysis more reproducible, auditable and assured.
 
 
@@ -38,13 +38,13 @@ Because of this, modular code is fundamental to making analysis more reproducibl
 ## Modular code
 
 Improving readability often involves breaking your code down into smaller, more manageable chunks.
-Regardless of the language, you can containerise your code into self-contained parts such as modules, classes, or functions.
+Regardless of the language, you can group your code into self-contained parts such as modules, classes, or functions.
 
 
 (functions)=
 ### Write re-usable code as functions
 
-In the early stages of analysis, we often copy and paste code to 'make it work'. As the code matures, it is worth taking repetitive code and turning it into functions.
+In the early stages of analysis, it is common to copy and paste code to 'make it work'. As the code matures, it is worth taking repetitive code and turning it into functions.
 Functions allow us to make a piece of logic reusable in a consistent and readable way, and also makes it easier for us to [test our logic](testing_code.md).
 
 When starting to write functions, you should consider what is the right level of complexity for a single function.
@@ -53,7 +53,8 @@ If this is what you find, it is usually best to break the code into multiple sma
 then use these smaller functions to build up a larger high-level function that performs the group of actions that you need.
 Smaller functions also have the advantage that you might also be able to re-use them in other places in your code. For example, in other high-level functions that perform similar tasks.
 
-This approach helps you break complex logic down into small, understandable chunks that can be documented and tested more easily.
+This approach helps you break complex logic down into small, understandable chunks that can be documented and tested more easily. 
+<!-- Possible example code here? -->
 
 When writing functions, it is also important to consider how they interact with other parts of your code.
 As a general rule of thumb, your code should run in the same way if a call to your function was replaced by the value that it would have returned.
@@ -62,23 +63,24 @@ This is called 'referential transparency'.
 In practice, this means that your functions should not depend on or affect variables that have not been explicitly fed into them as arguments.
 For instance, a function should not add columns to a data table that has not been passed as an input to the function. It should not assume that data or other functionality exists if they have not been supplied as arguments or explicitly referenced from other libraries.
 Nor should the action of a function be affected by anything other than arguments that are passed to it.
-For example, running your function twice with the same inputs should always produce the same results.
+For example, running your function twice with the same inputs **should always produce the same results.**
 
-Avoiding such behaviours makes your code more transparent;
+Avoiding these behaviours makes your code more transparent;
 it is easier for users and developers to understand which functions affect which data without being concerned about hidden behaviours.
-In turn, this makes it easier to locate bugs in the code and assure its function by peer review.
+This then makes it easier to locate bugs in the code and assure its function by peer review.
 
 When it is not possible or practical to follow these practices, you should ensure that any 'side-effects' are adequately documented for both users and developers.
 This may be the case where your code interacts with a file, database or an external service.
 Ultimately, signalling where these kind of things might happen, helps someone trying to debug issues know where to look.
 
-To summarise:
+```{admonition} To summarise
+:class: admonition-note
 
 - Make sure that functions are not overcomplicated;
 break down your code into smaller functions and build up your functionality with larger functions from these small building blocks.
 - Minimise the 'side-effects' of functions in order to make sure that your code is easy to debug and is transparent in its functionality.
 - Strive to make sure that running your function with the same inputs will produce the same results every time.
-
+```
 
 ### Group data and methods as classes
 
@@ -87,7 +89,7 @@ They create an association between data (attributes of the class) and logic (met
 Classes can be useful when representing real objects in our code, as the examples below demonstrate.
 
 Although classes exist in R, writing custom classes is less common than it is in Python (and other OOP enabling languages).
-Because of this, the following sub-section will focus primarily on Python classes. If you are coding in R, you may wish to [move to the next section.](#split-complex-code-into-multiple-scripts)
+Because of this, the following sub-section will focus primarily on **Python classes**. If you are coding in R, you may wish to [move to the next section.](#split-complex-code-into-multiple-scripts)
 
 With a more complex system, OOP can help to reduce complexity by hiding low-level details from users, such as an internal state.
 
@@ -347,12 +349,13 @@ For this you would usually use a script. The script helps organise and run your 
 Using a script does not guarantee that your code will run reproducibly, but it does ensure that code is run in the same way across multiple runs.
 ```
 
-To summarise:
+```{admonition} To summarise
+:class: admonition-note
 
 - Scripts are a good way to orchestrate your functions and classes in order to build a simple, yet effective pipeline.
 - They are text documents containing source code, which makes them easily human readable and auditable.
 - They can be broken down into sections using [comments](code_documentation.md) for readability.
-
+```
 
 (modules)=
 ### Organise related classes and functions into modules
@@ -509,14 +512,14 @@ is my code solving a problem that someone else has not already solved in my prog
 If the answer is 'Yes' then perhaps it is worth considering wrapping up your code and distributing it wider.
 
 ```{note}
-Packaging code properly will involve applying many of the recommendations from this book.
+Packaging code properly will involve applying many of the recommendations in this guidance.
 
 You will have to consider how to test, document and lay out your code for it to be usable and packagable.
 In the end, high quality packages are the cornerstone of open-source package ecosystems.
 However, it is not trivial to maintain and develop well-regarded open-source packages.
 
 If you feel like you are writing code that you might consider turning into a package,
-consult this book and strive to apply as many of the recommendations as you go.
+consult this guidance and strive to apply as many of the recommendations as you go.
 This will make the final polishing and packaging much simpler, and will produce packages that are easier for third-parties to trust and use.
 ```
 
@@ -556,8 +559,8 @@ Here are a few suggestions to consider when refactoring code from notebooks:
 - Import the required functionality from these new modules into the notebook or pipeline script.
 - For new analysis, reuse functionality from these modules in new notebooks and continue to document your analytical thinking alongside your code in these notebooks.
 
-After this, you might turn existing notebooks into HTML to send them stakeholders, or save them as is so that analytical peers can re-run and review your notebooks.
+After this, you might turn existing notebooks into HTML to send to stakeholders, or save them as they are to enable analytical peers can re-run and review your notebooks.
 The steps that you've taken to simplify your notebook code will make your code much easier to understand by readers.
 
-Bear in mind that other analysts can still run notebook files out of order, so they should not be used as the main method of actually generating outputs.
+Keep in mind that other analysts can still run notebook files out of order, so they should not be used as the main method of actually generating outputs.
 Output generation should instead be trusted to scripts, where human decisions do not alter the order that code is run.
