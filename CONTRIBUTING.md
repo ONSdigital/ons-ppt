@@ -13,7 +13,7 @@ Thank you for your interest in contributing to this project.
      2. Click the **Fork** button at the top right. This creates a copy under your GitHub account.
    - **Clone Your Fork Locally:**
      1. On your forked repository page, click the **Code** button and copy the URL.
-     2. Open your terminal in Visual Studio Code and run:
+     2. Open your terminal and run:
         ```cmd
         git clone <your-fork-url>
         cd <repo-folder>
@@ -29,7 +29,7 @@ Thank you for your interest in contributing to this project.
     ```cmd
     git checkout -b feature/your-branch-name
     ```
-- Open the project in Visual Studio Code.
+- Open the project.
 - Edit files, add features, or fix bugs as needed.
 - Stage and commit your changes:
     ```cmd
