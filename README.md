@@ -4,7 +4,7 @@ This repository contains tools and example code snippets in **Python** and **R**
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 ons-ppt/
@@ -40,7 +40,7 @@ ons-ppt/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Python Setup
 
@@ -77,16 +77,8 @@ ons-ppt/
 
 ---
 
-## 🧑‍💻 How to Use
+## How to Use
 
 - Navigate to the relevant unit and module.
 - Choose the `python/` or `r/` folder depending on your language of interest.
 - Run the code snippets as needed for your learning or case study.
-
----
-
-## 🛡️ Contributing
-
-1. Please do **not** push directly to the `main` branch.
-2. Submit changes via a pull request.
-3. Ensure all pre-commit checks pass before submitting.
