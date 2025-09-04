@@ -5,7 +5,7 @@ Thank you for your interest in contributing to this project.
 
 ## Contribution Process
 
-### **Forking and Cloning the Repository**
+### 1. **Forking and Cloning the Repository**
    To begin contributing, you need your own copy of the repository:
 
    - **Fork the Repository:**
@@ -22,6 +22,30 @@ Thank you for your interest in contributing to this project.
      ```cmd
      git remote add upstream https://github.com/ONSdigital/ons-ppt.git
      ```
+
+### 2. **Making Changes**
+
+- Create a new branch for your changes:
+    ```cmd
+    git checkout -b feature/your-branch-name
+    ```
+- Open the project in Visual Studio Code.
+- Edit files, add features, or fix bugs as needed.
+- Stage and commit your changes:
+    ```cmd
+    git add .
+    git commit -m "Describe your changes"
+    ```
+- Push your branch to your forked repository:
+    ```cmd
+    git push origin feature/your-branch-name
+    ```
+
+### 3. **Pull Requests**
+- Go to your fork on GitHub.
+- Click **Compare & pull request**.
+- Fill in details and submit the pull request to the original repository.
+- Clearly describe your changes and reference any relevant issues.
 
 ## **Branch Naming Convention**
    Use clear, consistent branch names to make collaboration easier. Follow this format:
@@ -47,28 +71,5 @@ Thank you for your interest in contributing to this project.
    - Separate words with underscores for readability.
    - Match the theme/module/unit numbers to the folder structure if possible.
 
-## **Making Changes**
-
-- Create a new branch for your changes:
-    ```cmd
-    git checkout -b feature/your-branch-name
-    ```
-- Open the project in Visual Studio Code.
-- Edit files, add features, or fix bugs as needed.
-- Stage and commit your changes:
-    ```cmd
-    git add .
-    git commit -m "Describe your changes"
-    ```
-- Push your branch to your forked repository:
-    ```cmd
-    git push origin feature/your-branch-name
-    ```
-
-## **Pull Requests**
-- Go to your fork on GitHub.
-- Click **Compare & pull request**.
-- Fill in details and submit the pull request to the original repository.
-- Clearly describe your changes and reference any relevant issues.
-
+## Questions
 If you have questions, please contact the project maintainers directly at [PPT@ons.gov.uk](PPT@ons.gov.uk).
