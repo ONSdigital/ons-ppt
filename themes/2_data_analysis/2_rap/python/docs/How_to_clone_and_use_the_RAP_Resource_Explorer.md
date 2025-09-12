@@ -22,26 +22,20 @@ cd ons-ppt
 git checkout create_rap_resources_search
 ```
 
-Navigate to the RAP resources directory:
-
-```sh
-cd themes/2_data_analysis/2_rap/python/rap_resources
-```
-
 ## 2. Set up a python virtual environment (optional but recommended)
 
 On windows:
 
 ```sh
-python -m venv venv
-venv\Scripts\activate
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
 On macOS/Linux:
 
 ```sh
-python -m venv venv
-source venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 ```
 
 ## 3. Install Python Dependencies
@@ -51,9 +45,10 @@ pip install -r requirements.txt
 ```
 
 ## 4. Run the RAP Resource Explorer
-From the terminal:
+Navigate to the RAP resources directory:
+
 ```sh
-streamlit run RAP_Resource_Explorer.py
+cd themes/2_data_analysis/2_rap/python/rap_resources
 ```
 
 Using the bat file:
@@ -62,6 +57,21 @@ RAP_Resource_Explorer.bat
 ```
 
 Or open the directory in your file explorer and double-click the `RAP_Resource_Explorer.bat` file.
+
+From the terminal:
+```sh
+streamlit run RAP_Resource_Explorer.py
+```
+
+Streamlit uses port 8501 by default. If that port is in use you can find a free port using
+```sh
+python get_free_port.py
+```
+
+Then run streamlit on a specific port (optional):
+```sh
+streamlit run RAP_Resource_Explorer.py --server.port 8502  # replace 8502 with your free port
+```
 
 ## 5. Open in your browser
 After running the above command, Streamlit will display a local URL (usually http://localhost:8501).
