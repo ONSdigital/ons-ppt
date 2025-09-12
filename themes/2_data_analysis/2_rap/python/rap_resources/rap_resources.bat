@@ -1,6 +1,14 @@
 @echo off
-REM Activate the virtual environment in the repo root
-call "%~dp0..\..\..\..\..\venv\Scripts\activate"
+REM Activate the virtual environment (checks for .venv or venv)
+IF EXIST "%~dp0..\..\..\..\..\venv\Scripts\activate" (
+    call "%~dp0..\..\..\..\..\venv\Scripts\activate"
+) ELSE IF EXIST "%~dp0..\..\..\..\..\.venv\Scripts\activate" (
+    call "%~dp0..\..\..\..\..\.venv\Scripts\activate"
+) ELSE (
+    echo No virtual environment found. Please create one named 'venv' or '.venv'.
+    pause
+    exit /b
+)
 
 REM Get a free port and store it in a variable
 for /f "delims=" %%p in ('python "%~dp0get_free_port.py"') do set PORT=%%p
