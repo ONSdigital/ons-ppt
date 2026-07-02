@@ -13,12 +13,15 @@ install.packages("tidyverse") # for data management and wranging
 install.packages("here") # for directory path way 
 install.packages("rio") # import and exporting data set
 install.packages("janitor") # for cleaning data set
-
+install.packages("lubridate")  # lubridate package for date manipulation
+install.packages("epitools")  # installing the epitools package
 
 library(tidyverse)
 library(here)
 library(rio)
 library(janitor)
+library(lubridate)
+library(epitools) 
 
 
 ```
@@ -121,12 +124,6 @@ print(Incidence_rate)
 
 ```{r}
 
-install.packages("epitools")  # installing the epitools package
-
-## load the epitools package. 
-library(epitools) 
-library(dplyr)
-
 
 # create a data frame with two columns vaccine_state and disease_outcome
 vaccine_data <- data.frame(
@@ -153,11 +150,6 @@ oddsratio(vaccine_data$vaccine_state, vaccine_data$disease_outcome)
 # Epidemic curve
 
 ```{r}
-
-install.packages("lubridate")  # installing lubridate package for date manipulation
-
-library(lubridate)
-
 
 # Convert date to proper format and create epidemiological week using floor_date
 # Epidemiological weeks start on Monday
