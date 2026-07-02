@@ -16,3 +16,5 @@ n = sample_size(N, p, d, z, deff)
 print(f"Required sample size: {n:.2f}")
 import math
 print(f"Rounded up: {math.ceil(n)}")
+
+
