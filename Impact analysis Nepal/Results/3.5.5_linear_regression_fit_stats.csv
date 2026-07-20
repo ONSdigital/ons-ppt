@@ -1,0 +1,2 @@
+r.squared,adj.r.squared,sigma,statistic,p.value,df,logLik,AIC,BIC,deviance,df.residual,nobs
+0.043,-0.007,250780.358,0.86,0.639,20,-5529.723,11103.446,11191.258,23835608591802.598,379,400

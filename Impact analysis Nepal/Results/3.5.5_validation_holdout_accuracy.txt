@@ -1,0 +1,1 @@
+Out-of-sample (20% held-out test set) classification accuracy: 50 %

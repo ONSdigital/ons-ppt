@@ -1,0 +1,2 @@
+Area-level (between small-area) variance estimate: 0
+NOTE: this variance is ~0 (a 'singular fit'), meaning the model found no reliable geographic clustering beyond chance in this DUMMY dataset -- so model-based estimates shrink fully to the overall mean (56.4%) for every area. This is a genuine, correctly-detected result for synthetic/random data, not an error. With real survey data showing true geographic variation, small areas would shrink only PARTIALLY toward the overall mean, each retaining some of its own signal.

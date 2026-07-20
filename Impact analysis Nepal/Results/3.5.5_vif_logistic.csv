@@ -1,0 +1,13 @@
+"term","vif"
+"age",1.05
+"sex",1.06
+"education_level",1.15
+"urban_rural",1.05
+"province",1.21
+"hh_income_monthly_nrs",1.05
+"open_ceiling",1.06
+"earth_flooring",1.06
+"mosquito_control_measures",1.03
+"health_insurance",1.02
+"proximity_hotspot_km",1.04
+"env_risk_index",1.02

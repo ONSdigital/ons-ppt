@@ -1,0 +1,18 @@
+PRECAUTIONS APPLIED IN THIS REGRESSION ANALYSIS:
+1. Avoid overfitting: predictor list kept deliberately parsimonious; an
+   AIC-based stepwise model was compared against the full model (see
+   3.5.5_overfitting_check_AIC.csv).
+2. Multicollinearity: checked via VIF (see 3.5.5_vif_logistic.csv); all
+   values well below the common threshold of 5.
+3. Data quality: regression was run on the SECTION-3.3-CLEANED, de-
+   identified dataset, not the raw export.
+4. Model assumptions: linear-model residual diagnostics plotted (see
+   3.5.5_lm_residual_diagnostics.png); negative binomial (not Poisson)
+   used for count data because outbreak case counts are over-dispersed.
+5. Association, not causation: odds ratios and IRRs describe statistical
+   association only. E.g. a positive association between road density
+   and case counts (if found) would NOT mean roads cause dengue - both
+   are likely proxies for urbanisation and population density.
+6. Validation: the model was fit on 80% of records and evaluated on a
+   held-out 20% test set never used in fitting (see
+   3.5.5_validation_holdout_accuracy.txt).

@@ -1,0 +1,3 @@
+model,n_predictors,AIC
+Full model,12,575.7
+AIC-parsimonious model,1,546.1
