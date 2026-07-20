@@ -1,0 +1,4 @@
+variable,n_outliers,pct_outliers
+oop_health_expenditure_nrs,22,4.4
+direct_medical_expenditure_nrs,32,6.4
+hh_income_loss_nrs,29,5.8

@@ -1,0 +1,3 @@
+Cronbach's alpha for the psychosocial composite index: 0.336
+(>= 0.70 is conventionally considered acceptable internal consistency)
+NOTE: alpha is below the 0.70 threshold. In this DUMMY/synthetic dataset the four items are essentially uncorrelated random draws, so low reliability is expected here. With genuine survey data, a low alpha would instead prompt re-examining whether all four items truly measure the same underlying construct.

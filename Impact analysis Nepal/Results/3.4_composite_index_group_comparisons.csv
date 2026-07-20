@@ -1,0 +1,4 @@
+comparison,test,p_value
+psychosocial_index by sex,Mann-Whitney U,0.3673
+psychosocial_index by urban_rural,Mann-Whitney U,0.4766
+psychosocial_index by province,Kruskal-Wallis,0.8545

@@ -1,0 +1,22 @@
+term,odds_ratio,std.error,statistic,p.value,ci_low,ci_high
+(Intercept),0.842,0.619,-0.277,0.782,0.249,2.841
+age,1.011,0.006,1.767,0.077,0.999,1.024
+sexMale,0.992,0.211,-0.039,0.969,0.656,1.501
+education_levelNo Formal,1.571,0.362,1.246,0.213,0.775,3.219
+education_levelPrimary,1.452,0.326,1.143,0.253,0.767,2.763
+education_levelSecondary,1.594,0.309,1.507,0.132,0.87,2.932
+education_levelUniversity,1.415,0.375,0.925,0.355,0.68,2.976
+urban_ruralUrban,0.989,0.212,-0.05,0.96,0.653,1.498
+provinceGandaki,1.074,0.395,0.182,0.856,0.497,2.349
+provinceKarnali,0.897,0.385,-0.281,0.779,0.421,1.918
+provinceKoshi,1.174,0.386,0.416,0.678,0.552,2.522
+provinceLumbini,0.777,0.337,-0.748,0.455,0.4,1.504
+provinceMadhesh,0.925,0.337,-0.232,0.817,0.476,1.793
+provinceSudurpashchim,1.313,0.452,0.602,0.547,0.547,3.261
+hh_income_monthly_nrs,1,0,-0.663,0.507,1,1
+open_ceilingYes,1.062,0.226,0.267,0.789,0.682,1.66
+earth_flooringYes,0.789,0.213,-1.112,0.266,0.519,1.198
+mosquito_control_measuresYes,0.771,0.215,-1.205,0.228,0.504,1.174
+health_insuranceYes,1.224,0.224,0.902,0.367,0.791,1.904
+proximity_hotspot_km,0.997,0.025,-0.136,0.892,0.948,1.047
+env_risk_index,0.997,0.054,-0.064,0.949,0.896,1.109

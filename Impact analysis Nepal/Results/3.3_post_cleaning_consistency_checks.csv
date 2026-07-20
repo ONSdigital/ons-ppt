@@ -1,0 +1,4 @@
+check,n_flagged
+hospitalised but not infected,0
+age outside plausible range,0
+duplicate respondent_id remaining,0
