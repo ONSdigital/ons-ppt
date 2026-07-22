@@ -3,7 +3,7 @@
 This project prepares, cleans, and analyses household-level survey data on the
 health, economic, and social impact of dengue outbreaks in Nepal. It follows
 the structure of the impact-analysis reference document (Sections 3.3–3.5.6)
-and is built as R script run in sequence, plus their generated outputs.
+and is built as R script run in sequence, plus their generated outputs and based on 'R_HRR_Nepal_impact_analysiss.docx'
 
 ## 1. How to run
 
