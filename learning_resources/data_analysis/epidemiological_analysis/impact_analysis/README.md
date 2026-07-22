@@ -1,4 +1,4 @@
-# Nepal Dengue Outbreak — Household Impact Analysis Pipeline
+# Nepal Dengue Outbreak : Household Impact Analysis Pipeline
 
 This project prepares, cleans, and analyses household-level survey data on the
 health, economic, and social impact of dengue outbreaks in Nepal. It follows
