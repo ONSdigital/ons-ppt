@@ -8,7 +8,7 @@ and is built as R script run in sequence, plus their generated outputs.
 ## 1. How to run
 
 
-1. Run `02_20260708_Dengue_Impact_Analysis.R`, which reads that raw file (`dengue_raw_realistic.csv`), cleans
+1. Run `02_20260708_Dengue_Impact_Analysis.R`, which reads that raw file (`20260708_Dengue_Raw_Data.csv`), cleans
    it, and runs every analysis stage, saving all tables and plots into a
    dated `dengue_impact_outputs_YYYYMMDD/` folder.
 2. Edit the file paths (`INPUT_CSV`/`OUTPUT_CSV` in script 1, `RAW_CSV` in
