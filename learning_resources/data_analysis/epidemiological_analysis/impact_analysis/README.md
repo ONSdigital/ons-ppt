@@ -47,7 +47,7 @@ psych, lme4.
 
 | File | Description |
 |---|---|
-| `dengue_dummy_data.csv` | The original, clean dummy dataset (input to script 01). Not included in this delivery — supplied by you. |
+| `20260708_Dengue_Raw_Data.csv` | The original, clean dummy dataset (input to script 01). Not included in this delivery — supplied by you. |
 | `dengue_raw_realistic.csv` | Output of script 01: the same data with realistic anomalies added, and a pseudonymous respondent code in place of any identifier. This is the "raw" file script 02 expects as input. |
 | `dengue_analysis_ready_deidentified.csv` | Output of script 02, Section 3.3: the cleaned dataset after de-duplication, error correction, and imputation, with the pseudonymous code removed entirely. Fully anonymous. |
 | `dengue_analysis_ready_v1_YYYY-MM-DD.csv` | Same as above, saved with a versioned filename for audit/traceability. |
