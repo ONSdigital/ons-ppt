@@ -1,0 +1,13 @@
+COST-EFFECTIVENESS ANALYSIS - SUMMARY
+Question: What is the cost per dengue case prevented for households practising mosquito-control measures, compared with households that do not, over one outbreak season?
+CER (with mosquito control): 19999 NRS per case
+CER (without mosquito control): 14079 NRS per case
+ICER (incremental NRS per case prevented): 79269
+Sensitivity analysis (coverage & effectiveness +/-20%) robust: TRUE
+
+Interpretation note: this analysis uses household out-of-pocket economic
+burden as a proxy for 'cost' because programme delivery-cost data are not
+part of this household survey. A full donor/government-facing CEA should
+additionally cost the mosquito-control PROGRAMME itself (nets, larvicide,
+spraying teams, training, transport - see Section 3.5.6 'costs to include'),
+not only the household's residual illness cost.

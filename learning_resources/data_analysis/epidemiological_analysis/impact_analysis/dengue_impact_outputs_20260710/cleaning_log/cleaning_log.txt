@@ -1,0 +1,24 @@
+[2026-07-10 11:39:28] Imported raw file: C:/Users/Shirish Maharjan/OneDrive - HERD/Herd/Analysis for Action (AFA)/Data/20260708_Dengue_Raw_Data.csv - 510 rows, 67 columns
+[2026-07-10 11:39:28] De-duplication: removed 10 duplicate record(s) sharing the same respondent_id
+[2026-07-10 11:39:28] Standardised category coding for 'sex', 'urban_rural' and 26 Yes/No variables (collapsed 8 -> 2 raw spellings of sex, etc.)
+[2026-07-10 11:39:28] Column 'num_dengue_cases_hh': converted 1 text number(s) (e.g. 'ten') to numeric
+[2026-07-10 11:39:28] Range check 'age' outside [0, 110]: 3 value(s) set to NA
+[2026-07-10 11:39:29] Range check 'hh_income_monthly_nrs' outside [1, 2e+06]: 2 value(s) set to NA
+[2026-07-10 11:39:29] Range check 'days_ill' outside [0, 90]: 2 value(s) set to NA
+[2026-07-10 11:39:29] Range check 'mental_health_score' outside [0, 30]: 3 value(s) set to NA
+[2026-07-10 11:39:29] Recoded 10 legacy '99' missing-value code(s) in proximity_hotspot_km to NA
+[2026-07-10 11:39:29] Logic check: 4 record(s) had hospitalised_dengue = Yes but dengue_infection_status = No. Corrected dengue_infection_status to 'Yes' (hospitalisation implies a confirmed case in this survey's skip logic)
+[2026-07-10 11:39:29] Missing data: 'age' (0.6% missing) imputed with the median
+[2026-07-10 11:39:29] Missing data: 'hh_income_monthly_nrs' (5.6% missing) imputed with the median
+[2026-07-10 11:39:29] Missing data: 'proximity_hotspot_km' (2% missing) imputed with the median
+[2026-07-10 11:39:29] Missing data: 'days_ill' (0.4% missing) imputed with the median
+[2026-07-10 11:39:29] Missing data: 'healthcare_access_score' (5% missing) imputed with the median
+[2026-07-10 11:39:29] Missing data: 'mental_health_score' (6.4% missing) imputed with the median
+[2026-07-10 11:39:29] Missing data: 'oop_health_expenditure_nrs' (4.8% missing) imputed with the median
+[2026-07-10 11:39:29] Missing data: 'education_level' (3.8% missing) imputed with the mode
+[2026-07-10 11:39:29] Recoded 'age' into standard age groups (0-4, 5-17, 18-59, 60+)
+[2026-07-10 11:39:29] Post-cleaning consistency re-check completed (0 residual issues expected)
+[2026-07-10 11:39:29] Outlier scan (1.5xIQR rule) on cost variables: 22 household(s) flagged on out-of-pocket expenditure (retained in the data, flagged for sensitivity checks)
+[2026-07-10 11:39:29] Confidentiality: dropped the pseudonymous respondent_id and wrote a
+[2026-07-10 11:39:29] fully de-identified analysis file with restricted (owner-only) file permissions
+[2026-07-10 11:39:29] Analysis-ready dataset versioned and saved as: dengue_analysis_ready_v1_2026-07-10.csv

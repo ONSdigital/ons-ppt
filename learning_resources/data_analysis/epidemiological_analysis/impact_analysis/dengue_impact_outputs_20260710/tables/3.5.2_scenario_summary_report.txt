@@ -1,0 +1,9 @@
+DENGUE SCENARIO MODELLING REPORT
+============================================================
+Best Case Prediction:     817 cases
+Moderate Case (Current):  841 cases
+Worst Case Prediction:    875 cases
+============================================================
+VARIABLES USED:
+- Outcome: num_dengue_cases_hh
+- Predictors: mosquito_control_measures, env_risk_index
