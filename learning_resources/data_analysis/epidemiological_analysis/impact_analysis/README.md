@@ -80,7 +80,7 @@ sub-folders:
 
 Because the underlying dummy data is randomly generated (no real
 relationship between variables), several results are expected to show "no
-signal" — e.g. regression predictors with p > 0.05, a low Cronbach's alpha,
+signal" .e.g. regression predictors with p > 0.05, a low Cronbach's alpha,
 or a small-area model that shrinks fully to the overall mean. These are
 correct outputs given random input, not bugs. Once real survey data is used
 in place of the dummy CSV, the same code will surface genuine patterns.
