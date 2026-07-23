@@ -1,0 +1,221 @@
+---
+title: "Prevalence and incidence Codes"
+output: html_document
+---
+
+
+
+```{r}
+# installing the required packages
+
+
+install.packages("tidyverse") # for data management and wranging 
+install.packages("here") # for directory path way 
+install.packages("rio") # import and exporting data set
+install.packages("janitor") # for cleaning data set
+install.packages("lubridate")  # lubridate package for date manipulation
+install.packages("epitools")  # installing the epitools package
+
+library(tidyverse)
+library(here)
+library(rio)
+library(janitor)
+library(lubridate)
+library(epitools) 
+
+
+```
+
+
+## loading data set
+
+```{r}
+
+# loading cholera data set 
+
+cholera_data <- import(here("data", "cholera_data_2022.csv")) |> 
+  clean_names() |> 
+  mutate(date=as.Date(date, format="%Y-%m-%d"))
+
+
+# loading mid year population data set
+mw_population <- import(here("data", "mw_population.csv")) |> 
+  clean_names()
+
+
+```
+
+
+## Prevalence proportion
+
+```{r}
+# Prevalence proportion
+
+# This code will show the calculation of prevalence proportion using Malawi cholera-2022
+
+# cleaning the district names in both data sets to have similar format
+
+cholera_data$district <- str_to_lower(cholera_data$district)
+
+mw_population$district <- str_to_lower(mw_population$district)
+
+
+# aggregating the cases for first quarter (January to March) 2022
+first_quarter <-cholera_data |> 
+  filter(date >= "2022-01-01" & date <= "2022-06-30") |> 
+  group_by(district) |> 
+  summarise(first_quarter_cases=sum(cases, na.rm = TRUE))
+
+
+# merging the two quarters data of cases columns
+first_quarter<- merge(first_quarter, mw_population, by="district")
+
+
+# calculating prevalence proportion for first quarter for each district
+
+prev_district<- first_quarter |> 
+  mutate(prevalence=round((first_quarter_cases/population)*10000,2))
+
+
+# view the prevalence proportion for each district
+print(prev_district)
+
+
+```
+
+
+##Incidence Proportion
+
+```{r}
+
+blantyre_incidence<- cholera_data |> 
+  filter(district== "blantyre" ) |>
+  filter(date >= "2022-01-01" & date <= "2022-06-30") |>
+  group_by(district, epiweek) |>
+  summarise(first_quarter_cases=sum(cases, na.rm = TRUE))
+
+
+# merging with population data set
+blantyre_incidence <- merge(blantyre_incidence, mw_population, by="district") |> 
+  mutate(incidence_prop=round((first_quarter_cases/population)*100000,2)) |> 
+  select( district, epiweek, incidence_prop) 
+
+# viewing incidence proportion for Blantyre district per week
+blantyre_incidence
+  
+
+```
+
+
+
+## Incidence Rate
+
+```{r}
+
+Total_days_obs <- 816*21 # 816 days observed for 21 people
+Years_obs <- ceiling(Total_days_obs/365)  # The assumption is not a leap year
+Incidence_rate <-  (5/Years_obs)*10
+print(Incidence_rate) 
+
+```
+
+
+# Risk Ratio (RR)
+
+```{r}
+
+
+# create a data frame with two columns vaccine_state and disease_outcome
+vaccine_data <- data.frame(
+ vaccine_state= sample(rep(c("Vaccinated", "Unvaccinated"), 20)),   
+ disease_outcome= sample(rep(c("Positive", "Negative"), 20)) # 
+# print out the first 6 values from the data set created will use the head () function
+
+)
+
+# to print first 6 values
+head(vaccine_data)
+
+# calculating  the risk ratio, the following code line will be used 
+riskratio(vaccine_data$vaccine_state, vaccine_data$disease_outcome)
+
+
+
+# calculate the odds ratio 
+oddsratio(vaccine_data$vaccine_state, vaccine_data$disease_outcome)
+
+```
+
+
+# Epidemic curve
+
+```{r}
+
+# Convert date to proper format and create epidemiological week using floor_date
+# Epidemiological weeks start on Monday
+cholera_data <- cholera_data %>%
+  mutate(
+    date = as.Date(date),
+    epi_week_start = floor_date(date, unit = "week", week_start = 1)  # 1 = Monday
+  ) %>%
+  group_by(epi_week_start) %>%
+  summarise(
+    total_cases = sum(cases, na.rm = TRUE),
+    total_deaths = sum(deaths, na.rm = TRUE),
+    min_date = min(date, na.rm = TRUE),
+    max_date = max(date, na.rm = TRUE),
+    .groups = 'drop'
+  ) %>%
+  arrange(epi_week_start)
+
+# Define the scaling factors for the dual axes
+# Primary axis: 0-5000 (cases)
+# Secondary axis: 0-150 (deaths), with scale factor of 50
+scale_factor <- 150 / 5000  # Converting deaths scale to cases scale
+
+# Create the plot with dates on x-axis
+p <- ggplot(cholera_data, aes(x = epi_week_start)) +
+  # Column bars for cases (primary axis)
+  geom_col(aes(y = total_cases), fill = "#FFA500", color = "#FF8C00", alpha = 0.8, width = 5) +
+  # Line plot for deaths (needs scaling for secondary axis)
+  geom_line(aes(y = total_deaths / scale_factor), color = "#FF4500", linewidth = 1.2) +
+  # Primary y-axis (cases)
+  scale_y_continuous(
+    name = "Cases",
+    limits = c(0, 5000),
+    breaks = seq(0, 5000, by = 1000),
+    sec.axis = sec_axis(
+      ~ . * scale_factor,
+      name = "Deaths",
+      breaks = seq(0, 150, by = 50)
+    )
+  ) +
+  # X-axis with date formatting (by month)
+  scale_x_date(
+    date_breaks = "1 month",
+    date_labels = "%Y-%m-%d",
+    expand = c(0.01, 0)
+  ) +
+  # Formatting
+  labs(
+    title = "Weekly Epi curve of cholera cases in Malawi March 2022 to July 2024",
+    x = "Epidemiological Week",
+    y = "Cases"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
+    axis.title.y = element_text(color = "black", size = 10),
+    axis.title.y.right = element_text(color = "black", size = 10),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    panel.grid.major = element_line(color = "gray90"),
+    panel.grid.minor = element_blank(),
+    plot.margin = margin(10, 10, 10, 10)
+  )
+
+# view the plot
+print(p)
+
+
+```
+
