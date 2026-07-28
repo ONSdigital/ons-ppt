@@ -98,7 +98,7 @@ library(dplyr)
 library(tidyr)
 library(janitor)
 library(gt)
-library(ggplot2)
+library(ggplot2) # The scripts uses ggplot2 version 4.0.0
 library(svglite)
 library(scales)
 library(plotly)
@@ -146,6 +146,11 @@ vuln_bar <- ggplot(vuln_focus_1997, aes(x = country, y = vulnerable_pop, fill = 
   # Set bar width
   geom_bar(stat = "identity", 
            width = 0.6) +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Add number suffixes
   scale_y_continuous(labels = label_number(scale = 1e-6, suffix = "M")) +
   # Set the title and axis titles
@@ -156,17 +161,6 @@ vuln_bar <- ggplot(vuln_focus_1997, aes(x = country, y = vulnerable_pop, fill = 
   theme(
     axis.title.x = element_text(size = 12),
     axis.title.y = element_text(size = 12),
-    # Set the panel colour and background colour
-    panel.background = element_rect(fill = "#FFFFFF"),
-    plot.background = element_rect(fill = "#FFFFFF"),
-    # Set the grid size and colour
-    panel.grid.minor = element_line(colour = "#D9D9D9", 
-                                    size = 0.5),
-    panel.grid.major = element_line(colour = "#D9D9D9", 
-                                    size = 0.5),
-    panel.grid.major.x = element_blank(),
-          
-    panel.grid.minor.x = element_blank()
   ) +
   # Set the colours for the focus chart
   scale_fill_manual(values = c("TRUE" = "#324027", "FALSE" = "#949494"),

@@ -44,7 +44,7 @@ library(here)
 library(dplyr)
 library(tidyr)
 library(janitor)
-library(ggplot2)
+library(ggplot2) # The scripts uses ggplot2 version 4.0.0
 library(scales)
 library(svglite)
 library(plotly)
@@ -96,6 +96,11 @@ labels_df
 ```{r}
 vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line() +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Change the colours of lines to differentiate between countries
   scale_colour_manual(values = c("United Kingdom" = "#1E2A16",
@@ -127,6 +132,11 @@ vuln_line
 ```{r}
 vuln_line_titles <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line() +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   scale_y_continuous(labels = label_number(scale = 1)) +
   labs(x = "Year", y = "Vulnerable Population") +
   # Change the colours of lines to differentiate between countries
@@ -159,6 +169,11 @@ vuln_line_titles
 ```{r}
 vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line(size = 1) +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   scale_y_continuous(labels = label_number(scale = 1)) +
   labs(x = "Year", y = "Vulnerable Population") +
   # Change the colours of lines to differentiate between countries
@@ -191,6 +206,11 @@ vuln_line
 ```{r}
 vuln_line_thousands <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line() +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   labs(x = "Year", y = "Vulnerable Population (Thousands)") +
   scale_y_continuous(labels = label_number(scale = 1e-3, suffix = "k")) +
   # Change the colours of lines to differentiate between countries
@@ -223,6 +243,11 @@ vuln_line_thousands
 ```{r}
 vuln_line_millions <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line() +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   labs(x = "Year", y = "Vulnerable Population (Millions)") +
   scale_y_continuous(labels = label_number(scale = 1e-6, suffix = "M")) +
   # Change the colours of lines to differentiate between countries
@@ -270,6 +295,11 @@ vuln_2_country_labels <- vuln_2_country %>%
 
 vuln_line_billions <- ggplot(vuln_2_country, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line() +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   labs(x = "Year", y = "Vulnerable Population (Billions)") +
   scale_colour_manual(values = c("China" = "#1E2A16",
                                  "India" = "#D17E38"
@@ -303,6 +333,11 @@ vuln_focus <- vuln_4_country %>%
 
 vuln_line <- ggplot(vuln_focus, aes(x = year, y = vulnerable_pop,  group = country, colour = highlight)) +
   geom_line(size = 1) +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   scale_colour_manual(values = c("TRUE" = "#48553F", "FALSE" = "#a6a6a6")) +
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Remove legend set y-axis title to horizontal
@@ -329,6 +364,11 @@ vuln_line
 ```{r}
 vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line(size = 1) +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Change the colours of lines to differentiate between countries
   scale_colour_manual(values = c("United Kingdom" = "#1E2A16",
@@ -362,50 +402,6 @@ vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = c
 vuln_line
 ```
 
-## Modify background and gridlines
-
-```{r}
-vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
-  geom_line(size = 1) +
-  theme(
-    # Changed size of axis titles and axis text
-    axis.title.x = element_text(size = 12),
-    axis.title.y = element_text(size = 12),
-    axis.text.x = element_text(size = 8),
-    axis.text.y = element_text(size = 8),
-    # Change the colour and size of the vertical minor gridlines
-    panel.grid.minor.y = element_line(colour = "#D9D9D9", size = 0.25, linetype = 1),
-    # Change the colour and size of the vertical major gridlines
-    panel.grid.major.y = element_line(colour = "#D9D9D9", size = 0.25, linetype = 1),
-    # Remove horizontal gridlines
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank()) +
-  scale_y_continuous(labels = label_number(scale = 1)) +
-  # Change the colours of lines to differentiate between countries
-  scale_colour_manual(values = c("United Kingdom" = "#1E2A16",
-                                 "Argentina" = "#D17E38",
-                                 "Nepal" = "#444443",
-                                 "Malawi" = "#3EA27F"),
-                      ) +
-  # Remove legend set y-axis title to horizontal
-  theme(axis.title.y = element_text(angle = 0, 
-                                    hjust = 1,
-                                    vjust = 1.06,
-                                    # Adjust margin to move the title to the right
-                                    margin = margin(r = -80)
-                                    ),
-        # Adjust plot margin
-        plot.margin = margin(t = 20, l = 5, r = 5, b = 5)) +
-  theme(legend.position = "none") +
-  # Add labels to lines
-  geom_text_repel(data = labels_df,
-                  aes(label = country),
-                  nudge_y = 500000,
-                  colour = "#000000")
-  
-vuln_line
-```
-
 ## Break the start of the y-axis
 
 ```{r}
@@ -425,6 +421,11 @@ vuln_top_2
 
 vuln_axis_break <- ggplot(vuln_top_2, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line() +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   scale_colour_manual(values = c("China" = "#1E2A16",
                                  "India" = "#D17E38"
                                  )) +
@@ -500,6 +501,11 @@ vuln_top_2_gap_labels <- vuln_top_2_gap %>%
 ```{r}
 vuln_line <- ggplot(vuln_top_2_gap, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line() +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   annotate(
   "segment",
   x = 1972, xend = 1972,
@@ -552,6 +558,11 @@ vuln_line
 ```{r}
 vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
   geom_line() +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Change the colours of lines to differentiate between countries
   scale_colour_manual(values = c("United Kingdom" = "#1E2A16",
@@ -634,7 +645,7 @@ The line chart should:
     -   The y-axis label is: Vulnerable Population (Millions)
     -   The text size of the axis titles is 12
     -   The y-axis uses millions suffix (for example an axis break with a value of 6000000 would show as 6M)
-    -   The horizontal gridlines are HEX code #D9D9D9 and size = 0.5
+    -   theme_minimal is used to set the background and gridline colours
     -   The vertical gridlines are removed
     -   The plot and panel backgrounds are HEX code #FFFFFF
     -   The line of the country with the largest population is HEX code #1E2A16

@@ -94,7 +94,7 @@ library(dplyr)
 library(tidyr)
 library(janitor)
 library(gt)
-library(ggplot2)
+library(ggplot2) # The scripts uses ggplot2 version 4.0.0
 library(svglite)
 library(scales)
 library(htmlwidgets)

@@ -45,7 +45,7 @@ library(here)
 library(dplyr)
 library(tidyr)
 library(janitor)
-library(ggplot2)
+library(ggplot2) # The scripts uses ggplot2 version 4.0.0
 library(svglite)
 library(scales)
 library(plotly)
@@ -91,6 +91,11 @@ vuln_2007_top_6
 # Used vuln_2007_top_6 dataframe, country displayed on the x-axis vulnerable_pop displayed the on y-axis
 vuln_bar <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # label_number used to remove scientific notation
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Set y-axis title to horizontal
@@ -112,6 +117,11 @@ vuln_bar
 ```{r}
 vuln_bar_horizontal <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank()) +
   # Flip the chart so that the bars are horizontal
   coord_flip() +
   # label_number used to remove scientific notation
@@ -134,6 +144,11 @@ vuln_bar_horizontal
 ```{r}
 vuln_bar_titles <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Add axis titles
   labs(x = "Country", y = "Vulnerable Population") +
   # label_number used to remove scientific notation
@@ -156,6 +171,11 @@ vuln_bar_titles
 ```{r}
 vuln_bar_y_axis_changed <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # label_number used to remove scientific notation
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Set a limit for the y-axis
@@ -190,6 +210,11 @@ vuln_2007_top_6_arranged$country <- factor(
 # Create the bar chart using the arranged data
 vuln_bar_arranged <- ggplot(vuln_2007_top_6_arranged, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # label_number used to remove scientific notation
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Set y-axis title to horizontal
@@ -212,6 +237,11 @@ vuln_bar_change_width <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable
   geom_bar(stat = "identity",
            # Change the bar width
            width = 0.6) +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # label_number used to remove scientific notation
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Set y-axis title to horizontal
@@ -233,6 +263,11 @@ vuln_bar_change_width
 vuln_bar_change_bar_colour <- vuln_bar <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   # Change all bars to the same colour
   geom_bar(stat = "identity", fill = "#324027") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # label_number used to remove scientific notation
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Set y-axis title to horizontal
@@ -258,6 +293,11 @@ vuln_focus <- vuln_2007_top_6 %>%
 # Create a bar chart with the vuln_focus data 
 vuln_bar_focus_chart <- ggplot(vuln_focus, aes(x = country, y = vulnerable_pop, fill = highlight)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Change the bar colours based off the whether highlight is TRUE or FALSE
   scale_fill_manual(values = c("TRUE" = "#1e2a16", "FALSE" = "#959595"),
                     guide = "none") +
@@ -281,6 +321,11 @@ vuln_bar_focus_chart
 ```{r}
 vuln_bar_add_labels <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Add labels to bars containing the vulnerable population of each country
   geom_text(aes(label = vulnerable_pop), 
             # Adjust the position of the label
@@ -307,6 +352,11 @@ vuln_bar_add_labels
 ```{r}
 vuln_bar_custom_axis_breaks <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Custom axis breaks are used, y-axis is breaks are every 50000000 people
   scale_y_continuous(breaks = c(0, 50000000, 100000000, 150000000, 200000000, 250000000, 300000000, 350000000),
   # The function expansion is used to increase the vertical height of the plot by 40% to show the extra axis breaks
@@ -326,92 +376,16 @@ vuln_bar_custom_axis_breaks <- ggplot(vuln_2007_top_6, aes(x = country, y = vuln
 vuln_bar_custom_axis_breaks 
 ```
 
-## Change background and gridlines
-
-```{r}
-vuln_bar_change_background_and_gridlines<- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
-  geom_bar(stat = "identity", 
-           # Change the colour of the bars to ensure contrast with grey gridlines
-           fill = "#48553f") +
-  theme(
-    # Change the background colour of the panel (the inside box containing the bars) to white
-    panel.background = element_rect(fill = "#ffffff"),
-    # Change the background colour of the plot (the outside area containing the axis titles)
-    plot.background = element_rect(fill = "#ffffff"),
-    # Changed size of axis titles and axis text
-    axis.title.x = element_text(size = 12),
-    axis.title.y = element_text(size = 12),
-    axis.text.x = element_text(size = 8),
-    axis.text.y = element_text(size = 8),
-    # Change the colour and size of the minor gridlines
-    panel.grid.minor = element_line(colour = "#D9D9D9", size = 0.5, linetype = 1),
-    # Change the colour and size of the major gridlines
-    panel.grid.major = element_line(colour = "#D9D9D9", size = 0.5, linetype = 1)) +
-  # label_number used to remove scientific notation
-  scale_y_continuous(labels = label_number(scale = 1)) +
-  # Set y-axis title to horizontal
-  theme(axis.title.y = element_text(angle = 0, 
-                                    hjust = 1,
-                                    vjust = 1.06,
-                                    # Adjust margin to move the title to the right
-                                    margin = margin(r = -70)
-                                    ),
-        # Adjust plot margin
-        plot.margin = margin(t = 20, l = 5, r = 5, b = 5))
-
-vuln_bar_change_background_and_gridlines
-```
-
-## Remove gridlines
-
-```{r}
-vuln_bar_no_gridlines <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
-  geom_bar(stat = "identity") +
-  # Remove gridlines
-  theme(panel.grid = element_blank()) +
-  # label_number used to remove scientific notation
-  scale_y_continuous(labels = label_number(scale = 1)) +
-  # Set y-axis title to horizontal
-  theme(axis.title.y = element_text(angle = 0, 
-                                    hjust = 1,
-                                    vjust = 1.06,
-                                    # Adjust margin to move the title to the right
-                                    margin = margin(r = -70)
-                                    ),
-        # Adjust plot margin
-        plot.margin = margin(t = 20, l = 5, r = 5, b = 5))
-
-vuln_bar_no_gridlines
-```
-
-# Remove vertical gridlines
-
-```{r}
-vuln_bar_no_vertical_gridlines <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
-  geom_bar(stat = "identity") +
-  # Remove vertical gridlines
-  theme(panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank()) +
-  # label_number used to remove scientific notation
-  scale_y_continuous(labels = label_number(scale = 1)) +
-  # Set y-axis title to horizontal
-  theme(axis.title.y = element_text(angle = 0, 
-                                    hjust = 1,
-                                    vjust = 1.06,
-                                    # Adjust margin to move the title to the right
-                                    margin = margin(r = -70)
-                                    ),
-        # Adjust plot margin
-        plot.margin = margin(t = 20, l = 5, r = 5, b = 5))
-
-vuln_bar_no_vertical_gridlines
-```
-
 # Add number suffixes (Thousands)
 
 ```{r}
 vuln_bar_thousands <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Divide the axis breaks by 1000 and add the suffix k
   scale_y_continuous(labels = label_number(scale = 1e-3, suffix = "k")) +
   # Change the y-axis label
@@ -434,6 +408,11 @@ vuln_bar_thousands
 ```{r}
 vuln_bar_millions <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Divide the axis breaks by 1000000 and add the suffix M
   scale_y_continuous(labels = label_number(scale = 1e-6, suffix = "M")) +
   # Change the y-axis label
@@ -456,6 +435,11 @@ vuln_bar_millions
 ```{r}
 vuln_bar_billions <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Divide the axis breaks by 1000000000 and add the suffix B
   scale_y_continuous(labels = label_number(scale = 1e-9, suffix = "B")) +
   # Change the y-axis label
@@ -478,6 +462,11 @@ vuln_bar_billions
 ```{r}
 vuln_bar <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # label_number used to remove scientific notation
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Set y-axis title to horizontal
@@ -508,6 +497,11 @@ ggsave(
 ```{r}
 vuln_bar <- ggplot(vuln_2007_top_6, aes(x = country ,y = vulnerable_pop)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # label_number used to remove scientific notation
   scale_y_continuous(labels = label_number(scale = 1)) +
   # Set y-axis title to horizontal
@@ -540,12 +534,11 @@ The bar chart should:
     -   The x-axis label is: Country 
     -   The y-axis label is: Vulnerable Population (Millions) 
     -   The text size of the axis titles is 12
-    -   The panel background and plot background is HEX code #FFFFFF
+    -   theme_minimal is used to set the background and gridline colours
+    -   Vertical gridlines are removed
     -   The largest bar is HEX code #324028, the rest are HEX code #D4DDD6
     -   The width of the bars is 0.6
     -   The bars are ordered from largest to smallest
-    -   The horizontal gridlines are HEX code #D9D9D9 and size = 0.5
-    -   There are no vertical gridlines
     -   The y-axis uses millions suffix (for example an axis break with a value of 6000000 would show as 6M)
     -   The chart can be exported as an .svg file or a .html file with the file name:
         vuln_pop_partner_countries 
@@ -586,6 +579,11 @@ vuln_2002_and_2007_top_6
 vuln_cluster <- ggplot(vuln_2002_and_2007_top_6, aes(x = country, y = vulnerable_pop, fill = year)) +
   # position = "dodge" sets the chart to a clustered bar chart
   geom_bar(stat = "identity", position = "dodge") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Change the colours of bars
   scale_fill_manual(
     values = c("2002" = "#48553F", "2007" = "#F59342")
@@ -630,6 +628,11 @@ vuln_all_years_top_6_ordered
 ```{r}
 vuln_stacked_bar <- ggplot(vuln_all_years_top_6_ordered, aes(x = year, y = vulnerable_pop, fill = country)) +
   geom_bar(stat = "identity") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
   # Change the colours of bars
   scale_fill_manual(
     values = c("Pakistan" = "#1E2A1F", "Brazil" = "#D17E38", "Indonesia" = "#444443", "United States" = "#3EA27F", "India" = "#752111", "China" = "#618DD3")
@@ -690,6 +693,11 @@ year_totals
 ```{r fig.width=16, fig.height=6}
 vuln_stacked_bar_percent <- ggplot(vuln_1997_2002_2007_percent, aes(x = year, y = vulnerable_pop, fill = country)) +
   geom_col(position = "fill") +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove horizontal gridlines
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank()) +
   # Add the percentages of the total population inside the bars
   geom_text(
     aes(label = percent(percent, accuracy = 0.01)),

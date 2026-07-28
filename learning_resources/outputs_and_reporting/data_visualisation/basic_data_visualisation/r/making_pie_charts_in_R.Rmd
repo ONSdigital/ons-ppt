@@ -44,7 +44,7 @@ library(here)
 library(dplyr)
 library(tidyr)
 library(janitor)
-library(ggplot2)
+library(ggplot2) # The scripts uses ggplot2 version 4.0.0
 library(svglite)
 library(plotly)
 library(htmlwidgets)
