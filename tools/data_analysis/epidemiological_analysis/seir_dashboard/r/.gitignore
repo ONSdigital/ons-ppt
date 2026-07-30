@@ -1,0 +1,17 @@
+# R session artefacts
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# rsconnect deployment metadata (do not version)
+rsconnect/
+
+# Dataset cache — generated automatically by save_dataset()
+# These files are ephemeral and should not be versioned.
+data/cache/
+
+# OS artefacts
+.DS_Store
+Thumbs.db
