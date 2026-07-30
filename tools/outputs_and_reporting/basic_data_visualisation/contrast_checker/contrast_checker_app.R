@@ -246,7 +246,7 @@ server <- function(input, output, session) {
     output$ratio <- renderUI({
       ratio_text <- paste0("Contrast Ratio: ", format_ratio(ratio), ":1")
       div(
-        style = "font-size:1.3em;font-weight:600;padding:8px 16px;background:#f5f5f5;border:2px solid #228B22;border-radius:8px;color:#222;margin-bottom:10px;display:inline-block;",
+        style = "font-size:1.3em;font-weight:600;padding:8px 16px;background:#f5f5f5;border:2px solid #1E2A16;border-radius:8px;color:#222;margin-bottom:10px;display:inline-block;",
         ratio_text
       )
     })
