@@ -211,8 +211,8 @@ ui <- fluidPage(
     sidebarPanel(
       h4(tags$b("Select Colours")),
       fluidRow(
-        column(6, colourInput("fg", "Foreground Colour", value = "#006000")),
-        column(6, colourInput("bg", "Background Colour", value = "#FFFFFF"))
+        column(6, colourInput("fg", "Foreground Colour", value = "#1E2A16")),
+        column(6, colourInput("bg", "Background Colour", value = "#F8F5F1"))
       ),
       actionButton("check", "Check Contrast", class = "btn-primary")
     ),
