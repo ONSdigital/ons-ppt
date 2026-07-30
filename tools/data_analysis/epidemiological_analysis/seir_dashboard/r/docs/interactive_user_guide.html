@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AfA Dashboard — Interactive User Guide</title>
+<style>
+:root {
+  --near-black:    #1E2A16;
+  --dark-green:    #324027;
+  --earthy-green:  #48553F;
+  --orange:        #F59342;
+  --green-grey:    #F4F6F5;
+  --earthy-tint:   #F8F5F1;
+  --border-grey:   #D0D4CE;
+  --border-soft:   #A8B09F;
+  --hover-tint:    #EAF0E8;
+  --sea-green:     #3EA27F;
+  --dark-red:      #752111;
+  --detail-purple: #6E5DA6;
+  --detail-tint:   #EFEDF7;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--near-black);
+  background-color: var(--green-grey);
+}
+.shell { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  border-right: 0.5px solid var(--border-grey);
+  padding: 24px 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.sidebar h1 { font-size: 1.05rem; color: var(--dark-green); margin: 0 0 2px 0; }
+.sidebar .subtitle { font-size: 0.8rem; color: var(--earthy-green); margin-bottom: 18px; }
+.search-box {
+  width: 100%; padding: 8px 12px; font-size: 0.9rem;
+  border: 1px solid var(--border-soft); border-radius: 6px;
+  background-color: var(--earthy-tint); color: var(--near-black); margin-bottom: 18px;
+}
+.search-box:focus { outline: none; border-color: var(--dark-green); box-shadow: 0 0 0 2px rgba(50, 64, 39, 0.15); }
+.nav-list { list-style: none; margin: 0; padding: 0; }
+.nav-list li { margin-bottom: 2px; }
+.nav-list a {
+  display: block; padding: 8px 10px; font-size: 0.9rem; font-weight: 500;
+  color: var(--earthy-green); text-decoration: none; border-radius: 6px; border-left: 3px solid transparent;
+}
+.nav-list a:hover { background-color: var(--hover-tint); color: var(--dark-green); }
+.nav-list a.active {
+  background-color: var(--hover-tint); color: var(--dark-green);
+  border-left: 3px solid var(--dark-green); font-weight: 600;
+}
+.nav-list .sub a { font-size: 0.83rem; padding-left: 22px; font-weight: 400; }
+.sidebar-footer {
+  margin-top: 24px; padding-top: 16px; border-top: 0.5px solid var(--border-grey);
+  font-size: 0.78rem; color: var(--border-soft);
+}
+.sidebar-footer a { color: var(--earthy-green); }
+.main { flex: 1; max-width: 860px; margin: 0 auto; padding: 40px 48px 100px 48px; }
+section { margin-bottom: 56px; scroll-margin-top: 20px; }
+h1.page-title { font-size: 2rem; color: var(--dark-green); margin-bottom: 6px; }
+.page-subtitle { font-size: 1.05rem; color: var(--earthy-green); font-style: italic; margin-bottom: 28px; }
+h2 { font-size: 1.5rem; color: var(--dark-green); border-bottom: 2px solid var(--border-grey); padding-bottom: 8px; margin-top: 0; }
+h3 { font-size: 1.15rem; color: var(--earthy-green); margin-top: 28px; }
+h4 { font-size: 1rem; color: var(--earthy-green); margin-top: 20px; }
+p { color: var(--near-black); }
+ul.bullets { padding-left: 22px; }
+ul.bullets li { margin-bottom: 8px; }
+table.guide-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 16px 0; }
+table.guide-table th { background-color: var(--dark-green); color: var(--green-grey); text-align: left; padding: 10px 14px; font-weight: 600; }
+table.guide-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-grey); vertical-align: top; }
+table.guide-table tr:hover td { background-color: var(--green-grey); }
+.callout { border: 2px solid; border-radius: 6px; padding: 14px 18px; margin: 18px 0; }
+.callout .callout-label { font-weight: 700; margin-bottom: 6px; display: block; }
+.callout.note     { background-color: var(--green-grey); border-color: var(--dark-green); }
+.callout.note .callout-label { color: var(--dark-green); }
+.callout.tip       { background-color: var(--earthy-tint); border-color: var(--earthy-green); }
+.callout.tip .callout-label { color: var(--earthy-green); }
+.callout.warning   { background-color: #FCE9D6; border-color: var(--orange); }
+.callout.warning .callout-label { color: #B05A12; }
+.callout.detail    { background-color: var(--detail-tint); border-color: var(--detail-purple); }
+.callout.detail .callout-label { color: var(--detail-purple); }
+.legend-row { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+.legend-swatch { width: 22px; height: 22px; border-radius: 4px; flex-shrink: 0; }
+.legend-text strong { color: var(--dark-green); }
+.simulator { background-color: #ffffff; border: 0.5px solid var(--border-grey); border-radius: 12px; padding: 24px 28px; margin: 20px 0; }
+.simulator-badge {
+  display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--earthy-green); background-color: var(--hover-tint); padding: 4px 10px; border-radius: 12px; margin-bottom: 14px;
+}
+.sim-controls { margin-bottom: 20px; }
+.sim-control-row { margin-bottom: 18px; }
+.sim-control-row label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark-green); margin-bottom: 6px; }
+.sim-control-row input[type="range"] { width: 100%; accent-color: var(--dark-green); height: 6px; }
+.sim-value { font-weight: 600; color: var(--earthy-green); }
+.kpi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 18px 0; }
+@media (max-width: 700px) { .kpi-grid { grid-template-columns: 1fr; } }
+.kpi-card {
+  border-radius: 10px; padding: 16px; border: 1px solid var(--border-grey); text-align: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.kpi-card .kpi-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--earthy-green); margin-bottom: 8px; }
+.kpi-card .kpi-value { font-size: 1.7rem; font-weight: 700; margin-bottom: 4px; }
+.kpi-card .kpi-state { font-size: 0.78rem; font-weight: 600; }
+.kpi-card.state-controlled { background-color: #EAF7F1; border-color: var(--sea-green); }
+.kpi-card.state-controlled .kpi-value, .kpi-card.state-controlled .kpi-state { color: #1F6B50; }
+.kpi-card.state-warning { background-color: #FCE9D6; border-color: var(--orange); }
+.kpi-card.state-warning .kpi-value, .kpi-card.state-warning .kpi-state { color: #B05A12; }
+.kpi-card.state-critical { background-color: #F9EDEA; border-color: var(--dark-red); }
+.kpi-card.state-critical .kpi-value, .kpi-card.state-critical .kpi-state { color: var(--dark-red); }
+.sim-chart-wrap { margin-top: 16px; }
+.sim-chart-wrap canvas { width: 100%; height: 260px; display: block; }
+.sim-reset {
+  margin-top: 16px; background-color: transparent; border: 0.5px solid var(--border-soft); color: var(--earthy-green);
+  padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;
+}
+.sim-reset:hover { background-color: var(--hover-tint); border-color: var(--earthy-green); }
+code.inline { background-color: #F0F0F0; padding: 2px 6px; border-radius: 4px; font-family: Consolas, monospace; font-size: 0.88em; }
+pre.code-block { background-color: #2B2B2B; color: #EAEAEA; padding: 16px 20px; border-radius: 6px; font-family: Consolas, monospace; font-size: 0.85rem; overflow-x: auto; margin: 16px 0; }
+.italic-note { font-style: italic; color: var(--earthy-green); }
+.mobile-bar { display: none; background: #ffffff; border-bottom: 0.5px solid var(--border-grey); padding: 12px 16px; position: sticky; top: 0; z-index: 50; align-items: center; justify-content: space-between; }
+.mobile-bar button { background: none; border: 1px solid var(--border-soft); border-radius: 6px; padding: 6px 10px; color: var(--dark-green); font-weight: 600; }
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .sidebar.open { display: block; position: fixed; z-index: 100; width: 80%; height: 100vh; }
+  .mobile-bar { display: flex; }
+  .main { padding: 24px 20px 80px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="mobile-bar">
+  <strong style="color:#324027;">AfA Dashboard Guide</strong>
+  <button id="menuToggle">☰ Menu</button>
+</div>
+
+<div class="shell">
+
+  <nav class="sidebar" id="sidebar">
+    <h1>AfA Dashboard</h1>
+    <div class="subtitle">Interactive User Guide</div>
+    <input type="text" class="search-box" id="searchBox" placeholder="Search this guide…">
+    <ul class="nav-list" id="navList">
+      <li><a href="#intro" class="nav-link">1. What this guide is for</a></li>
+      <li><a href="#getting-started" class="nav-link">2. Getting started</a></li>
+      <li class="sub"><a href="#dataset-source" class="nav-link">2.1 Choosing a dataset source</a></li>
+      <li class="sub"><a href="#upload-csv" class="nav-link">2.2 Uploading your own dataset</a></li>
+      <li class="sub"><a href="#choosing-view" class="nav-link">2.3 Choosing a view</a></li>
+      <li><a href="#advanced-view" class="nav-link">3. The Advanced View</a></li>
+      <li class="sub"><a href="#adv-parameters" class="nav-link">3.1 Setting your parameters</a></li>
+      <li class="sub"><a href="#adv-charts" class="nav-link">3.2 Reading the charts</a></li>
+      <li class="sub"><a href="#adv-export" class="nav-link">3.3 Exporting your results</a></li>
+      <li><a href="#simple-view" class="nav-link">4. The Simple View</a></li>
+      <li class="sub"><a href="#simple-cards" class="nav-link">4.1 The three indicator cards</a></li>
+      <li class="sub"><a href="#simple-controls" class="nav-link">4.2 The scenario controls</a></li>
+      <li class="sub"><a href="#simple-thresholds" class="nav-link">4.3 Adjusting the alarm thresholds</a></li>
+      <li><strong style="font-size:0.78rem; color:#A8B09F; padding-left:10px;">TRY IT LIVE ↓</strong></li>
+      <li class="sub"><a href="#simulator" class="nav-link">▸ Interactive simulator</a></li>
+      <li><a href="#faq" class="nav-link">5. Frequently asked questions</a></li>
+      <li><a href="#contact" class="nav-link">6. Who to contact</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      Companion to the official User Guide (Product 3).<br>
+      Source: <a href="https://github.com/XtnPaez/afa-dashboard-arg" target="_blank">afa-dashboard-arg</a>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <h1 class="page-title">AfA Dashboard — User Guide</h1>
+    <p class="page-subtitle">An interactive companion to the official User Guide, with a live, in-browser simulator you can try without installing anything.</p>
+
+    <div class="callout note">
+      <span class="callout-label">About this page</span>
+      This is a companion to the official User Guide (Product 3), produced as a Word document for formal submission. The content is the same; this version adds a live simulator so you can see how the model responds before installing the dashboard itself.
+    </div>
+
+    <section id="intro">
+      <h2>1. What this guide is for</h2>
+      <p>This guide explains how to use the AfA Dashboard: a tool for exploring how an infectious disease, such as COVID-19, might spread under different conditions, and what that could mean for hospitals and health systems.</p>
+      <p>You do not need a background in statistics, epidemiology, or computer programming to use this guide or the dashboard itself. Every screen, button, and chart is explained in plain language.</p>
+
+      <div class="callout detail">
+        <span class="callout-label">How this guide works</span>
+        The main text explains everything you need to use the dashboard with confidence. Throughout the guide, you will also find boxes like this one, titled "For more detail". These are entirely optional — they explain a little more about how something is calculated, for readers who want to understand the method behind a number. You can skip them completely and still get full value from the dashboard.
+      </div>
+
+      <p>This guide covers:</p>
+      <ul class="bullets">
+        <li>How to open the dashboard and load a dataset.</li>
+        <li>How to use the Advanced View, which gives you full control over every parameter of the model, including how to download your results.</li>
+        <li>How to use the Simple View, a streamlined view built around three key indicators and a small number of controls.</li>
+        <li>Answers to common questions about interpreting what you see.</li>
+      </ul>
+
+      <div class="callout note">
+        <span class="callout-label">Note</span>
+        If you need to install or publish the dashboard rather than simply use it, see the Implementation Guide instead.
+      </div>
+    </section>
+
+    <section id="getting-started">
+      <h2>2. Getting started</h2>
+      <p>When you open the dashboard, you will see an entry screen with a single card in the centre. This is where you choose what data the dashboard should use, before moving on to explore it.</p>
+
+      <h3 id="dataset-source">2.1 Choosing a dataset source</h3>
+      <p>Under "Dataset source", you can choose between two options:</p>
+      <table class="guide-table">
+        <tr><th>Option</th><th>What it does</th></tr>
+        <tr><td>Simulated (mock)</td><td>Loads a ready-made example dataset, built from typical default values. This is the quickest way to explore the dashboard — you do not need to prepare anything in advance.</td></tr>
+        <tr><td>Upload your own dataset (CSV)</td><td>Lets you load your own set of epidemiological and health-system values, specific to the country, region, or scenario you want to study.</td></tr>
+      </table>
+      <p>Once you have chosen an option, click the "Load dataset" button. A short message will appear confirming that the dataset loaded successfully.</p>
+
+      <h3 id="upload-csv">2.2 Uploading your own dataset</h3>
+      <p>If you choose to upload your own dataset, you will need a CSV file — a simple spreadsheet format that most spreadsheet programs (such as Excel or Google Sheets) can create by using "Save As" or "Export" and choosing the CSV format.</p>
+      <p>Your file must have exactly two columns, named <code class="inline">parameter</code> and <code class="inline">value</code>, and must include the following ten rows:</p>
+      <table class="guide-table">
+        <tr><th>Row name ("parameter")</th><th>What it represents</th></tr>
+        <tr><td><code class="inline">r0</code></td><td>How many people, on average, one infected person passes the disease to.</td></tr>
+        <tr><td><code class="inline">incubation_period</code></td><td>The average number of days between catching the disease and starting to show symptoms.</td></tr>
+        <tr><td><code class="inline">infectious_period</code></td><td>The average number of days during which an infected person can pass on the disease.</td></tr>
+        <tr><td><code class="inline">ifr</code></td><td>The infection fatality rate: the proportion of infected people who are expected to die, as a result of the disease.</td></tr>
+        <tr><td><code class="inline">icu_capacity</code></td><td>The total number of intensive care unit (ICU) beds available.</td></tr>
+        <tr><td><code class="inline">ventilator_availability</code></td><td>The total number of ventilators (breathing-support machines) available.</td></tr>
+        <tr><td><code class="inline">healthcare_staff</code></td><td>The total number of healthcare staff available to treat patients.</td></tr>
+        <tr><td><code class="inline">icu_admission_rate</code></td><td>The proportion of infected people expected to need an ICU bed.</td></tr>
+        <tr><td><code class="inline">ventilator_usage_rate</code></td><td>The proportion of infected people expected to need a ventilator.</td></tr>
+        <tr><td><code class="inline">population</code></td><td>The total population of the area you are studying.</td></tr>
+      </table>
+
+      <div class="callout tip">
+        <span class="callout-label">Tip</span>
+        Argentina reference defaults are shown in the upload window as a guide. You do not need to use these exact figures — replace them with values appropriate to your own country, region, or scenario.
+      </div>
+      <div class="callout warning">
+        <span class="callout-label">If your file does not load</span>
+        The dashboard checks your file before using it. If a row is missing, misspelled, or contains a value that is not a number, you will see a message explaining exactly what needs fixing. Correct your file and try uploading it again.
+      </div>
+
+      <h3 id="choosing-view">2.3 Choosing a view</h3>
+      <p>After loading a dataset, choose between two ways of exploring it:</p>
+      <ul class="bullets">
+        <li><strong>Advanced View</strong> — gives you full control over every parameter of the model, with detailed charts. Best if you want to explore specific scenarios in depth.</li>
+        <li><strong>Simple View</strong> — a streamlined view built around three key indicators and two main controls. Best for a quick read of how a scenario is developing.</li>
+      </ul>
+      <p>Both views start from the same dataset. From that point on, they work independently — a change you make in one view has no effect on the other. This means you can use both views side by side to compare a detailed exploration against a quick summary.</p>
+    </section>
+
+    <section id="advanced-view">
+      <h2>3. The Advanced View</h2>
+      <p>The Advanced View gives you full control over the model behind the dashboard. It is organised into a parameter panel, on the left or top of the screen depending on your device, and a set of charts that update once you run a simulation.</p>
+
+      <h3 id="adv-parameters">3.1 Setting your parameters</h3>
+      <p>The parameter panel lets you adjust every input the model uses. These are grouped as follows:</p>
+      <table class="guide-table">
+        <tr><th>Parameter group</th><th>What it controls</th></tr>
+        <tr><td>Disease parameters</td><td>How infectious the disease is, how long it takes to show symptoms, how long someone remains infectious, and how likely an infected person is to die from it.</td></tr>
+        <tr><td>Policy and compliance</td><td>Which type of public health response is in place (for example, gradual restrictions or on-off interventions), and how closely the population follows it.</td></tr>
+        <tr><td>Healthcare resources</td><td>How many ICU beds, ventilators, and healthcare staff are available, and what proportion of infected people are expected to need each of these.</td></tr>
+        <tr><td>Simulation scope</td><td>The start and end dates of the period you want to simulate.</td></tr>
+      </table>
+
+      <div class="callout detail">
+        <span class="callout-label">For more detail</span>
+        The "Policy and compliance" setting changes how strongly the model reduces transmission. Under the "Phased Mitigation" policy, for example, full compliance with the measures in place reduces the effective spread of the disease by up to half compared with no measures at all.
+      </div>
+      <p>Once you are happy with your settings, click the button to run the simulation. The charts on the right (or below, on smaller screens) will update to reflect your chosen scenario.</p>
+
+      <h3 id="adv-charts">3.2 Reading the charts</h3>
+      <p>The Advanced View includes several charts. Each one tells a different part of the story:</p>
+      <table class="guide-table">
+        <tr><th>Chart</th><th>What it shows</th></tr>
+        <tr><td>SEIR curves</td><td>How the population moves between four groups over time: people who can still catch the disease, people who have caught it but cannot yet pass it on, people who can currently pass it on, and people who have recovered (or are no longer infectious).</td></tr>
+        <tr><td>Cumulative cases and deaths</td><td>The running total of cases and deaths over the simulated period, rather than the daily figures.</td></tr>
+        <tr><td>Healthcare resource pressure</td><td>How the demand for ICU beds and ventilators compares with the capacity you specified, over time. Where demand crosses the capacity line, the health system would be under strain.</td></tr>
+      </table>
+      <p>Hover your mouse over any point on a chart to see the exact values for that day.</p>
+
+      <h3 id="adv-export">3.3 Exporting your results</h3>
+      <p>Click the download button above the charts to export the full set of simulation results as a CSV file, which you can open in any spreadsheet program for further analysis, reporting, or sharing with colleagues. This file contains the day-by-day values behind everything shown in the charts.</p>
+      <div class="callout tip">
+        <span class="callout-label">Tip</span>
+        The file uses the European number format (for example, 1.234,56 rather than 1,234.56). You may need to adjust your spreadsheet program's regional settings if the numbers do not display correctly when you open it.
+      </div>
+      <div class="callout note">
+        <span class="callout-label">Note</span>
+        This export is only available in the Advanced View. The Simple View does not include a download option, as it is designed for a quick read of the indicator cards rather than detailed analysis.
+      </div>
+    </section>
+
+    <section id="simple-view">
+      <h2>4. The Simple View</h2>
+      <p>The Simple View is designed for a quick read of how a scenario is developing, without needing to interpret detailed charts. It is built around three indicator cards and a small number of controls.</p>
+
+      <h3 id="simple-cards">4.1 The three indicator cards</h3>
+      <table class="guide-table">
+        <tr><th>Card</th><th>What it tells you</th></tr>
+        <tr><td>Epidemic Trajectory</td><td>Whether the number of currently infectious people is rising or falling, by comparing the most recent week of the simulation with the week before it.</td></tr>
+        <tr><td>ICU Pressure</td><td>How much of your intensive care capacity is in use by the end of the simulated period, as a percentage.</td></tr>
+        <tr><td>Cumulative Deaths</td><td>The total number of deaths by the end of the simulated period, as a percentage of the population.</td></tr>
+      </table>
+      <p>Each card is colour-coded, using the same three states throughout the dashboard:</p>
+      <div class="legend-row"><div class="legend-swatch" style="background:#3EA27F;"></div><div class="legend-text"><strong>Controlled</strong> — comfortably below its warning level. No cause for concern under the current scenario.</div></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#F59342;"></div><div class="legend-text"><strong>Warning</strong> — past its warning level, but not yet critical. Worth keeping an eye on.</div></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#752111;"></div><div class="legend-text"><strong>Critical</strong> — past its critical level. A serious situation under the current scenario.</div></div>
+
+      <div class="callout detail">
+        <span class="callout-label">For more detail</span>
+        ICU Pressure is based on how many ICU beds are in use on the final day of the simulation, accounting for an average hospital stay of ten days, rather than on the single worst day of the simulation. This is a deliberate design choice: under fast-spreading scenarios, the worst single day can be many times higher than total capacity, which produces a number that is technically correct but not useful for decision-making. The final-day figure gives a more stable, comparable read of pressure on the health system.
+      </div>
+
+      <h3 id="simple-controls">4.2 The scenario controls</h3>
+      <p>Below the three cards, two sliders let you adjust the scenario directly:</p>
+      <table class="guide-table">
+        <tr><th>Control</th><th>What it does</th></tr>
+        <tr><td>R₀ — Basic Reproduction Number</td><td>How many people, on average, one infected person passes the disease to. Higher values mean faster spread.</td></tr>
+        <tr><td>Compliance Level (%)</td><td>How closely the population is following prevention measures, such as distancing or mask-wearing. At 0%, no measures are reducing spread. At 100%, the disease's effective spread is reduced by half.</td></tr>
+      </table>
+      <p>Unlike the Advanced View, changing either of these sliders re-runs the simulation immediately — there is no separate button to click. The three cards update straight away to reflect your new scenario.</p>
+
+      <h3 id="simple-thresholds">4.3 Adjusting the alarm thresholds</h3>
+      <p>By default, each card uses standard warning and critical levels. If these do not match your own context, click "Settings — Alarm Thresholds" to reveal six fields, two for each card:</p>
+      <table class="guide-table">
+        <tr><th>Card</th><th>Default warning level</th><th>Default critical level</th></tr>
+        <tr><td>Epidemic Trajectory</td><td>1% weekly growth</td><td>20% weekly growth</td></tr>
+        <tr><td>ICU Pressure</td><td>70% of capacity</td><td>100% of capacity</td></tr>
+        <tr><td>Cumulative Deaths</td><td>0.05% of population</td><td>0.20% of population</td></tr>
+      </table>
+      <div class="callout note">
+        <span class="callout-label">Note</span>
+        Changing these thresholds only changes when a card turns orange or red — it does not change the simulation itself, and does not require you to run it again. This makes it quick to test "what would concern me" without affecting your scenario.
+      </div>
+    </section>
+
+    <section id="simulator">
+      <h2>Try it live: an in-browser simulator</h2>
+      <p>The widget below reproduces the Simple View's two scenario controls and three indicator cards, using the same equations and default values as the real dashboard. It runs entirely in your browser — no installation required.</p>
+
+      <div class="callout warning">
+        <span class="callout-label">This is a simplified demonstration</span>
+        This simulator is built for illustration only. It is not connected to the dashboard's R code, and is not a substitute for it. Use it to get a feel for how R₀ and Compliance Level affect a scenario before installing the real dashboard, described in the Implementation Guide.
+      </div>
+
+      <div class="simulator">
+        <span class="simulator-badge">Live · runs in your browser</span>
+
+        <div class="sim-controls">
+          <div class="sim-control-row">
+            <label for="simR0">R₀ — Basic Reproduction Number: <span class="sim-value" id="simR0Value">2.5</span></label>
+            <input type="range" id="simR0" min="0.5" max="6.0" step="0.1" value="2.5">
+          </div>
+          <div class="sim-control-row">
+            <label for="simCompliance">Compliance Level: <span class="sim-value" id="simComplianceValue">50%</span></label>
+            <input type="range" id="simCompliance" min="0" max="100" step="1" value="50">
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card" id="cardTrajectory">
+            <div class="kpi-label">Epidemic Trajectory</div>
+            <div class="kpi-value" id="valTrajectory">—</div>
+            <div class="kpi-state" id="stateTrajectory">—</div>
+          </div>
+          <div class="kpi-card" id="cardICU">
+            <div class="kpi-label">ICU Pressure</div>
+            <div class="kpi-value" id="valICU">—</div>
+            <div class="kpi-state" id="stateICU">—</div>
+          </div>
+          <div class="kpi-card" id="cardDeaths">
+            <div class="kpi-label">Cumulative Deaths</div>
+            <div class="kpi-value" id="valDeaths">—</div>
+            <div class="kpi-state" id="stateDeaths">—</div>
+          </div>
+        </div>
+
+        <div class="sim-chart-wrap">
+          <canvas id="simChart" width="800" height="260"></canvas>
+        </div>
+
+        <button class="sim-reset" id="simReset">Reset to Argentina defaults</button>
+      </div>
+
+      <div class="callout detail">
+        <span class="callout-label">For more detail: how this simulator calculates its results</span>
+        The simulator solves the same four SEIR equations as the dashboard (dS, dE, dI, dR), using the same default parameters for Argentina (population 45,000,000; incubation period 5 days; infectious period 7 days; infection fatality rate 1%; ICU admission rate 13.6%; ICU capacity 6,000 beds; average hospital stay 10 days), over a 365-day period. The effective reproduction number is calculated as <code class="inline">R₀ × (1 − Compliance × 0.5)</code>, exactly as in the dashboard's Advanced and Simple Views. A simple fixed-step numerical method (RK4) is used to solve the equations in JavaScript, in place of the deSolve package used in R.
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2>5. Frequently asked questions</h2>
+
+      <h4>Why does my ICU Pressure figure look much higher than 100%?</h4>
+      <p>Under fast-spreading scenarios, demand for ICU beds can genuinely exceed available capacity many times over. A figure such as 300% or higher is not an error — it reflects a scenario in which demand for intensive care has substantially outstripped what is available. See Section 4.1 for more on how this figure is calculated.</p>
+
+      <h4>What is the difference between the Advanced View and the Simple View?</h4>
+      <p>The Advanced View gives you full control over every model parameter and shows detailed charts — better suited to in-depth exploration. The Simple View focuses on three key indicators and two main controls, for a faster read of a scenario. Both use the same underlying model and the same starting dataset, but they run independently once loaded: changes in one do not affect the other.</p>
+
+      <h4>Can I trust the default values shown when I upload my own dataset?</h4>
+      <p>The default values shown as a guide are based on published epidemiological research for Argentina. They are a reasonable starting point, but you should replace them with figures that reflect your own country, region, or scenario wherever these are available.</p>
+
+      <h4>Why do the two views show different results for what looks like the same scenario?</h4>
+      <p>The two views are intentionally kept separate once a dataset is loaded. If you change a slider in the Advanced View, this has no effect on the Simple View, and vice versa. To compare like with like, set the same values in both views.</p>
+
+      <h4>My uploaded file was rejected. What should I check first?</h4>
+      <p>Confirm that your file has exactly two columns named <code class="inline">parameter</code> and <code class="inline">value</code>, that all ten required rows are present and correctly spelled (see Section 2.2), and that every value is a plain number, with no text, currency symbols, or thousands separators.</p>
+    </section>
+
+    <section id="contact">
+      <h2>6. Who to contact</h2>
+      <p>For questions about how to use the dashboard, contact:</p>
+      <table class="guide-table">
+        <tr><td><strong>Maintainer</strong></td><td>Cristian Paez</td></tr>
+        <tr><td><strong>Project</strong></td><td>AfA Dashboard — Analysis for Action (Argentina Unit)</td></tr>
+        <tr><td><strong>Source code</strong></td><td><a href="https://github.com/XtnPaez/afa-dashboard-arg" target="_blank">github.com/XtnPaez/afa-dashboard-arg</a></td></tr>
+      </table>
+      <p class="italic-note">For questions about installing or publishing the dashboard, see the Implementation Guide instead. For a detailed, technical description of how the model and the dashboard work internally, see the Technical Submission Note.</p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const sidebar = document.getElementById('sidebar');
+document.getElementById('menuToggle').addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+});
+
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('section');
+
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 900) sidebar.classList.remove('open');
+  });
+});
+
+function updateActiveLink() {
+  let current = '';
+  sections.forEach(sec => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top <= 120) current = sec.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', updateActiveLink);
+updateActiveLink();
+
+const searchBox = document.getElementById('searchBox');
+searchBox.addEventListener('input', () => {
+  const q = searchBox.value.trim().toLowerCase();
+  sections.forEach(sec => {
+    if (q === '') { sec.style.opacity = '1'; return; }
+    sec.style.opacity = sec.innerText.toLowerCase().includes(q) ? '1' : '0.25';
+  });
+});
+
+const DEFAULTS = {
+  population: 45000000,
+  nInfected: 10000,
+  incubationPeriod: 5,
+  infectiousPeriod: 7,
+  ifr: 0.01,
+  icuAdmissionRate: 0.136,
+  icuCapacity: 6000,
+  hospitalStayDays: 10,
+  days: 365
+};
+
+function runSEIR(r0, compliancePct) {
+  const compliance = compliancePct / 100;
+  let effectiveR0 = r0 * (1 - compliance * 0.5);
+  if (effectiveR0 < 0.5) effectiveR0 = 0.5;
+
+  const beta  = effectiveR0 / DEFAULTS.infectiousPeriod;
+  const sigma = 1 / DEFAULTS.incubationPeriod;
+  const gamma = 1 / DEFAULTS.infectiousPeriod;
+
+  const N = DEFAULTS.population;
+  let S = N - DEFAULTS.nInfected, E = 0, I = DEFAULTS.nInfected, R = 0;
+
+  const series = { S: [S], E: [E], I: [I], R: [R], icuDemand: [I * DEFAULTS.icuAdmissionRate] };
+
+  const dt = 1;
+  function derivs(s, e, i, r) {
+    const dS = -beta * s * i / N;
+    const dE =  beta * s * i / N - sigma * e;
+    const dI =  sigma * e - gamma * i;
+    const dR =  gamma * i;
+    return [dS, dE, dI, dR];
+  }
+
+  for (let t = 1; t <= DEFAULTS.days; t++) {
+    const k1 = derivs(S, E, I, R);
+    const k2 = derivs(S + k1[0]*dt/2, E + k1[1]*dt/2, I + k1[2]*dt/2, R + k1[3]*dt/2);
+    const k3 = derivs(S + k2[0]*dt/2, E + k2[1]*dt/2, I + k2[2]*dt/2, R + k2[3]*dt/2);
+    const k4 = derivs(S + k3[0]*dt,   E + k3[1]*dt,   I + k3[2]*dt,   R + k3[3]*dt);
+
+    S += (dt/6) * (k1[0] + 2*k2[0] + 2*k3[0] + k4[0]);
+    E += (dt/6) * (k1[1] + 2*k2[1] + 2*k3[1] + k4[1]);
+    I += (dt/6) * (k1[2] + 2*k2[2] + 2*k3[2] + k4[2]);
+    R += (dt/6) * (k1[3] + 2*k2[3] + 2*k3[3] + k4[3]);
+
+    series.S.push(S); series.E.push(E); series.I.push(I); series.R.push(R);
+    series.icuDemand.push(I * DEFAULTS.icuAdmissionRate);
+  }
+
+  const win = DEFAULTS.hospitalStayDays;
+  const occ = new Array(series.icuDemand.length).fill(0);
+  for (let t = 0; t < series.icuDemand.length; t++) {
+    if (t < win - 1) {
+      occ[t] = series.icuDemand.slice(0, t + 1).reduce((a, b) => a + b, 0);
+    } else {
+      let sum = 0;
+      for (let k = t - win + 1; k <= t; k++) sum += series.icuDemand[k];
+      occ[t] = sum;
+    }
+  }
+  series.icuOccupancy = occ;
+
+  const deaths = new Array(series.I.length).fill(0);
+  let cum = 0;
+  for (let t = 1; t < series.I.length; t++) {
+    const newInfections = sigma * series.E[t - 1];
+    cum += newInfections * DEFAULTS.ifr;
+    deaths[t] = cum;
+  }
+  series.cumulativeDeaths = deaths;
+
+  return series;
+}
+
+function resolveAlarmState(value, warn, crit) {
+  if (value === null || isNaN(value)) return 'controlled';
+  if (value <= warn) return 'controlled';
+  if (value <= crit) return 'warning';
+  return 'critical';
+}
+
+function formatPct(v) {
+  return (Math.round(v * 100) / 100).toFixed(2) + '%';
+}
+
+function setCard(cardId, valueId, stateId, value, label, warn, crit) {
+  const state = resolveAlarmState(value, warn, crit);
+  const card = document.getElementById(cardId);
+  card.className = 'kpi-card state-' + state;
+  document.getElementById(valueId).textContent = label;
+  document.getElementById(stateId).textContent =
+    state === 'controlled' ? 'Controlled' : state === 'warning' ? 'Warning' : 'Critical';
+}
+
+function drawChart(series) {
+  const canvas = document.getElementById('simChart');
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  const n = series.I.length;
+  const maxVal = Math.max(...series.S, ...series.E, ...series.I, ...series.R);
+  const pad = 30;
+
+  function xPos(i) { return pad + (i / (n - 1)) * (w - pad * 1.5); }
+  function yPos(v) { return h - pad - (v / maxVal) * (h - pad * 1.7); }
+
+  ctx.strokeStyle = '#D0D4CE';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad, 10); ctx.lineTo(pad, h - pad); ctx.lineTo(w - 10, h - pad);
+  ctx.stroke();
+
+  function plotLine(data, colour) {
+    ctx.strokeStyle = colour;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    data.forEach((v, i) => {
+      const x = xPos(i), y = yPos(v);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  plotLine(series.S, '#A8B09F');
+  plotLine(series.E, '#F59342');
+  plotLine(series.I, '#752111');
+  plotLine(series.R, '#3EA27F');
+
+  const legend = [
+    ['Susceptible', '#A8B09F'], ['Exposed', '#F59342'],
+    ['Infectious', '#752111'], ['Recovered', '#3EA27F']
+  ];
+  ctx.font = '11px Arial';
+  let lx = pad;
+  legend.forEach(([label, colour]) => {
+    ctx.fillStyle = colour;
+    ctx.fillRect(lx, 14, 10, 10);
+    ctx.fillStyle = '#1E2A16';
+    ctx.fillText(label, lx + 14, 23);
+    lx += ctx.measureText(label).width + 40;
+  });
+}
+
+function updateSimulator() {
+  const r0 = parseFloat(document.getElementById('simR0').value);
+  const compliance = parseFloat(document.getElementById('simCompliance').value);
+
+  document.getElementById('simR0Value').textContent = r0.toFixed(1);
+  document.getElementById('simComplianceValue').textContent = compliance + '%';
+
+  const series = runSEIR(r0, compliance);
+  const n = series.I.length;
+
+  const last7 = series.I.slice(n - 7, n).reduce((a, b) => a + b, 0) / 7;
+  const prev7 = series.I.slice(n - 14, n - 7).reduce((a, b) => a + b, 0) / 7;
+  const growth = prev7 === 0 ? 0 : ((last7 - prev7) / prev7) * 100;
+  setCard('cardTrajectory', 'valTrajectory', 'stateTrajectory', growth,
+          (growth >= 0 ? '+' : '') + growth.toFixed(2) + '%', 1, 20);
+
+  const icuPct = (series.icuOccupancy[n - 1] / DEFAULTS.icuCapacity) * 100;
+  setCard('cardICU', 'valICU', 'stateICU', icuPct, formatPct(icuPct), 70, 100);
+
+  const deathsPct = (series.cumulativeDeaths[n - 1] / DEFAULTS.population) * 100;
+  setCard('cardDeaths', 'valDeaths', 'stateDeaths', deathsPct, formatPct(deathsPct), 0.05, 0.20);
+
+  drawChart(series);
+}
+
+document.getElementById('simR0').addEventListener('input', updateSimulator);
+document.getElementById('simCompliance').addEventListener('input', updateSimulator);
+document.getElementById('simReset').addEventListener('click', () => {
+  document.getElementById('simR0').value = 2.5;
+  document.getElementById('simCompliance').value = 50;
+  updateSimulator();
+});
+
+updateSimulator();
+</script>
+
+</body>
+</html>

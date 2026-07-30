@@ -1,0 +1,35 @@
+Package: afadashboardarg
+Title: SEIR Epidemiological Modelling Prototype
+Version: 0.1.0
+Authors@R:
+    person("Cristian", "Paez", email = "paez.cristian@gmail.com", role = c("aut", "cre"))
+Description: Modular Shiny prototype for interactive SEIR epidemiological
+    modelling, developed as part of Analysis for Action (Argentina Unit).
+    Supports scenario simulation, parameter adjustment, healthcare resource
+    pressure analysis, and CSV export of results.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
+Depends: R (>= 4.3)
+Imports:
+    shiny,
+    shinyjs,
+    bslib,
+    ggplot2,
+    plotly,
+    dplyr,
+    tidyr,
+    purrr,
+    scales,
+    lubridate,
+    deSolve,
+    RcppRoll,
+    rsconnect
+Suggests:
+    testthat,
+    shinytest2,
+    pkgdown,
+    lintr
+URL: https://github.com/XtnPaez/afa-dashboard-arg, https://cpaez.shinyapps.io/afa-dashboard-arg/
+BugReports: https://github.com/XtnPaez/afa-dashboard-arg/issues
