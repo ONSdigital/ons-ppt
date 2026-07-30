@@ -733,7 +733,8 @@ make_chi_row <- function(var_name, label) {
   
   # 1. Create the Cross-tabulation
   tab_data <- df %>%
-    filter(!is.na(.data[[var_name]]), !is.na(.data[[outcome_var]]))
+    filter(!is.na(.data[[var_name]]), !is.na(.data[[outcome_var]])) %>%
+    mutate(across(where(is.factor), droplevels))
   
   # 2. Run Chi-square test
   raw_tab <- table(tab_data[[var_name]], tab_data[[outcome_var]])
