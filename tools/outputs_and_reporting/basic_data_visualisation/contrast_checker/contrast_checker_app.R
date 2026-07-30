@@ -156,6 +156,7 @@ get_lightness <- function(hex_colour) {
 
 # ---- UI ------------------------------------------------------------------
 ui <- fluidPage(
+  includeCSS("www/custom.css"),
   tags$head(
     tags$script(HTML(
       "function getPageHeight() {
@@ -194,7 +195,18 @@ ui <- fluidPage(
       });"
     ))
   ),
-  titlePanel("Colour Contrast Checker (WCAG)"),
+  div(
+    class = "app-header",
+    tags$img(
+      src = "whiteAAlogo.png",
+      class = "app-logo",
+      alt = "Analysis for Action logo"
+    ),
+    div(
+      class = "app-title-wrap",
+      h2("Colour Contrast Checker (WCAG)", class = "app-title")
+    )
+  ),
   sidebarLayout(
     sidebarPanel(
       h4(tags$b("Select Colours")),

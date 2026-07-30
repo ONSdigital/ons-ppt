@@ -1,0 +1,104 @@
+/*
+   Custom Shiny app theme
+   Palette source: healthcare facility mapping brand guidance
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
+
+/* ---- Brand tokens ---------------------------------------------------- */
+:root {
+  --brand-dark-green: #324027;
+  --brand-earthy-green: #48553F;
+  --brand-orange: #F59342;
+  --brand-near-black: #1E2A16;
+
+  --tint-green-grey: #F4F6F5;
+  --tint-earthy: #F8F5F1;
+  --tint-white: #FFFFFF;
+
+  --viz-cat-1: #1E2A16; /* Near black */
+  --viz-cat-2: #D17E38; /* Burnt orange */
+  --viz-cat-3: #444443; /* Dark stone */
+  --viz-cat-4: #3EA27F; /* Sea green */
+  --viz-cat-5: #752111; /* Dark red */
+  --viz-cat-6: #618DD3; /* Sky blue */
+
+  --viz-cont-1: #1E2A16; /* Near black */
+  --viz-cont-2: #6C7466; /* Mid green */
+  --viz-cont-3: #CDD0CB; /* Light green */
+
+  --viz-focus-1: #1E2A16; /* Near black */
+  --viz-focus-2: #949494; /* Grey */
+}
+
+/* ---- Base ------------------------------------------------------------ */
+body {
+  font-family: "Open Sans", sans-serif;
+  background-color: #FFFFFF;
+  color: #1E2A16;
+}
+
+a {
+  color: #324027;
+}
+
+a:hover {
+  color: #48553F;
+}
+
+/* ---- Helper utility classes ------------------------------------------ */
+.bg-tint-green-grey { background-color: #F4F6F5; }
+.bg-tint-earthy     { background-color: #F8F5F1; }
+.text-brand-dark-green   { color: #324027; }
+.text-brand-earthy-green { color: #48553F; }
+.text-brand-orange       { color: #F59342; }
+
+/* ---- Shiny app header ------------------------------------------------ */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #1E2A16;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+
+.app-logo {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.app-title-wrap {
+  min-width: 0;
+}
+
+.app-title {
+  margin: 0;
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* ---- Selectize inputs ------------------------------------------------ */
+.selectize-input,
+.selectize-dropdown {
+  font-family: "Open Sans", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+.selectize-input input,
+.selectize-input .item {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+}
+
+.selectize-dropdown .option {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
