@@ -46,13 +46,13 @@ library(tidyr)
 library(janitor)
 library(ggplot2) # The scripts uses ggplot2 version 4.0.0
 library(svglite)
-library(plotly)
 library(htmlwidgets)
 library(scales)
+library(ggiraph)
 
 # Use here::here() to construct paths, do not setwd()
 here::here()
-vuln <- read.csv(here::here("learning_resources", "data", "vulnerable.csv"))
+vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
 ```
 
 ## Prepare your data
@@ -246,10 +246,38 @@ ggsave(
   # Select the plot to save
   plot = vuln_pie_colours,
   # Set the save path
-  path = "D:/Temp",
+  path = here::here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "example_outputs"
+    ),
   # Set aspect ratio of plot, an aspect ratio of 16:9 will fill 1920x1080 displays
   width = 16,
   height = 9
+)
+```
+
+# Exporting (.html file format)
+
+```{r}
+vuln_pie_html <- girafe(
+  ggobj = vuln_pie_colours
+)
+
+htmlwidgets::saveWidget(
+  vuln_pie_html,
+  file = here::here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "example_outputs",
+    "vuln_pie.html"
+    )
 )
 ```
 
@@ -274,6 +302,6 @@ The pie chart should:
     -   Include data labels containing each country's name and its percentage of the total vulnerable population
     -   The labels are HEX code #000000
     -   There is no legend
-    -   The chart is exported as an .svg file with the file name: vuln_pie_solution
-    -   The chart is saved to the D:/Temp folder
-    -   The saved .svg chart has an aspect ratio of 16:9
+    -   The chart is exported with the file name: vuln_pie_solution
+    -   The chart is saved to the exercise_outputs folder
+    -   The plot can be saved as both .svg chart has an aspect ratio of 16:9 and a .html

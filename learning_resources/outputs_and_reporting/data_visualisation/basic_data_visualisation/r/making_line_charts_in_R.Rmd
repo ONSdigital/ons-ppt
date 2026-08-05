@@ -50,10 +50,12 @@ library(svglite)
 library(plotly)
 library(htmlwidgets)
 library(ggrepel)
+library(ggdist)
+library(ggiraph)
 
 # Use here::here() to construct paths, do not setwd()
 here::here()
-vuln <- read.csv(here::here("learning_resources", "data", "vulnerable.csv"))
+vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
 ```
 
 ## Introduction to ggplot2
@@ -74,7 +76,7 @@ vuln_4_country <- vuln %>%
   
   filter(country %in% c("Argentina", "Malawi", "Nepal","United Kingdom")) %>%
   
-  select(year, vulnerable_pop, country)
+  select(year, vulnerable_pop, country, upper_confidence_limit, lower_confidence_limit)
 
 # To Display the data
 
@@ -325,6 +327,42 @@ vuln_line_billions <- ggplot(vuln_2_country, aes(x = year, y = vulnerable_pop, c
 vuln_line_billions
 ```
 
+## Confidence intervals
+
+```{r}
+vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country, ymin = lower_confidence_limit, ymax = upper_confidence_limit)) +
+  geom_lineribbon() +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
+  scale_y_continuous(labels = label_number(scale = 1)) +
+  # Change the colours of lines to differentiate between countries
+  scale_colour_manual(values = c("United Kingdom" = "#1E2A16",
+                                 "Argentina" = "#D17E38",
+                                 "Nepal" = "#444443",
+                                 "Malawi" = "#3EA27F"),
+  ) +
+  # Remove legend set y-axis title to horizontal
+  theme(axis.title.y = element_text(angle = 0, 
+                                    hjust = 1,
+                                    vjust = 1.06,
+                                    # Adjust margin to move the title to the right
+                                    margin = margin(r = -70)
+                                    ),
+        # Adjust plot margin
+        plot.margin = margin(t = 20, l = 5, r = 5, b = 5)) +
+  theme(legend.position = "none") +
+  # Add labels to lines
+  geom_text_repel(data = labels_df,
+                  aes(label = country),
+                  nudge_y = 500000,
+                  colour = "#000000")
+
+vuln_line
+```
+
 ## Focus chart
 
 ```{r}
@@ -573,10 +611,10 @@ vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = c
   # Remove legend set y-axis title to horizontal
   theme(axis.title.y = element_text(angle = 0, 
                                     hjust = 1,
-                                    vjust = 1.03,
+                                    vjust = 1,
                                     margin = margin(r = -80)
                                     ),
-        plot.margin = margin(t = 20, l = 5, r = 5, b = 5)) +
+        plot.margin = margin(t = 20, l = 10, r = 5, b = 5)) +
   theme(legend.position = "none") +
   # Add labels to lines
   geom_text_repel(data = labels_df,
@@ -585,17 +623,13 @@ vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = c
                   colour = "#000000",
                   segment.colour = NA)
 
-# Note: the y-axis title will look incorrect in Rstudio but the saved .svg file will have the axis title in the correct position
-# For the plot to look correct in Rstudio change vjust to 1.06
 vuln_line
 
 ggsave(
   # Set the file name
-  filename = "vuln_line.svg",
+  filename = here::here("learning_resources", "outputs_and_reporting", "data_visualisation", "basic_data_visualisation", "output", "vuln_line.svg"),
   # Select the plot to save
   plot = vuln_line,
-  # Set the save path
-  path = "D:/Temp",
   # Set aspect ratio of plot, an aspect ratio of 16:9 will fill 1920x1080 displays
   width = 16,
   height = 9
@@ -605,30 +639,42 @@ ggsave(
 # Exporting (.html file format) (currently has issues)
 
 ```{r}
-#vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
-#  geom_line() +
-#  scale_y_continuous(labels = label_number(scale = 1)) +
-#  # Change the colours of lines to differentiate between countries
-#  scale_colour_manual(values = c("United Kingdom" = "#1E2A16",
-#                                 "Argentina" = "#D17E38",
-#                                 "Nepal" = "#444443",
-#                                 "Malawi" = "#3EA27F"),
-# ) +
-#  # Remove legend set y-axis title to horizontal
-#  theme(axis.title.y = element_text(angle = 0, 
-#                                    hjust = 1,
-#                                    vjust = 1.03,
-#                                    margin = margin(r = -80)
-#                                    ),
-#        plot.margin = margin(t = 20, l = 5, r = 5, b = 5)) +
-#  theme(legend.position = "none")
-#
-## Note: the y-axis title will look incorrect in Rstudio but the saved file will have the axis title in the correct position
-#vuln_line
-#
-#vuln_line_html <- ggplotly(vuln_line)
-#
-#saveWidget(vuln_line_html, file = "D:/Temp/vuln_line.html")
+vuln_line <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
+  geom_line_interactive() +
+  scale_y_continuous(labels = label_number(scale = 1)) +
+  # Change the colours of lines to differentiate between countries
+  scale_colour_manual(values = c("United Kingdom" = "#1E2A16",
+                                 "Argentina" = "#D17E38",
+                                 "Nepal" = "#444443",
+                                 "Malawi" = "#3EA27F"),
+ ) +
+  # Remove legend set y-axis title to horizontal
+  theme(axis.title.y = element_text(angle = 0, 
+                                    hjust = 1,
+                                    vjust = 1.05,
+                                    margin = margin(r = -80)
+                                    ),
+        plot.margin = margin(t = 20, l = 10, r = 5, b = 5)) +
+  theme(legend.position = "none")
+
+# Note: the y-axis title will look incorrect in Rstudio but the saved file will have the axis title in the correct position
+vuln_line
+
+vuln_line_html <- girafe(
+  ggobj = vuln_line
+)
+
+htmlwidgets::saveWidget(
+  vuln_line_html,
+  file = here::here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "output",
+    "vuln_line.html"
+    )
+)
 ```
 
 ## Exercise
@@ -653,6 +699,7 @@ The line chart should:
     -   The line of the country with the third largest population is HEX code #444443
     -   The line of the country with the fourth largest population is HEX code #3EA27F
     -   Labels with country names are at the end of lines
+    -   The plot has confidence intervals
     -   The chart is exported as an .svg file with the file name:
         vuln_line_solution
     -   The chart is saved to the D:/Temp folder

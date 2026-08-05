@@ -99,10 +99,12 @@ library(svglite)
 library(scales)
 library(htmlwidgets)
 library(plotly)
+library(ggdist)
+library(ggrepel)
+library(ggiraph)
 
-# Use here::here() to construct paths, do not setwd()
 here::here()
-vuln <- read.csv(here::here("learning_resources", "data", "vulnerable.csv"))
+vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
 ```
 
 # Preparing the dataframe
@@ -131,8 +133,8 @@ vuln_top_4_labels <- vuln_top_4_countries_2007 %>%
 # Creating the line chart
 
 ```{r}
-vuln_line_solution <- ggplot(vuln_top_4, aes(x = year, y = vulnerable_pop, colour = country)) + 
-  geom_line() +
+vuln_line_solution <- ggplot(vuln_top_4, aes(x = year, y = vulnerable_pop, colour = country, ymin = lower_confidence_limit, ymax = upper_confidence_limit)) + 
+  geom_lineribbon() +
   labs(x = "Year", y = "Vulnerable Population (Millions)") +
   theme(
     # Change the background colour of the panel (the inside box containing the bars) to white
@@ -140,8 +142,8 @@ vuln_line_solution <- ggplot(vuln_top_4, aes(x = year, y = vulnerable_pop, colou
     # Change the background colour of the plot (the outside area containing the axis titles)
     plot.background = element_rect(fill = "#ffffff"),
     # Changed size of axis titles and axis text
-    axis.title.x = element_text(size = 12),
-    axis.title.y = element_text(size = 12),  
+    axis.title.x = element_text(size = rel(1)),
+    axis.title.y = element_text(size = rel(1)),  
     # Change the colour and size of the minor gridlines
     panel.grid.minor = element_line(colour = "#D9D9D9", size = 0.5, linetype = 1),
     # Change the colour and size of the major gridlines
@@ -161,7 +163,7 @@ vuln_line_solution <- ggplot(vuln_top_4, aes(x = year, y = vulnerable_pop, colou
   # Remove legend set y-axis title to horizontal
   theme(axis.title.y = element_text(angle = 0, 
                                     hjust = 1, 
-                                    vjust = 1.03,
+                                    vjust = 1,
                                     margin = margin(r = -150)
                                     ),
         plot.margin = margin(t = 20, l = 5, r = 5, b = 5)) +
@@ -172,18 +174,28 @@ vuln_line_solution <- ggplot(vuln_top_4, aes(x = year, y = vulnerable_pop, colou
                   colour = "#000000",
                   segment.colour = NA)
 
-# Note the y-axis title will not be in the correct position incorrect in Rstudio but the saved version will be correct
-# For the plot to look correct in Rstudio change vjust to 1.06
-
 vuln_line_solution
 ```
 
 # Save as .html
 
 ```{r}
-#vuln_line_html <- ggplotly(vuln_line_solution)
-#
-#saveWidget(vuln_line_html, file = "D:/Temp/vuln_line_solution.html")
+vuln_line_solution_html <- girafe(
+  ggobj = vuln_line_solution
+)
+
+htmlwidgets::saveWidget(
+  vuln_line_solution_html,
+  file = here::here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "exercise_outputs",
+    "vuln_line_solution.html"
+    )
+)
 ```
 
 # Save as .svg
@@ -195,7 +207,14 @@ ggsave(
   # Select the plot to save
   plot = vuln_line_solution,
   # Set the save path
-  path = "D:/Temp",
+  path = here::here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "exercise_outputs"
+    ),
   # Set aspect ratio of plot, an aspect ratio of 16:9 will fill 1920x1080 displays
   width = 16,
   height = 9

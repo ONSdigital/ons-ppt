@@ -31,7 +31,7 @@ file_path <- file.path(learning_resources_dir, "data", "filename.csv")
 
 - Definitions:
     - "Unit name" refers to the unit name, which is also the name of the folder
-    this python folder is in.
+    this R folder is in.
     - "Chapter name" refers to the specific chapter that the code snippets are
     in. Chapters are the highest level headings in the learning resource.
     - "Section name" refers to subheadings within chapters that code snippets
@@ -101,12 +101,11 @@ library(gt)
 library(ggplot2) # The scripts uses ggplot2 version 4.0.0
 library(svglite)
 library(scales)
-library(plotly)
+library(ggiraph)
 library(htmlwidgets)
 
-# Use here::here() to construct paths, do not setwd()
 here::here()
-vuln <- read.csv(here::here("learning_resources", "data", "vulnerable.csv"))
+vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
 ```
 
 ## Preparing the dataframe
@@ -176,12 +175,25 @@ vuln_bar <- ggplot(vuln_focus_1997, aes(x = country, y = vulnerable_pop, fill = 
         plot.margin = margin(t = 20, l = 5, r = 5, b = 5))
 ```
 
-# Save as .html (has issues)
+# Save as .html 
 
 ```{r}
-#vuln_bar_html <- ggplotly(vuln_bar)
-#
-#saveWidget(vuln_bar_html, file = "D:/Temp/vuln_pop_partner_countries.html")
+vuln_bar_html <- girafe(
+  ggobj = vuln_bar
+)
+
+htmlwidgets::saveWidget(
+  vuln_bar_html,
+  file = here::here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "exercise_outputs",
+    "vuln_bar_solution.html"
+    )
+)
 ```
 
 # Save as .svg
@@ -189,11 +201,18 @@ vuln_bar <- ggplot(vuln_focus_1997, aes(x = country, y = vulnerable_pop, fill = 
 ```{r}
 ggsave(
   # Set the file name
-  filename = "vuln_pop_partner_countries.svg",
+  filename = "vuln_bar_solution.svg",
   # Select the plot to save
   plot = vuln_bar,
   # Set the save path
-  path = "D:/Temp",
+  path = here::here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "exercise_outputs"
+    ),
   # Set aspect ratio of plot, an aspect ratio of 16:9 will fill 1920x1080 displays
   width = 16,
   height = 9

@@ -14,7 +14,7 @@ file_path <- file.path(learning_resources_dir, "data", "filename.csv")
 ```
 
 -   Definitions:
-    -   "Unit name" refers to the unit name, which is also the name of the folder this python folder is in.
+    -   "Unit name" refers to the unit name, which is also the name of the folder this R folder is in.
     -   "Chapter name" refers to the specific chapter that the code snippets are in. Chapters are the highest level headings in the learning resource.
     -   "Section name" refers to subheadings within chapters that code snippets are in. ---
 
@@ -54,7 +54,7 @@ library(forcats)
 
 # Use here::here() to construct paths, do not setwd()
 here::here()
-vuln <- read.csv(here::here("learning_resources", "data", "vulnerable.csv"))
+vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
 ```
 
 ## Introduction to ggplot2
@@ -87,36 +87,9 @@ vuln_2007_top_6
 ## Make the base bar chart
 
 ```{r}
-# Creating a gglot2 bar chart
-# Used vuln_2007_top_6 dataframe, country displayed on the x-axis vulnerable_pop displayed the on y-axis
+
 vuln_bar <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
-  geom_bar(stat = "identity") +
-  # Use theme_minimal to increase contrast
-  theme_minimal() +
-  # Remove vertical gridlines
-  theme(panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank()) +
-  # label_number used to remove scientific notation
-  scale_y_continuous(labels = label_number(scale = 1)) +
-  # Set y-axis title to horizontal
-  theme(axis.title.y = element_text(angle = 0, 
-                                    hjust = 1,
-                                    vjust = 1.06,
-                                    # Adjust margin to move the title to the right
-                                    margin = margin(r = -70)
-                                    ),
-        # Adjust plot margin
-        plot.margin = margin(t = 20, l = 5, r = 5, b = 5))
-
-
-vuln_bar
-```
-
-## Make the chart horizontal
-
-```{r}
-vuln_bar_horizontal <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
-  geom_bar(stat = "identity") +
+  geom_col() +
   # Use theme_minimal to increase contrast
   theme_minimal() +
   # Remove vertical gridlines
@@ -136,7 +109,7 @@ vuln_bar_horizontal <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_p
         # Adjust plot margin
         plot.margin = margin(t = 20, l = 50, r = 5, b = 5))
 
-vuln_bar_horizontal
+vuln_bar
 ```
 
 ## Rename axes
@@ -481,11 +454,9 @@ vuln_bar <- ggplot(vuln_2007_top_6, aes(x = country, y = vulnerable_pop)) +
 
 ggsave(
   # Set the file name
-  filename = "vuln_pop_2007.svg",
+  filename = here::here("learning_resources", "outputs_and_reporting", "data_visualisation", "basic_data_visualisation", "output", "vuln_bar.svg"),
   # Select the plot to save
   plot = vuln_bar,
-  # Set the save path
-  path = "D:/Temp",
   # Set aspect ratio of plot, an aspect ratio of 16:9 will fill 1920x1080 displays
   width = 16,
   height = 9
@@ -516,7 +487,7 @@ vuln_bar <- ggplot(vuln_2007_top_6, aes(x = country ,y = vulnerable_pop)) +
 
 vuln_bar_html <- ggplotly(vuln_bar)
 
-saveWidget(vuln_bar_html, file = "D:/Temp/vuln_pop_2007.html")
+saveWidget(vuln_bar_html, file = here::here("learning_resources", "outputs_and_reporting", "data_visualisation", "basic_data_visualisation", "output", "vuln_bar.html"))
 ```
 
 ## Exercise
