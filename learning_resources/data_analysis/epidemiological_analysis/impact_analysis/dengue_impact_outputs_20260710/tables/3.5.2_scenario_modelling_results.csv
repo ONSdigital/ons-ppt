@@ -1,0 +1,4 @@
+scenario,predicted_total_hh_cases
+"Best case (high control, lower risk)",830
+Moderate case (current conditions),867
+"Worst case (no control, higher risk)",917

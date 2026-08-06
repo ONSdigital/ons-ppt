@@ -1,0 +1,5 @@
+# Overdispersion test (using simulated residuals)
+
+ dispersion ratio = 0.724
+          p-value = 0.024
+

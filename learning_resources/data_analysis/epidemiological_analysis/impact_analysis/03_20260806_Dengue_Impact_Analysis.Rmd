@@ -1,0 +1,848 @@
+---
+title: "Nepal Dengue Outbreak — Health Emergency Impact Analysis"
+subtitle: "Full Pipeline: Section 3.3 (Data Preparation) → Section 3.5.6 (Cost-Effectiveness Analysis)"
+author: "Herd International, Nepal — Analysis for Action (A4A)"
+date: "20.07.2026"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: false
+    theme: readable
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Introduction
+
+This Unit walks through a complete health-emergency impact analysis, from raw survey data to a cost-effectiveness conclusion, using a dengue outbreak in Nepal as the worked example. Each section below follows the same numbering as the reference document (*R_HRR_Nepal_impact_analysis*), so you can move between this notebook and the write-up without losing your place.
+
+The raw input is a deliberately **messy** household survey export, it contains missing values, impossible values (e.g. an age of 200), inconsistent category coding ("Yes"/"yes"/"Y"/"1"), and duplicate rows. This is realistic: real survey exports almost always need this kind of cleaning before any analysis can be trusted. Section 3.3 walks through fixing each of these problems, one at a time, with every change logged.
+
+---
+
+## 0. Packages & Global Setup
+
+Before anything else, we load every package the pipeline needs and set a random seed. Setting the seed matters here because later steps (the train/test split in Section 3.5.5, for example) involve random sampling without a fixed seed, you'd get slightly different results each time you re-run the script, which makes your work hard to check or reproduce.
+
+```{r packages-setup}
+required_packages <- c(
+  "tidyverse", "janitor", "car", "MASS", "broom", "corrplot", "epitools",
+  "rstatix", "performance", "scales", "psych", "lme4"
+)
+new_packages <- required_packages[!(required_packages %in% installed.packages()[, "Package"])]
+if (length(new_packages) > 0) install.packages(new_packages, dependencies = TRUE)
+invisible(lapply(required_packages, library, character.only = TRUE))
+
+set.seed(123)
+
+raw_csv    <- "C:/Users/Shirish Maharjan/OneDrive - HERD/Herd/Analysis for Action (AFA)/Data/20260708_Dengue_Raw_Data.csv" 
+output_dir <- paste0("dengue_impact_outputs_", format(Sys.Date(), "%Y%m%d"))
+table_dir  <- file.path(output_dir, "tables")
+plot_dir   <- file.path(output_dir, "plots")
+log_dir    <- file.path(output_dir, "cleaning_log")
+for (d in c(output_dir, table_dir, plot_dir, log_dir)) if (!dir.exists(d)) dir.create(d, recursive = TRUE)
+```
+
+A running, timestamped cleaning log lets us document every change we make to the data, so the work can be checked and repeated by anyone else on the team.
+
+```{r cleaning-log-fn}
+cleaning_log <- character(0)
+log_step <- function(msg) {
+  entry <- paste0("[", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "] ", msg)
+  cleaning_log <<- c(cleaning_log, entry)
+  cat(entry, "\n")
+}
+```
+
+---
+
+# 3.3 Preparing Data for Quantitative Analysis
+
+## 3.3(a) Import & protect the raw data
+
+We read the raw file into `raw_df` and **never touch it again** all cleaning happens on a working copy, `df`. This keeps an untouched original on disk at all times, so if a cleaning step turns out to be wrong, we can always start over.
+
+```{r import-raw}
+raw_df <- read.csv(raw_csv, stringsAsFactors = FALSE, na.strings = c("", "NA", "N/A"))
+log_step(paste("Imported raw file:", raw_csv, "-", nrow(raw_df), "rows,", ncol(raw_df), "columns"))
+
+df <- raw_df
+```
+
+## 3.3(b) Define variables and indicators
+
+Before cleaning or analysing anything, we decide up front which variables are numerical, categorical, ordinal, or binary. Defining these roles once, here, means every later section (Likert analysis, regression, etc.) can simply refer back to these lists instead of re-deciding variable types each time.
+
+```{r define-variable-roles}
+binary_vars <- c(
+  "sex", "children_under5_present", "elderly_hh_member_present",
+  "chronic_disease_status", "hh_affected_dengue", "confirmed_dengue_case_hh",
+  "open_ceiling", "earth_flooring", "hospitalised_dengue",
+  "complications_present", "death_due_to_dengue_hh",
+  "school_work_absenteeism_dengue", "mosquito_control_measures",
+  "health_info_access", "health_insurance", "dengue_infection_status",
+  "hospitalisation_status", "disability_functional_limit",
+  "healthcare_utilisation", "reduction_social_participation",
+  "caregiving_responsibility_change", "debt_borrowing",
+  "asset_sale_coping", "healthcare_seeking_behaviour",
+  "access_diagnosis_treatment", "govt_ngo_support_received"
+)
+nominal_vars <- c("education_level", "religion", "ethnicity", "occupation",
+                   "urban_rural", "province")
+ordinal_vars <- c("outbreak_intensity", "dengue_severity", "self_reported_health",
+                   "severity_illness_med", "duration_illness_med",
+                   "social_support_availability")
+count_vars <- c("hh_size", "num_dengue_cases_hh", "num_hh_members_infected",
+                 "school_absenteeism_days", "work_absenteeism_days",
+                 "productivity_loss_workdays")
+continuous_vars <- c(
+  "age", "hh_income_monthly_nrs", "duration_outbreak_exposure_days",
+  "proximity_hotspot_km", "days_ill", "caregiving_burden_score",
+  "dengue_prevention_knowledge_score", "healthcare_access_score",
+  "env_risk_index", "days_illness_recovery", "mental_health_score",
+  "oop_health_expenditure_nrs", "social_support_score",
+  "community_cohesion_score", "perceived_stigma_score",
+  "hh_income_loss_nrs", "direct_medical_expenditure_nrs",
+  "transport_treatment_cost_nrs", "financial_assistance_received_nrs",
+  "hh_caregiving_burden_med", "oop_expenditure_med",
+  "knowledge_preventive_practices"
+)
+```
+
+## 3.3(c) Organise and structure the dataset / machine-readable naming
+
+Column names should already be `lowercase_with_underscores`, but we run `janitor::clean_names()` defensively in case the raw export used spaces, mixed case, or special characters  this is a cheap safeguard that costsnothing if the names are already clean.
+
+```{r clean-names}
+names_before <- names(df)
+df <- janitor::clean_names(df)
+if (!identical(names_before, names(df))) {
+  log_step("Standardised column names to lowercase_with_underscores (janitor::clean_names)")
+}
+```
+
+## 3.3(d) Smart de-duplication
+
+We use the anonymous `respondent_id` : never a name :  to detect cases where the same household was entered into the system twice.
+
+```{r deduplicate}
+n_before <- nrow(df)
+dup_ids  <- df$respondent_id[duplicated(df$respondent_id)]
+df <- df %>% distinct(respondent_id, .keep_all = TRUE)
+log_step(paste("De-duplication: removed", n_before - nrow(df),
+                "duplicate record(s) sharing the same respondent_id"))
+```
+
+## 3.3(e) Format standardisation — inconsistent category coding
+
+Real exports often mix "Male"/"male"/"M" or "Yes"/"yes"/"Y"/"1" for what should be a single category. Each variant is mapped to one standardised label, so categories don't get silently split into extra, spurious levels later on.
+
+```{r standardise-categories}
+standardise_categories <- function(x, yes_no = FALSE) {
+  x <- trimws(x)
+  if (yes_no) {
+    x <- dplyr::case_when(
+      toupper(x) %in% c("YES", "Y", "1") ~ "Yes",
+      toupper(x) %in% c("NO", "N", "0")   ~ "No",
+      TRUE ~ x
+    )
+  }
+  x
+}
+
+before_levels <- length(unique(df$sex))
+df$sex <- dplyr::case_when(
+  toupper(trimws(df$sex)) %in% c("MALE", "M")   ~ "Male",
+  toupper(trimws(df$sex)) %in% c("FEMALE", "F") ~ "Female",
+  TRUE ~ trimws(df$sex)
+)
+df$urban_rural <- dplyr::case_when(
+  toupper(trimws(df$urban_rural)) %in% c("URBAN", "U") ~ "Urban",
+  toupper(trimws(df$urban_rural)) %in% c("RURAL", "R") ~ "Rural",
+  TRUE ~ trimws(df$urban_rural)
+)
+for (v in intersect(binary_vars, names(df))) {
+  df[[v]] <- standardise_categories(df[[v]], yes_no = TRUE)
+}
+log_step(paste("Standardised category coding for 'sex', 'urban_rural' and",
+                length(intersect(binary_vars, names(df))), "Yes/No variables"))
+```
+
+## 3.3(f) Type-consistency: fix stray non-numeric entries in numeric columns
+
+Occasionally a data-entry clerk types "ten" instead of `10` in a count column. We catch and convert these before treating the column as numeric.
+
+```{r fix-text-numbers}
+number_words <- c(zero=0, one=1, two=2, three=3, four=4, five=5, six=6,
+                   seven=7, eight=8, nine=9, ten=10)
+fix_text_numbers <- function(x) {
+  x_chr <- as.character(x)
+  hit <- tolower(trimws(x_chr)) %in% names(number_words)
+  x_chr[hit] <- number_words[tolower(trimws(x_chr[hit]))]
+  suppressWarnings(as.numeric(x_chr))
+}
+for (v in c(count_vars, continuous_vars)) {
+  if (v %in% names(df) && !is.numeric(df[[v]])) {
+    n_text <- sum(!is.na(df[[v]]) & is.na(suppressWarnings(as.numeric(df[[v]]))))
+    df[[v]] <- fix_text_numbers(df[[v]])
+    if (n_text > 0) log_step(paste0("Column '", v, "': converted ", n_text,
+                                     " text number(s) (e.g. 'ten') to numeric"))
+  } else if (v %in% names(df)) {
+    df[[v]] <- as.numeric(df[[v]])
+  }
+}
+```
+
+## 3.3(g) Logic and range checks
+
+Impossible values (an age of 200, negative income) are set to `NA` rather than silently kept or silently deleted , every change is logged with the number of records it affected, so nothing disappears without a trace.
+
+```{r range-checks}
+range_rule <- function(varname, lower, upper) {
+  bad <- which(df[[varname]] < lower | df[[varname]] > upper)
+  if (length(bad) > 0) {
+    log_step(paste0("Range check '", varname, "' outside [", lower, ", ", upper,
+                     "]: ", length(bad), " value(s) set to NA"))
+    df[[varname]][bad] <<- NA
+  }
+}
+range_rule("age", 0, 110)
+range_rule("hh_income_monthly_nrs", 1, 2000000)
+range_rule("days_ill", 0, 90)
+range_rule("mental_health_score", 0, 30)
+
+n_99 <- sum(df$proximity_hotspot_km == 99, na.rm = TRUE)
+if (n_99 > 0) {
+  df$proximity_hotspot_km[df$proximity_hotspot_km == 99] <- NA
+  log_step(paste0("Recoded ", n_99, " legacy '99' missing-value code(s) in",
+                   " proximity_hotspot_km to NA"))
+}
+```
+
+A household can't logically be "hospitalised for dengue" while also being recorded as "not infected". Where this conflict occurs, we treat `dengue_infection_status` as the more reliable, clinically-confirmed field and correct it, this is a judgement call worth discussing with the team before applying to a real dataset.
+
+```{r logic-check}
+logic_conflict <- which(df$hospitalised_dengue == "Yes" & df$dengue_infection_status == "No")
+if (length(logic_conflict) > 0) {
+  log_step(paste0("Logic check: ", length(logic_conflict), " record(s) had",
+                   " hospitalised_dengue = Yes but dengue_infection_status = No.",
+                   " Corrected dengue_infection_status to 'Yes'"))
+  df$dengue_infection_status[logic_conflict] <- "Yes"
+}
+```
+
+## 3.3(h) Manage missing data
+
+First we quantify missingness for every variable, **before** applying any fix. This documentation step matters because it see exactly how much data was missing before you touched it.
+
+```{r missing-summary}
+missing_summary <- df %>%
+  summarise(across(everything(), ~ sum(is.na(.)))) %>%
+  pivot_longer(everything(), names_to = "variable", values_to = "n_missing") %>%
+  mutate(pct_missing = round(100 * n_missing / nrow(df), 1)) %>%
+  arrange(desc(n_missing))
+write_csv(missing_summary, file.path(table_dir, "3.3_missing_data_summary.csv"))
+```
+
+Then we apply a documented, variable-appropriate rule: continuous variables under 10% missing get median imputation (robust to skew); categorical variables under 10% missing get mode imputation; anything at or above 10% missing is **left as NA** rather than imputed, since imputing that much data risks manufacturing evidence that isn't really there.
+
+```{r impute-missing}
+median_impute <- function(x) { x[is.na(x)] <- median(x, na.rm = TRUE); x }
+mode_impute   <- function(x) {
+  ux <- na.omit(x); m <- names(sort(table(ux), decreasing = TRUE))[1]
+  x[is.na(x)] <- m; x
+}
+
+for (v in c(continuous_vars, count_vars)) {
+  if (!(v %in% names(df))) next
+  pmiss <- mean(is.na(df[[v]]))
+  if (pmiss > 0 && pmiss < 0.10) {
+    df[[v]] <- median_impute(df[[v]])
+    log_step(paste0("Missing data: '", v, "' (", round(100*pmiss,1),
+                     "% missing) imputed with the median"))
+  } else if (pmiss >= 0.10) {
+    log_step(paste0("Missing data: '", v, "' (", round(100*pmiss,1),
+                     "% missing) left as NA - excluded case-wise in analysis"))
+  }
+}
+for (v in c(nominal_vars, binary_vars, ordinal_vars)) {
+  if (!(v %in% names(df))) next
+  pmiss <- mean(is.na(df[[v]]))
+  if (pmiss > 0 && pmiss < 0.10) {
+    df[[v]] <- mode_impute(df[[v]])
+    log_step(paste0("Missing data: '", v, "' (", round(100*pmiss,1),
+                     "% missing) imputed with the mode"))
+  } else if (pmiss >= 0.10) {
+    log_step(paste0("Missing data: '", v, "' (", round(100*pmiss,1),
+                     "% missing) left as NA - excluded case-wise in analysis"))
+  }
+}
+```
+
+## 3.3(i) Coding and recoding variables
+
+Now that values are clean, we convert each variable to its proper R type (factor, ordered factor) and derive a standard age-group variable from raw age.
+
+```{r recode-variables}
+df <- df %>%
+  mutate(across(all_of(intersect(binary_vars, names(df))), as.factor)) %>%
+  mutate(across(all_of(intersect(nominal_vars, names(df))), as.factor)) %>%
+  mutate(across(all_of(intersect(ordinal_vars, names(df))), ~ factor(.x, ordered = TRUE))) %>%
+  mutate(age_group = cut(age,
+                          breaks = c(-Inf, 4, 17, 59, Inf),
+                          labels = c("0-4", "5-17", "18-59", "60+")))
+log_step("Recoded 'age' into standard age groups (0-4, 5-17, 18-59, 60+)")
+```
+
+## 3.3(j) Check data consistency and validity (post-cleaning re-check)
+
+After cleaning, we re-run the same consistency checks from 3.3(g) to confirm they're now resolved, a useful sanity check before moving on to analysis.
+
+```{r post-cleaning-check}
+consistency_flags <- tibble(
+  check = c("hospitalised but not infected",
+            "age outside plausible range",
+            "duplicate respondent_id remaining"),
+  n_flagged = c(
+    sum(df$hospitalised_dengue == "Yes" & df$dengue_infection_status == "No", na.rm = TRUE),
+    sum(df$age < 0 | df$age > 110, na.rm = TRUE),
+    sum(duplicated(df$respondent_id))
+  )
+)
+write_csv(consistency_flags, file.path(table_dir, "3.3_post_cleaning_consistency_checks.csv"))
+log_step("Post-cleaning consistency re-check completed (0 residual issues expected)")
+```
+
+## 3.3(k) Identify outliers
+
+We apply the IQR rule (1.5 × IQR beyond Q1/Q3) to the cost variables, which are the most outlier-prone in economic-impact data. Outliers are **flagged, not removed** — an extreme value may be a genuine catastrophic-cost case rather than a data-entry error, so removing it silently could bias the analysis.
+
+```{r outlier-scan}
+flag_outliers <- function(x) {
+  q1 <- quantile(x, 0.25, na.rm = TRUE); q3 <- quantile(x, 0.75, na.rm = TRUE)
+  iqr <- q3 - q1
+  x < (q1 - 1.5 * iqr) | x > (q3 + 1.5 * iqr)
+}
+outlier_vars <- c("oop_health_expenditure_nrs", "direct_medical_expenditure_nrs",
+                   "hh_income_loss_nrs")
+outlier_summary <- map_dfr(outlier_vars, function(v) {
+  flags <- flag_outliers(df[[v]])
+  tibble(variable = v, n_outliers = sum(flags, na.rm = TRUE),
+         pct_outliers = round(100 * mean(flags, na.rm = TRUE), 1))
+})
+write_csv(outlier_summary, file.path(table_dir, "3.3_outlier_summary.csv"))
+df$extreme_cost_flag <- flag_outliers(df$oop_health_expenditure_nrs)
+log_step(paste0("Outlier scan (1.5xIQR rule) on cost variables: ",
+                 sum(df$extreme_cost_flag, na.rm = TRUE),
+                 " household(s) flagged on out-of-pocket expenditure"))
+```
+
+## 3.3(l) Ensure data security and confidentiality
+
+The only quasi-identifier in this dataset is the pseudonymous `respondent_id` used for de-duplication above. We now drop it entirely so the analysis file carries no identifier of any kind, and write the file with owner-only permissions as an extra safeguard.
+
+```{r deidentify}
+df_deidentified <- df %>% dplyr::select(-respondent_id)
+deidentified_path <- file.path(output_dir, "dengue_analysis_ready_deidentified.csv")
+write_csv(df_deidentified, deidentified_path)
+try(Sys.chmod(deidentified_path, mode = "0600"), silent = TRUE)
+log_step("Confidentiality: dropped the pseudonymous respondent_id and wrote a")
+log_step("fully de-identified analysis file with restricted (owner-only) file permissions")
+
+df <- df_deidentified
+```
+
+## 3.3(m) Prepare data for statistical software / data dictionary
+
+Finally, we generate a data dictionary (every variable's type, missingness, and an example value) and save a versioned, analysis-ready CSV. The full cleaning log is also written to disk so every step above can be checked and repeated by anyone else.
+
+```{r data-dictionary}
+data_dictionary <- tibble(
+  variable = names(df),
+  r_class  = sapply(df, function(x) class(x)[1]),
+  n_missing = sapply(df, function(x) sum(is.na(x))),
+  example_value = sapply(df, function(x) as.character(na.omit(x)[1]))
+)
+write_csv(data_dictionary, file.path(table_dir, "3.3_data_dictionary.csv"))
+
+versioned_name <- paste0("dengue_analysis_ready_v1_", format(Sys.Date(), "%Y-%m-%d"), ".csv")
+write_csv(df, file.path(output_dir, versioned_name))
+log_step(paste("Analysis-ready dataset versioned and saved as:", versioned_name))
+
+writeLines(cleaning_log, file.path(log_dir, "cleaning_log.txt"))
+```
+
+Data preparation is now complete: `r nrow(df)` rows and `r ncol(df)` columns are ready for analysis.
+
+---
+
+# 3.4 Analysis of Likert-Scale Data
+
+The survey doesn't include raw 5-point Likert items, but it does include several validated 0–10 psychosocial rating scales (mental health, social support, community cohesion, stigma) and one 5-category ordinal item (self-reported health), which play the same analytical role. We analyse them the way the reference document recommends: first the single ordinal item on its own, then a composite index across related items checked for reliability before combining.
+
+## 3.4(a) Categorical (ordinal) analysis of a single item
+
+```{r likert-single-item}
+likert_item_summary <- df %>%
+  filter(!is.na(self_reported_health)) %>%
+  count(self_reported_health) %>%
+  mutate(percentage = round(100 * n / sum(n), 1)) %>%
+  arrange(desc(n))
+write_csv(likert_item_summary, file.path(table_dir, "3.4_self_reported_health_distribution.csv"))
+
+p_likert <- ggplot(likert_item_summary, aes(x = self_reported_health, y = percentage)) +
+  geom_col(fill = "#3B7EA1") +
+  labs(title = "Self-reported health status (ordinal item analysis)",
+       x = NULL, y = "Percentage of respondents (%)") +
+  theme_minimal(base_size = 11)
+p_likert
+ggsave(file.path(plot_dir, "3.4_self_reported_health_bar.png"), p_likert, width = 7, height = 5, dpi = 150)
+```
+
+## 3.4(b) Composite (interval) index + reliability (Cronbach's alpha)
+
+Four related wellbeing/impact scales are combined into a single "psychosocial impact index". We don't assume in advance which items are reverse-scored — `check.keys = TRUE` lets `psych::alpha` inspect the inter-item correlations and automatically reverse any item that correlates negatively with the rest, before computing reliability and the composite
+score.
+
+```{r composite-index}
+composite_items <- df %>%
+  mutate(.row_id = row_number()) %>%
+  transmute(.row_id, mental_health_score, social_support_score,
+            community_cohesion_score, perceived_stigma_score) %>%
+  drop_na()
+
+alpha_result <- psych::alpha(composite_items %>% dplyr::select(-.row_id), check.keys = TRUE)
+cronbach_alpha <- round(alpha_result$total$raw_alpha, 3)
+cronbach_alpha
+```
+
+Cronbach's alpha of `r cronbach_alpha` measures internal consistency; ≥0.70 is conventionally considered acceptable. If it falls below that threshold on real data, that's a signal to re-examine whether all four items truly measure the same underlying construct — not just a number to note and move past.
+
+```{r composite-score}
+df$psychosocial_index <- NA_real_
+df$psychosocial_index[composite_items$.row_id] <- alpha_result$scores
+```
+
+## 3.4(c) Compare the composite score across groups
+
+Because Likert-derived scores aren't normally distributed, we use non-parametric tests (Mann-Whitney U, Kruskal-Wallis) rather than a t-test or ANOVA to compare the composite index across groups.
+
+```{r likert-group-comparisons}
+likert_group_tests <- bind_rows(
+  tibble(comparison = "psychosocial_index by sex",
+         test = "Mann-Whitney U",
+         p_value = round(wilcox.test(psychosocial_index ~ sex, data = df)$p.value, 4)),
+  tibble(comparison = "psychosocial_index by urban_rural",
+         test = "Mann-Whitney U",
+         p_value = round(wilcox.test(psychosocial_index ~ urban_rural, data = df)$p.value, 4)),
+  tibble(comparison = "psychosocial_index by province",
+         test = "Kruskal-Wallis",
+         p_value = round(kruskal.test(psychosocial_index ~ province, data = df)$p.value, 4))
+)
+write_csv(likert_group_tests, file.path(table_dir, "3.4_composite_index_group_comparisons.csv"))
+likert_group_tests
+```
+
+---
+
+# 3.5.1 Small-Area Estimation
+
+The survey only has reliable sample sizes at the province level. To illustrate small-area estimation, we define "small areas" as province × urban/rural combinations (14 cells) — some cells have very few respondents, which is exactly the problem small-area estimation exists to address: how do you get a stable local estimate when the direct, cell-only sample is too small to trust on its own?
+
+```{r sae-direct}
+sae_cells <- df %>%
+  filter(!is.na(dengue_infection_status)) %>%
+  mutate(area = paste(province, urban_rural, sep = " - ")) %>%
+  group_by(area) %>%
+  summarise(n = n(),
+            direct_prevalence = round(100 * mean(dengue_infection_status == "Yes"), 1),
+            .groups = "drop")
+```
+
+The model-based (EBLUP-style) estimate uses a mixed-effects logistic regression with a random intercept per area, which "borrows strength" across all areas — shrinking noisy, small-sample direct estimates toward the overall mean.
+
+```{r sae-model}
+sae_input <- df %>% filter(!is.na(dengue_infection_status)) %>%
+  mutate(area = paste(province, urban_rural, sep = " - "))
+sae_model <- lme4::glmer(
+  dengue_infection_status ~ (1 | area),
+  data = sae_input,
+  family = binomial
+)
+df_sae <- sae_input %>%
+  mutate(model_based_prob = predict(sae_model, type = "response"))
+model_based <- df_sae %>%
+  group_by(area) %>%
+  summarise(model_based_prevalence = round(100 * mean(model_based_prob), 1), .groups = "drop")
+
+sae_table <- sae_cells %>% left_join(model_based, by = "area") %>% arrange(n)
+write_csv(sae_table, file.path(table_dir, "3.5.1_small_area_estimates.csv"))
+sae_table
+```
+
+```{r sae-plot}
+p_sae <- sae_table %>%
+  pivot_longer(cols = c(direct_prevalence, model_based_prevalence),
+               names_to = "estimate_type", values_to = "prevalence_pct") %>%
+  ggplot(aes(x = reorder(area, n), y = prevalence_pct, color = estimate_type, group = estimate_type)) +
+  geom_point(size = 2) + geom_line(aes(group = estimate_type)) +
+  coord_flip() +
+  labs(title = "Small-area estimation: direct vs. model-based (shrinkage) prevalence",
+       subtitle = "Areas ordered by sample size (smallest at top)",
+       x = "Small area (province - urban/rural)", y = "Dengue infection prevalence (%)",
+       color = NULL) +
+  theme_minimal(base_size = 10)
+p_sae
+ggsave(file.path(plot_dir, "3.5.1_sae_direct_vs_modelbased.png"), p_sae, width = 8, height = 6, dpi = 150)
+```
+
+If the area-level variance from this model is close to zero, that's not an error, it means the model found no reliable geographic clustering beyond chance, so estimates shrink fully to the overall mean. With real data showing true geographic variation, small areas would shrink only *partially* toward the overall mean, retaining some of their own signal.
+
+---
+
+# 3.5.2 & 3.5.5 Regression Analysis and Scenario Modelling
+
+Scenario modelling (3.5.2) depends on a fitted regression model, so we fit the model first (3.5.5) and then use it to generate best/moderate/worst-case projections.
+
+## 3.5.4 Determinant analysis (screening candidate predictors)
+
+Before building multivariable models, we screen candidate determinants using cross-tabulation and chi-square tests, this tells us which variables are worth including as predictors below.
+
+```{r determinant-screening}
+df <- df %>%
+  mutate(income_quartile = ntile(hh_income_monthly_nrs, 4),
+         income_quartile = factor(income_quartile, labels = c("Q1 (Lowest)", "Q2", "Q3", "Q4 (Highest)")))
+
+determinant_vars <- list(
+  "Age Group" = "age_group", "Sex" = "sex", "Education Level" = "education_level",
+  "Religion" = "religion", "Ethnicity" = "ethnicity",
+  "Household Income" = "income_quartile", "Occupation" = "occupation",
+  "Residence" = "urban_rural", "Province" = "province"
+)
+outcome_var <- "dengue_infection_status"
+
+make_chi_row <- function(var_name, label) {
+  tab_data <- df %>%
+    filter(!is.na(.data[[var_name]]), !is.na(.data[[outcome_var]])) %>%
+    mutate(across(where(is.factor), droplevels))
+  raw_tab <- table(tab_data[[var_name]], tab_data[[outcome_var]])
+  chi_test <- chisq.test(raw_tab)
+  chi_val <- paste0(round(chi_test$statistic, 2), " (", chi_test$parameter, ")")
+  p_val <- ifelse(chi_test$p.value < 0.001, "<0.001", round(chi_test$p.value, 3))
+  counts <- tab_data %>%
+    group_by(category = as.character(.data[[var_name]])) %>%
+    summarise(Yes = sum(.data[[outcome_var]] == "Yes"), No = sum(.data[[outcome_var]] == "No"),
+              Total = n(), .groups = "drop") %>%
+    mutate(Yes_pct = paste0(Yes, " (", round(100 * Yes / Total, 1), "%)"),
+           No_pct  = paste0(No, " (", round(100 * No / Total, 1), "%)"))
+  header_row <- tibble(Characteristics = label, `Yes (%)` = NA, `No (%)` = NA,
+                        `Chi-square (df)` = chi_val, `p-value` = as.character(p_val))
+  data_rows <- counts %>%
+    transmute(Characteristics = paste0("  ", category), `Yes (%)` = Yes_pct,
+              `No (%)` = No_pct, `Chi-square (df)` = NA, `p-value` = NA)
+  bind_rows(header_row, data_rows)
+}
+
+final_determinant_table <- map2_dfr(determinant_vars, names(determinant_vars), ~make_chi_row(.x, .y))
+readr::write_excel_csv(final_determinant_table, file.path(table_dir, "3.5.4_formatted_determinant_table.csv"), na = "")
+final_determinant_table
+```
+
+## 3.5.5(a) Logistic regression — dengue infection status
+
+We fit the model on 80% of records and hold out the remaining 20% for **out-of-sample validation** a precaution against reporting accuracy that only exists because the model memorised its training data.
+
+```{r logistic-model}
+predictor_vars <- c("age", "sex", "education_level", "urban_rural", "province",
+                    "hh_income_monthly_nrs", "open_ceiling", "earth_flooring",
+                    "mosquito_control_measures", "health_insurance",
+                    "proximity_hotspot_km", "env_risk_index")
+
+model_data <- df %>%
+  dplyr::select(all_of(unique(c(predictor_vars, "dengue_infection_status",
+                                 "oop_health_expenditure_nrs", "num_dengue_cases_hh")))) %>%
+  drop_na()
+
+train_idx  <- sample(seq_len(nrow(model_data)), size = round(0.8 * nrow(model_data)))
+train_data <- model_data[train_idx, ]
+test_data  <- model_data[-train_idx, ]
+
+logit_model <- glm(as.formula(paste("dengue_infection_status ~", paste(predictor_vars, collapse = " + "))),
+                    data = train_data, family = binomial)
+logit_summary <- broom::tidy(logit_model, conf.int = TRUE, exponentiate = TRUE) %>%
+  rename(odds_ratio = estimate, ci_low = conf.low, ci_high = conf.high) %>%
+  mutate(across(where(is.numeric), ~round(.x,3)))
+write_csv(logit_summary, file.path(table_dir, "3.5.5_logistic_regression_ORs.csv"))
+logit_summary
+```
+
+We also check for overfitting (comparing the full model against an AIC-selected parsimonious model) and multicollinearity (variance inflation factors)  both standard precautions before trusting a multivariable model.
+
+```{r logistic-diagnostics}
+parsimonious_model <- suppressWarnings(MASS::stepAIC(logit_model, direction = "both", trace = FALSE))
+overfit_check <- tibble(model = c("Full model", "AIC-parsimonious model"),
+                         n_predictors = c(length(predictor_vars), length(attr(terms(parsimonious_model), "term.labels"))),
+                         AIC = round(c(AIC(logit_model), AIC(parsimonious_model)), 1))
+write_csv(overfit_check, file.path(table_dir, "3.5.5_overfitting_check_AIC.csv"))
+
+test_pred  <- predict(logit_model, newdata = test_data, type = "response")
+test_class <- ifelse(test_pred > 0.5, "Yes", "No")
+test_acc   <- mean(test_class == test_data$dengue_infection_status)
+writeLines(paste("Out-of-sample (20% held-out test set) classification accuracy:",
+                  round(100*test_acc,1), "%"),
+           file.path(table_dir, "3.5.5_validation_holdout_accuracy.txt"))
+
+vif_logit <- car::vif(logit_model)
+if (is.matrix(vif_logit)) vif_logit <- vif_logit[,1]
+write.csv(tibble(term = names(vif_logit), vif = round(vif_logit,2)),
+          file.path(table_dir, "3.5.5_vif_logistic.csv"), row.names = FALSE)
+```
+
+```{r logistic-forest-plot}
+forest_df <- logit_summary %>% filter(term != "(Intercept)")
+p_forest <- ggplot(forest_df, aes(x = odds_ratio, y = reorder(term, odds_ratio))) +
+  geom_point(size = 2, color = "#B22222") +
+  geom_errorbarh(aes(xmin = ci_low, xmax = ci_high), height = 0.2) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey40") +
+  scale_x_log10() +
+  labs(title = "Adjusted odds ratios for dengue infection (multivariable model)",
+       x = "Odds ratio (log scale, 95% CI)", y = NULL) + theme_minimal(base_size = 11)
+p_forest
+ggsave(file.path(plot_dir, "3.5.5_forest_plot_odds_ratios.png"), p_forest, width = 7, height = 5, dpi = 150)
+```
+
+## 3.5.5(b) Linear regression — continuous economic-burden outcome
+
+```{r linear-model}
+lm_model <- lm(oop_health_expenditure_nrs ~ ., data = train_data %>% dplyr::select(-dengue_infection_status, -num_dengue_cases_hh))
+write_csv(broom::tidy(lm_model, conf.int = TRUE) %>% mutate(across(where(is.numeric), ~round(.x,3))),
+          file.path(table_dir, "3.5.5_linear_regression_coefficients.csv"))
+write_csv(broom::glance(lm_model) %>% mutate(across(where(is.numeric), ~round(.x,3))),
+          file.path(table_dir, "3.5.5_linear_regression_fit_stats.csv"))
+```
+
+```{r linear-diagnostics, fig.width=10, fig.height=8}
+par(mfrow = c(2,2)); plot(lm_model)
+```
+
+## 3.5.5(c) Negative binomial regression — household dengue case count
+
+We use negative binomial rather than Poisson regression because outbreak count data is typically **over-dispersed** (variance exceeds the mean) Poisson would understate the uncertainty.
+
+```{r negbin-model}
+nb_model <- MASS::glm.nb(as.formula(paste("num_dengue_cases_hh ~", paste(predictor_vars, collapse = " + "))),
+                          data = train_data)
+write_csv(broom::tidy(nb_model, conf.int = TRUE, exponentiate = TRUE) %>%
+            rename(irr = estimate, ci_low = conf.low, ci_high = conf.high) %>%
+            mutate(across(where(is.numeric), ~round(.x,3))),
+          file.path(table_dir, "3.5.5_negbin_regression_IRRs.csv"))
+overdisp <- tryCatch(performance::check_overdispersion(nb_model), error = function(e) NULL)
+if (!is.null(overdisp)) capture.output(print(overdisp), file = file.path(table_dir, "3.5.5_overdispersion_check.txt"))
+```
+
+**A reminder on interpretation:** odds ratios and incidence-rate ratios describe statistical *association*, not causation. A positive association between, say, road density and case counts would not mean roads cause dengue. Both are likely proxies for urbanisation and population density.
+
+## 3.5.2 Scenario modelling
+
+Using the negative binomial model just fitted, we project total household case counts under best-case (universal mosquito control, 20% lower environmental risk), moderate-case (current observed conditions), and worst-case (no control, 20% higher risk) scenarios.
+
+```{r scenario-modelling}
+run_scenario_modelling <- function(model_obj, base_data) {
+  best <- base_data %>%
+    mutate(mosquito_control_measures = factor("Yes", levels = levels(base_data$mosquito_control_measures)),
+           env_risk_index = env_risk_index * 0.8)
+  moderate <- base_data
+  worst <- base_data %>%
+    mutate(mosquito_control_measures = factor("No", levels = levels(base_data$mosquito_control_measures)),
+           env_risk_index = env_risk_index * 1.2)
+
+  predict_total <- function(newdata) sum(predict(model_obj, newdata = newdata, type = "response"), na.rm = TRUE)
+
+  tibble::tibble(
+    scenario = c("Best case (high control, lower risk)",
+                 "Moderate case (current conditions)",
+                 "Worst case (no control, higher risk)"),
+    predicted_total_hh_cases = round(c(predict_total(best), predict_total(moderate), predict_total(worst)), 0)
+  )
+}
+
+scenario_results <- run_scenario_modelling(nb_model, model_data)
+write_csv(scenario_results, file.path(table_dir, "3.5.2_scenario_modelling_results.csv"))
+scenario_results
+```
+
+```{r scenario-plot}
+p_scenario <- ggplot(scenario_results, aes(x = scenario, y = predicted_total_hh_cases, fill = scenario)) +
+  geom_col(show.legend = FALSE) +
+  labs(title = "Scenario modelling: projected household dengue cases",
+       x = NULL, y = "Predicted total household cases") +
+  theme_minimal(base_size = 10) + theme(axis.text.x = element_text(angle = 15, hjust = 1))
+p_scenario
+ggsave(file.path(plot_dir, "3.5.2_scenario_modelling.png"), p_scenario, width = 7, height = 5, dpi = 150)
+```
+
+---
+
+# 3.5.3 Prevalence Analysis
+
+We explore dengue prevalence by **place, person, and time** .The classic descriptive-epidemiology breakdown with exact 95% confidence intervals for every estimate.
+
+```{r prevalence-analysis}
+outcome_var <- "dengue_infection_status"
+
+get_formatted_prevalence <- function(group_var, label_name) {
+  stats <- df %>%
+    filter(!is.na(.data[[group_var]]), !is.na(.data[[outcome_var]])) %>%
+    group_by(category = as.character(.data[[group_var]])) %>%
+    summarise(Number = sum(.data[[outcome_var]] == "Yes"), Total = n(), .groups = "drop") %>%
+    mutate(Percent = round(100 * Number / Total, 1))
+
+  ci_list <- lapply(1:nrow(stats), function(i) {
+    res <- binom.exact(stats$Number[i], stats$Total[i])
+    paste0(round(100 * res$lower, 1), " - ", round(100 * res$upper, 1))
+  })
+  stats$`95% CI` <- unlist(ci_list)
+
+  header_row <- tibble(Characteristics = label_name, Number = NA, Percent = NA, `95% CI` = NA)
+  data_rows <- stats %>%
+    transmute(Characteristics = paste0("  ", category), Number = as.numeric(Number),
+              Percent = Percent, `95% CI` = `95% CI`)
+  bind_rows(header_row, data_rows)
+}
+
+final_prevalence_table <- bind_rows(
+  get_formatted_prevalence("sex", "Sex"),
+  get_formatted_prevalence("age_group", "Age Group"),
+  get_formatted_prevalence("province", "Province"),
+  get_formatted_prevalence("outbreak_intensity", "Outbreak Intensity")
+)
+
+readr::write_excel_csv(final_prevalence_table, file.path(table_dir, "3.5.3_formatted_prevalence_table.csv"), na = "")
+final_prevalence_table
+```
+
+---
+
+# 3.5.6 Cost-Effectiveness Analysis
+
+## Step 1: Define the question
+
+- **Intervention**: household-level mosquito-control measures (larviciding, bed-nets, repellents, indoor spraying)
+- **Comparator**: households reporting no mosquito-control measures
+- **Population**: surveyed households in dengue-affected districts
+- **Time horizon**: one outbreak season (the survey's recall period)
+- **Perspective**: household (out-of-pocket) economic burden of illness
+
+```{r cea-question}
+question <- paste(
+  "What is the cost per dengue case prevented for households practising",
+  "mosquito-control measures, compared with households that do not, over",
+  "one outbreak season?"
+)
+question
+```
+
+## Step 2: Identify all costs
+
+We use the household's full economic burden — direct medical spend, transport, and income loss — as the closest available proxy for "cost" in a household-level survey. A true programme-level cost-effectiveness analysis would additionally need the implementer's delivery cost per household, which sits outside this dataset's scope.
+
+```{r cea-costs}
+cea_data <- df %>%
+  filter(!is.na(mosquito_control_measures)) %>%
+  mutate(total_hh_cost = rowSums(cbind(oop_health_expenditure_nrs, transport_treatment_cost_nrs,
+                                        hh_income_loss_nrs), na.rm = TRUE))
+```
+
+## Step 3: Measure outcomes
+
+```{r cea-outcomes}
+cea_summary <- cea_data %>%
+  group_by(mosquito_control_measures) %>%
+  summarise(n_households = n(), mean_cost_nrs = round(mean(total_hh_cost, na.rm = TRUE), 0),
+            mean_cases_per_hh = round(mean(num_dengue_cases_hh, na.rm = TRUE), 3), .groups = "drop")
+write_csv(cea_summary, file.path(table_dir, "3.5.6_cea_group_summary.csv"))
+cea_summary
+```
+
+## Step 4: Calculate the CER and ICER
+
+```{r cea-icer}
+group_yes <- cea_summary %>% filter(mosquito_control_measures == "Yes")
+group_no  <- cea_summary %>% filter(mosquito_control_measures == "No")
+
+calc_cer_icer <- function(cost_yes, cases_yes, cost_no, cases_no) {
+  cases_prevented_per_hh <- cases_no - cases_yes
+  incremental_cost        <- cost_yes - cost_no
+  icer <- if (cases_prevented_per_hh != 0) round(incremental_cost / cases_prevented_per_hh, 0) else NA
+  list(cer_yes = round(cost_yes / max(cases_yes, 1e-6), 0),
+       cer_no  = round(cost_no  / max(cases_no, 1e-6), 0),
+       cases_prevented_per_hh = round(cases_prevented_per_hh, 3),
+       icer_per_case_prevented = icer)
+}
+cea_result <- calc_cer_icer(group_yes$mean_cost_nrs, group_yes$mean_cases_per_hh,
+                             group_no$mean_cost_nrs,  group_no$mean_cases_per_hh)
+
+cea_result_table <- tibble(
+  metric = c("CER - with mosquito control (NRS per case)",
+             "CER - without mosquito control (NRS per case)",
+             "Cases prevented per household (with vs without control)",
+             "ICER - incremental NRS per additional case prevented"),
+  value = c(cea_result$cer_yes, cea_result$cer_no,
+            cea_result$cases_prevented_per_hh, cea_result$icer_per_case_prevented)
+)
+write_csv(cea_result_table, file.path(table_dir, "3.5.6_cer_icer_results.csv"))
+cea_result_table
+```
+
+## Step 5: Sensitivity analysis
+
+We vary coverage and effectiveness assumptions by ±20%  the two most uncertain inputs  to check whether the conclusion holds up under reasonable uncertainty, not just at the single point estimate.
+
+```{r cea-sensitivity}
+sensitivity_grid <- expand_grid(coverage_adj = c(0.8, 1.0, 1.2), effectiveness_adj = c(0.8, 1.0, 1.2))
+sensitivity_results <- sensitivity_grid %>%
+  mutate(adj_cases_prevented = cea_result$cases_prevented_per_hh * effectiveness_adj,
+         adj_cost_yes = group_yes$mean_cost_nrs * coverage_adj,
+         icer_adjusted = round((adj_cost_yes - group_no$mean_cost_nrs) / pmax(adj_cases_prevented, 1e-6), 0))
+write_csv(sensitivity_results, file.path(table_dir, "3.5.6_sensitivity_analysis.csv"))
+
+conclusion_robust <- all(sign(sensitivity_results$icer_adjusted) == sign(cea_result$icer_per_case_prevented))
+sensitivity_results
+```
+
+## Step 6: Interpret and decide
+
+```{r cea-plot}
+p_cea <- cea_summary %>%
+  ggplot(aes(x = mosquito_control_measures, y = mean_cost_nrs, fill = mosquito_control_measures)) +
+  geom_col(show.legend = FALSE) +
+  labs(title = "Mean household economic burden by mosquito-control practice",
+       x = "Mosquito control measures used", y = "Mean total household cost (NRS)") +
+  theme_minimal(base_size = 11)
+p_cea
+ggsave(file.path(plot_dir, "3.5.6_cea_cost_comparison.png"), p_cea, width = 6, height = 5, dpi = 150)
+```
+
+The incremental cost-effectiveness ratio is **`r cea_result$icer_per_case_prevented` NRS per additional case prevented**, and this conclusion is `r ifelse(conclusion_robust, "robust", "not robust")` to ±20% variation in coverage and effectiveness assumptions.
+
+> **Interpretation note:** this analysis uses household out-of-pocket
+> economic burden as a proxy for "cost" because programme delivery-cost data
+> isn't part of this household survey. A full donor- or government-facing
+> cost-effectiveness analysis should additionally cost the mosquito-control
+> **programme** itself (nets, larvicide, spraying teams, training,
+> transport), not only the household's residual illness cost.
+
+---
+
+## Wrap-up
+
+```{r session-info}
+sessionInfo()
+```
+
+This notebook produced: a de-identified, analysis-ready dataset; a full data
+dictionary; a timestamped cleaning log; and every table and plot from
+Sections 3.3–3.5.6, written to `r output_dir`.

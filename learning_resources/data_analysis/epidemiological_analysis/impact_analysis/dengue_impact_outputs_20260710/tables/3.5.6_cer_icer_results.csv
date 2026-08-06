@@ -1,0 +1,5 @@
+metric,value
+CER - with mosquito control (NRS per case),19999
+CER - without mosquito control (NRS per case),14079
+Cases prevented per household (with vs without control),0.104
+ICER - incremental NRS per additional case prevented,79269
