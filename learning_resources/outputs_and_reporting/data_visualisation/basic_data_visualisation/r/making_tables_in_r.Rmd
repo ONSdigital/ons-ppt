@@ -636,20 +636,6 @@ vuln_table %>%
 
 ```
 
-## Export as .svg
-
-```{r}
-vuln_table %>%
-
-  gtsave(filename = "r_table_test.png", path = "D:/TEMP/")
-
-vuln_pie_png <- image_read("D:/Temp/r_table_test.png")
-
-vuln_table_svg <- image_convert(vuln_table_png, format = "svg")
-
-image_write(vuln_table_svg, "D:/Temp/r_table_test.svg")
-```
-
 ## Exercise
 
 Use this exercise to test what you’ve learned about making tables. You can adapt much of the code covered in this section, but some basic data manipulation will also be required which has not been covered here.

@@ -102,9 +102,8 @@ library(plotly)
 library(ggdist)
 library(ggrepel)
 library(ggiraph)
-
-here::here()
-vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
+ 
+vuln <- read_csv(here("learning_resources", "data", "vulnerable.csv"))
 ```
 
 # Preparing the dataframe
@@ -184,9 +183,9 @@ vuln_line_solution_html <- girafe(
   ggobj = vuln_line_solution
 )
 
-htmlwidgets::saveWidget(
+saveWidget(
   vuln_line_solution_html,
-  file = here::here(
+  file = here(
     "learning_resources",
     "outputs_and_reporting",
     "data_visualisation",
@@ -207,7 +206,7 @@ ggsave(
   # Select the plot to save
   plot = vuln_line_solution,
   # Set the save path
-  path = here::here(
+  path = here(
     "learning_resources",
     "outputs_and_reporting",
     "data_visualisation",

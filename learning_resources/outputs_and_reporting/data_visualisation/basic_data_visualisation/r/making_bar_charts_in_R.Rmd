@@ -52,9 +52,7 @@ library(plotly)
 library(htmlwidgets)
 library(forcats)
 
-# Use here::here() to construct paths, do not setwd()
-here::here()
-vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
+vuln <- read_csv(here("learning_resources", "data", "vulnerable.csv"))
 ```
 
 ## Introduction to ggplot2
@@ -75,7 +73,7 @@ vuln_2007_top_6 <- vuln %>%
   # Filter the data to just the year 2007
   filter(year %in% ("2007")) %>%
   # Select just the country and vulnerable_pop columns
-  select(country, vulnerable_pop) %>%
+  select(year, vulnerable_pop, country, upper_confidence_limit, lower_confidence_limit) %>%
   # Select only the rows with the 6 highest vulnerable_pop value
   dplyr::top_n(n = 6)
 
@@ -733,5 +731,37 @@ vuln_stacked_bar_percent <- ggplot(vuln_1997_2002_2007_percent, aes(x = year, y 
         plot.margin = margin(t = 20, l = 5, r = 5, b = 5))
   
 vuln_stacked_bar_percent
+```
+
+## Confidence intervals (range plot)
+
+```{r}
+vuln_confidence_intervals <- ggplot(
+  vuln_2007_top_6,
+  aes(
+    y = reorder(country, vulnerable_pop),
+    x = vulnerable_pop
+  )
+) +
+
+  # Confidence interval
+  geom_segment(
+    aes(
+      x = lower_confidence_limit,
+      xend = upper_confidence_limit,
+      yend = country
+    )
+  ) +
+
+  # Point estimate
+  geom_point() +
+
+  scale_x_continuous(
+    labels = scales::label_comma()
+  ) +
+
+  theme_minimal()
+
+vuln_confidence_intervals
 ```
 

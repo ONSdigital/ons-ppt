@@ -53,9 +53,7 @@ library(ggrepel)
 library(ggdist)
 library(ggiraph)
 
-# Use here::here() to construct paths, do not setwd()
-here::here()
-vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
+vuln <- read_csv(here("learning_resources", "data", "vulnerable.csv"))
 ```
 
 ## Introduction to ggplot2
@@ -214,6 +212,7 @@ vuln_line_thousands <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, 
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank()) +
   labs(x = "Year", y = "Vulnerable Population (Thousands)") +
+  # Add number suffixes (1e-6 would be used to create suffixes for millions, 1e-9 for bilions, etc)
   scale_y_continuous(labels = label_number(scale = 1e-3, suffix = "k")) +
   # Change the colours of lines to differentiate between countries
   scale_colour_manual(values = c("United Kingdom" = "#1E2A16",
@@ -238,93 +237,6 @@ vuln_line_thousands <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, 
                   colour = "#000000")
 
 vuln_line_thousands
-```
-
-# Add number suffixes (Millions)
-
-```{r}
-vuln_line_millions <- ggplot(vuln_4_country, aes(x = year, y = vulnerable_pop, colour = country)) +
-  geom_line() +
-  # Use theme_minimal to increase contrast
-  theme_minimal() +
-  # Remove vertical gridlines
-  theme(panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank()) +
-  labs(x = "Year", y = "Vulnerable Population (Millions)") +
-  scale_y_continuous(labels = label_number(scale = 1e-6, suffix = "M")) +
-  # Change the colours of lines to differentiate between countries
-  scale_colour_manual(values = c("United Kingdom" = "#1E2A16",
-                                 "Argentina" = "#D17E38",
-                                 "Nepal" = "#444443",
-                                 "Malawi" = "#3EA27F"),
-  ) +
-  # Remove legend set y-axis title to horizontal
-  theme(axis.title.y = element_text(angle = 0, 
-                                    hjust = 1,
-                                    vjust = 1.06,
-                                    # Adjust margin to move the title to the right
-                                    margin = margin(r = -150)
-                                    ),
-        # Adjust plot margin
-        plot.margin = margin(t = 20, l = 5, r = 5, b = 5)) +
-  theme(legend.position = "none") +
-  # Add labels to lines
-  geom_text_repel(data = labels_df,
-                  aes(label = country),
-                  nudge_y = 500000,
-                  colour = "#000000")
-
-vuln_line_millions
-```
-
-# Add number suffixes (Billions)
-
-```{r}
-# Prepare the data
-vuln_2_country <- vuln %>%
-  # Select just the country, year and vulnerable_pop columns
-  select(country, vulnerable_pop, year) %>%
-  # India and China selected because there vulnerable populations are close to one billion
-  filter(country %in% c("China", "India")) %>%
-  group_by(country)
-
-# Prepare data used to create labels
-vuln_2_country_labels <- vuln_2_country %>%
-  
-  group_by(country) %>%
-  
-  slice_max(year)
-
-vuln_line_billions <- ggplot(vuln_2_country, aes(x = year, y = vulnerable_pop, colour = country)) +
-  geom_line() +
-  # Use theme_minimal to increase contrast
-  theme_minimal() +
-  # Remove vertical gridlines
-  theme(panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank()) +
-  labs(x = "Year", y = "Vulnerable Population (Billions)") +
-  scale_colour_manual(values = c("China" = "#1E2A16",
-                                 "India" = "#D17E38"
-                                 ),
-                      ) +
-  # Remove legend set y-axis title to horizontal
-  scale_y_continuous(labels = label_number(scale = 1e-9, suffix = "B")) +
-  theme(axis.title.y = element_text(angle = 0, 
-                                    hjust = 1,
-                                    vjust = 1.06,
-                                    # Adjust margin to move the title to the right
-                                    margin = margin(r = -150)
-                                    ),
-        # Adjust plot margin
-        plot.margin = margin(t = 20, l = 5, r = 5, b = 5)) +
-  theme(legend.position = "none") +
-  # Add labels to lines
-  geom_text_repel(data = vuln_2_country_labels,
-                  aes(label = country),
-                  nudge_y = 500000,
-                  colour = "#000000")
-
-vuln_line_billions
 ```
 
 ## Confidence intervals
@@ -627,7 +539,7 @@ vuln_line
 
 ggsave(
   # Set the file name
-  filename = here::here("learning_resources", "outputs_and_reporting", "data_visualisation", "basic_data_visualisation", "output", "vuln_line.svg"),
+  filename = here("learning_resources", "outputs_and_reporting", "data_visualisation", "basic_data_visualisation", "output", "vuln_line.svg"),
   # Select the plot to save
   plot = vuln_line,
   # Set aspect ratio of plot, an aspect ratio of 16:9 will fill 1920x1080 displays
@@ -664,9 +576,9 @@ vuln_line_html <- girafe(
   ggobj = vuln_line
 )
 
-htmlwidgets::saveWidget(
+saveWidget(
   vuln_line_html,
-  file = here::here(
+  file = here(
     "learning_resources",
     "outputs_and_reporting",
     "data_visualisation",
