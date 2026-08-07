@@ -1,0 +1,305 @@
+---
+title: "Basic Data Visualisation, How to make pie charts in R"
+output: html_document
+---
+
+This block contains instructions on how to fill in this template.
+
+**Please delete this block when creating your own file.**
+
+This template should be used to create code snippet notebooks for each chapter in a learning resource. Follow the instructions below to complete the template: - Replace content in square brackets (e.g., [unit_name], [link], [chapter name]) with the relevant information. For example the title block below could be changed from "[unit_name], [chapter_name] - Code snippets" to "Basic Data Visualisation, Creating pie charts - Code snippets". - In the setup section add any instructions for users to follow before running the code snippets, such as installing packages or downloading data files. Add any necessary import statements or setup code in the first code cell. - Code snippets should be grouped into sections according to the sections in the learning resource. - Each code snippet from the learning resource should be placed in its own code cell under the relevant section, with any necessary context provided in a markdown block above each code cell. - Follow [tidyverse](https://style.tidyverse.org/) style guide for R code formatting. - Whenever you need to reference a file in [learning_resources](http://_vscodecontentref_/1), use:
+
+``` r
+file_path <- file.path(learning_resources_dir, "data", "filename.csv")
+```
+
+-   Definitions:
+    -   "Unit name" refers to the unit name, which is also the name of the folder this python folder is in.
+    -   "Chapter name" refers to the specific chapter that the code snippets are in. Chapters are the highest level headings in the learning resource.
+    -   "Section name" refers to subheadings within chapters that code snippets are in. ---
+
+## Basic Data Visualisation, How to make pie charts in R - Code examples
+
+The following code relates to the **How to make pie charts in R** section of the **Basic Data Visualisation** learning resource on the [Analysis for Action](%5BPLACEHOLDER%5D) platform.
+
+Use this code to get to grips with the basics of making pie charts in R as per the best practice covered in the written guidance. You are welcome to copy and adapt the code to meet your needs, but make sure that any outputs also align with any style requirements for your organisation.
+
+The code applies each change separately and does not create any outputs.
+
+## Troubleshooting
+
+If you encounter any issues running the code snippets, consider the following troubleshooting steps: - Ensure you have followed the setup instructions in the [README.md](../../../README.md) file including `install.packages()` for required packages. - Run code from top to bottom to ensure all dependencies are met. - Restart your R session and clear all outputs. - For more detailed troubleshooting guidance, refer to the [troubleshooting document](%5BPLACEHOLDER%5D).
+
+## Setup
+
+Before running the code snippets, ensure you have: - followed the setup instructions in the [README.md](../../../README.md) file, - **[add further instructions as needed]**, - run the code block below.
+
+```{r setup, message=FALSE}
+# This chunk should include:
+# * library() calls for required packages
+# * paths to data files
+# * any other setup required
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(janitor)
+library(ggplot2) # The scripts uses ggplot2 version 4.0.0
+library(svglite)
+library(htmlwidgets)
+library(scales)
+library(ggiraph)
+
+vuln <- read_csv(here("learning_resources", "data", "vulnerable.csv"))
+```
+
+## Prepare your data
+
+This code uses the 'vulnerable' dataset.
+
+The raw data is too large to use in a pie chart. You need to filter it to make a smaller dataframe first.
+
+```{r}
+# Prepare your data to make it suitable for a bar chart
+
+vuln_2007 <- vuln %>%
+  # Filter the data to just the year 2007
+  filter(year %in% ("2007")) %>%
+  # Select countries with large differences in vulnerable population size
+  filter(country %in% c("Mauritius", "Denmark", "Canada", "Netherlands")) %>%
+  select(country, vulnerable_pop) %>%
+  # Arrange by vulnerable population size from largest to smallest
+  arrange(desc(vulnerable_pop))
+
+# To Display the data
+
+vuln_2007
+```
+
+## Make the base pie chart
+
+```{r}
+vuln_pie <- ggplot(vuln_2007, aes(x = "", y = vulnerable_pop, fill = country)) +
+  geom_col() +
+  # start sets the location of the start of the first sector, 0 = vertical
+  # direction sets the rotation on the pie chart, -1 = clockwise
+  coord_polar("y", start = 0, direction = -1) +
+  theme(panel.background = element_rect(fill = "#FFFFFF"),
+# As pie charts are made by creating a stacked bar chart and turning it into a circle, axis breaks and axis titles that are created when creating a stacked bar chart appear around the edge of the pie chart, these need to be removed
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.grid = element_blank())
+
+vuln_pie
+```
+
+# Add white border between sectors
+
+```{r}
+vuln_pie_white_borders <- ggplot(vuln_2007, aes(x = "", y = vulnerable_pop, fill = country)) +
+  # Add white border between sectors
+  geom_col(colour = "#FFFFFF") +
+  # start sets the location of the start of the first sector, 0 = vertical
+  # direction sets the rotation on the pie chart, -1 = clockwise
+  coord_polar("y", start = 0, direction = -1) +
+  # Remove breaks around the edge of the pie
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill = "#FFFFFF")
+)
+
+vuln_pie_white_borders
+```
+
+# Change sector colours to ensure high contrast
+
+```{r}
+vuln_pie_colours <- ggplot(vuln_2007, aes(x = "", y = vulnerable_pop, fill = country)) +
+  # Add white border between sectors
+  geom_col(colour = "#FFFFFF") +
+  # start sets the location of the start of the first sector, 0 = vertical
+  # direction sets the rotation on the pie chart, -1 = clockwise
+  coord_polar("y", start = 0, direction = -1) +
+  # Remove breaks around the edge of the pie
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill = "#FFFFFF")
+) +
+  # Change sector colours
+  scale_fill_manual(
+    values = c("#D17E38", "#444443", "#3EA27F", "#752111")
+)
+
+vuln_pie_colours
+```
+
+# Add percentages as labels
+
+```{r}
+# Adapt data to include percentages
+vuln_2007_percent <- vuln_2007 %>%
+  select(country, vulnerable_pop) %>%
+  arrange(desc(vulnerable_pop)) %>%
+  # Calculate percentages of the vulnerable population
+  mutate(percent = vulnerable_pop / sum(vulnerable_pop),
+        country = factor(country, levels = country),
+        # Calculate the point around the pie that the label will sit
+        total = cumsum(percent),
+        midpoint = total - (percent / 2),
+        # Adjust labels to the left if label is at the left side of the pie to avoid label clipping
+        # Adjust labels to the right if label is at the right side of the pie to avoid label clipping
+        hjust = case_when(
+        midpoint > 0.125 & midpoint < 0.375 ~ 0.2,
+        midpoint > 0.625 & midpoint < 0.875 ~ 0.8,
+        TRUE ~ 0.5
+        )
+)
+vuln_2007_percent
+```
+
+```{r}
+vuln_pie_percentage <- ggplot(vuln_2007_percent, aes(x = "", y = vulnerable_pop, fill = country)) +
+  # Add white border between sectors
+  geom_col(colour = "#FFFFFF") +
+  # start sets the location of the start of the first sector, 0 = vertical
+  # direction sets the rotation on the pie chart, -1 = clockwise
+  coord_polar("y", start = 0, direction = -1, clip = "off") +
+  # Remove breaks around the edge of the pie
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill = "#FFFFFF")
+) +
+  # Change sector colours
+  scale_fill_manual(
+    values = c("#D17E38", "#444443", "#3EA27F", "#752111")
+) +
+  # Create labels
+  geom_text(
+    aes(
+      # Set distance from the circumference of the circle that labels are written
+      x = 1.62,
+      # Write the content of the labels
+      label = paste(country,"[" ,percent(percent, accuracy = 0.01), "]")),
+    # Labels appear at the midpoint of each sector
+    position = position_stack(vjust = 0.5),
+    colour = "#000000",
+    size = 3,
+    # Horizontally adjust labels using the hjust column in the dataframe
+    hjust = vuln_2007_percent$hjust
+  ) +
+  # Remove legend
+  theme(legend.position = "none")
+
+vuln_pie_percentage
+```
+
+# Exporting (.svg file format)
+
+```{r}
+vuln_pie_colours <- ggplot(vuln_2007_percent, aes(x = "", y = vulnerable_pop, fill = country)) +
+  # Add white border between sectors
+  geom_col(colour = "#FFFFFF") +
+  # start sets the location of the start of the first sector, 0 = vertical
+  # direction sets the rotation on the pie chart, -1 = clockwise
+  coord_polar("y", start = 0, direction = -1, clip = "off") +
+  # Remove breaks around the edge of the pie
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_rect(fill = "#FFFFFF")
+) +
+  # Change sector colours
+  scale_fill_manual(
+    values = c("#D17E38", "#444443", "#3EA27F", "#752111")
+) +
+  # Create labels
+  geom_text(
+    aes(
+      # Set distance from the circumference of the circle that labels are written
+      x = 1.62,
+      # Write the content of the labels
+      label = paste(country,"[" ,percent(percent, accuracy = 0.01), "]")),
+    # Labels appear at the midpoint of each sector
+    position = position_stack(vjust = 0.5),
+    colour = "#000000",
+    # Larger text can be used for the saved version
+    size = 6,
+    # Horizontally adjust labels using the hjust column in the dataframe
+    hjust = vuln_2007_percent$hjust
+  ) +
+  # Remove legend
+  theme(legend.position = "none")
+
+ggsave(
+  # Set the file name
+  filename = "vuln_pie.svg",
+  # Select the plot to save
+  plot = vuln_pie_colours,
+  # Set the save path
+  path = here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "example_outputs"
+    ),
+  # Set aspect ratio of plot, an aspect ratio of 16:9 will fill 1920x1080 displays
+  width = 16,
+  height = 9
+)
+```
+
+# Exporting (.html file format)
+
+```{r}
+vuln_pie_html <- girafe(
+  ggobj = vuln_pie_colours
+)
+
+saveWidget(
+  vuln_pie_html,
+  file = here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "example_outputs",
+    "vuln_pie.html"
+    )
+)
+```
+
+## Exercise
+
+Use this exercise to test what you’ve learned about making pie charts. You can adapt much of the code covered in this section, but some basic data manipulation will also be required which has not been covered here.
+
+Create a pie chart in R. Use the vulnerable dataset as your input data.
+
+For an extra challenge, consider setting yourself an hour’s time limit to help simulate an emergency.
+
+The pie chart should:
+
+-   Show the size of vulnerable populations in Argentina, Malawi, Nepal, and the United Kingdom in the year 2007
+-   Be formatted so that:
+    -   There are no axis labels
+    -   The countries are ordered so that the pie chart is ordered clockwise from largest to smallest, starting at 12 o'clock
+    -   The largest sector is HEX code #D17E38
+    -   The second largest sector is HEX code #444443
+    -   The third largest sector is HEX code #3EA27F
+    -   The smallest sector is HEX code #752111
+    -   Include data labels containing each country's name and its percentage of the total vulnerable population
+    -   The labels are HEX code #000000
+    -   There is no legend
+    -   The chart is exported with the file name: vuln_pie_solution
+    -   The chart is saved to the exercise_outputs folder
+    -   The plot can be saved as both .svg chart has an aspect ratio of 16:9 and a .html

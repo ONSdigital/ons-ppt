@@ -1,0 +1,10 @@
+Package: example
+Type: Package
+Title: Example Package
+Version: 1.0.0
+Author: Your Name
+Maintainer: Analysis for Action Team <analysisforaction@ons.gov.uk>
+Description: Add a brief description.
+License: MIT
+Imports: roxygen2==7.1.1
+RoxygenNote: 7.1.1

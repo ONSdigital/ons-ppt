@@ -1,0 +1,222 @@
+---
+title: "Basic Data Visualisation, How to make line charts in R: Exercise solution"
+output: html_document
+---
+
+---
+This block contains instructions on how to fill in this template.
+
+**Please delete this block when creating your own file.**
+
+This template should be used to create code snippet notebooks for each chapter
+in a learning resource. Follow the instructions below to complete the template:
+- Replace content in square brackets (e.g., [unit_name], [link], [chapter name])
+with the relevant information. For example the title block below could be changed
+from "[unit_name], [chapter_name] - Code snippets" to "Basic Data Visualisation,
+Creating Line Charts - Code snippets".
+- In the setup section add any instructions for users to follow before running the
+code snippets, such as installing packages or downloading data files. Add any
+necessary import statements or setup code in the first code cell.
+- Code snippets should be grouped into sections according to the sections in the
+learning resource.
+- Each code snippet from the learning resource should be placed in its own code
+cell under the relevant section, with any necessary context provided in a
+markdown block above each code cell.
+- Follow [tidyverse](https://style.tidyverse.org/) style guide for R code
+formatting.
+- Whenever you need to reference a file in [learning_resources](http://_vscodecontentref_/1), use:
+```r
+file_path <- file.path(learning_resources_dir, "data", "filename.csv")
+```
+
+- Definitions:
+    - "Unit name" refers to the unit name, which is also the name of the folder
+    this python folder is in.
+    - "Chapter name" refers to the specific chapter that the code snippets are
+    in. Chapters are the highest level headings in the learning resource.
+    - "Section name" refers to subheadings within chapters that code snippets
+    are in.
+---
+
+# Basic Data Visualisation, How to make line charts in R: Exercise solution
+
+The following code relates to the **Making line charts in R** script in the
+**Basic Data Visualisation** learning resource on the [Analysis for Action]([PLACEHOLDER])
+platform.
+
+This is the code used to produce the exercise solution from the **Making line charts in R** script. Compare your code and output against the code and output produced here to see how well you did. Note that your code and output do not need to match the solution exactly to be considered correct!
+
+Can you think of any other ways of making the line chart more accessible?
+
+The line chart should:
+
+- The size of the vulnerable populations of the 4 countries with the largest vulnerable populations in 2007 over the years from 1952 to 2007
+-   Be formatted so that:
+    -   The x-axis label is: Year 
+    -   The y-axis label is: Vulnerable Population (Millions)
+    -   The text size of the axis titles is 12
+    -   The y-axis uses millions suffix (for example an axis break with a value of 6000000 would show as 6M)
+    -   The panel background and plot background is HEX code #FFFFFF
+    -   The horizontal and vertical gridlines are HEX code #D9D9D9 and size = 0.5
+    -   The chart is exported as an .svg file with the file name:
+        vuln_line_top_4
+    -   The chart is saved to the D:/Temp folder
+    -   The save charted has an aspect ratio of 16:9
+
+## Troubleshooting
+
+If you encounter any issues running the code snippets, consider the following
+troubleshooting steps:
+- Ensure you have followed the setup instructions in the
+[README.md](../../../README.md) file including `install.packages()` for
+required packages.
+- Run code from top to bottom to ensure all dependencies are met.
+- Restart your R session and clear all outputs.
+- For more detailed troubleshooting guidance, refer to the
+[troubleshooting document]([PLACEHOLDER]).
+
+## Setup
+
+Before running the code snippets, ensure you have:
+- followed the setup instructions in the [README.md](../../../README.md) file,
+- **[add further instructions as needed]**,
+- run the code block below.
+
+```{r setup, message=FALSE}
+# This chunk should include:
+# * library() calls for required packages
+# * paths to data files
+# * any other setup required
+
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(janitor)
+library(gt)
+library(ggplot2) # The scripts uses ggplot2 version 4.0.0
+library(svglite)
+library(scales)
+library(htmlwidgets)
+library(plotly)
+library(ggdist)
+library(ggrepel)
+library(ggiraph)
+ 
+vuln <- read_csv(here("learning_resources", "data", "vulnerable.csv"))
+```
+
+# Preparing the dataframe
+
+```{r}
+# Prepare your data to make it suitable for a line chart
+# Find the 4 countries with the largest vulnerable populations in 2007
+vuln_top_4_countries_2007 <- vuln %>%
+  filter(year %in% 2007) %>%
+  group_by(year) %>%
+  slice_max(order_by = vulnerable_pop, n = 4)
+
+# Filter the vuln dataframe to the 4 countries in the vuln_top_4_countries_2007 dataframe
+vuln_top_4 <- vuln %>%
+  filter(country %in% vuln_top_4_countries_2007$country)
+
+vuln_top_4
+
+vuln_top_4_labels <- vuln_top_4_countries_2007 %>%
+  
+  group_by(country) %>%
+  
+  slice_max(year)
+```
+
+# Creating the line chart
+
+```{r}
+vuln_line_solution <- ggplot(vuln_top_4, aes(x = year, y = vulnerable_pop, colour = country, ymin = lower_confidence_limit, ymax = upper_confidence_limit)) + 
+  geom_lineribbon() +
+  labs(x = "Year", y = "Vulnerable Population (Millions)") +
+  theme(
+    # Change the background colour of the panel (the inside box containing the bars) to white
+    panel.background = element_rect(fill = "#ffffff"),
+    # Change the background colour of the plot (the outside area containing the axis titles)
+    plot.background = element_rect(fill = "#ffffff"),
+    # Changed size of axis titles and axis text
+    axis.title.x = element_text(size = rel(1)),
+    axis.title.y = element_text(size = rel(1)),  
+    # Change the colour and size of the minor gridlines
+    panel.grid.minor = element_line(colour = "#D9D9D9", size = 0.5, linetype = 1),
+    # Change the colour and size of the major gridlines
+    panel.grid.major = element_line(colour = "#D9D9D9", size = 0.5, linetype = 1),
+    # Remove legend
+    legend.position = "none",
+    # Remove vertical gridlines
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()) +
+  scale_y_continuous(labels = label_number(scale = 1e-6, suffix = "M")) +
+  # Change the colours of lines to differentiate between countries
+  scale_colour_manual(values = c("China" = "#1E2A16",
+                                 "India" = "#D17E38",
+                                 "Indonesia" = "#444443",
+                                 "United States" = "#3EA27F")
+                      ) +
+  # Remove legend set y-axis title to horizontal
+  theme(axis.title.y = element_text(angle = 0, 
+                                    hjust = 1, 
+                                    vjust = 1,
+                                    margin = margin(r = -150)
+                                    ),
+        plot.margin = margin(t = 20, l = 5, r = 5, b = 5)) +
+  # Add labels to lines
+  geom_text_repel(data = vuln_top_4_labels,
+                  aes(label = country),
+                  nudge_y = 500000,
+                  colour = "#000000",
+                  segment.colour = NA)
+
+vuln_line_solution
+```
+
+# Save as .html
+
+```{r}
+vuln_line_solution_html <- girafe(
+  ggobj = vuln_line_solution
+)
+
+saveWidget(
+  vuln_line_solution_html,
+  file = here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "exercise_outputs",
+    "vuln_line_solution.html"
+    )
+)
+```
+
+# Save as .svg
+
+```{r}
+ggsave(
+  # Set the file name
+  filename = "vuln_line_solution.svg",
+  # Select the plot to save
+  plot = vuln_line_solution,
+  # Set the save path
+  path = here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "exercise_outputs"
+    ),
+  # Set aspect ratio of plot, an aspect ratio of 16:9 will fill 1920x1080 displays
+  width = 16,
+  height = 9
+)
+```
+

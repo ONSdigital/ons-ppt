@@ -1,0 +1,250 @@
+---
+title: "Basic Data Visualisation, How to make tables in R: Exercise solution"
+output: html_document
+---
+
+---
+This block contains instructions on how to fill in this template.
+
+**Please delete this block when creating your own file.**
+
+This template should be used to create code snippet notebooks for each chapter
+in a learning resource. Follow the instructions below to complete the template:
+- Replace content in square brackets (e.g., [unit_name], [link], [chapter name])
+with the relevant information. For example the title block below could be changed
+from "[unit_name], [chapter_name] - Code snippets" to "Basic Data Visualisation,
+Creating Bar Charts - Code snippets".
+- In the setup section add any instructions for users to follow before running the
+code snippets, such as installing packages or downloading data files. Add any
+necessary import statements or setup code in the first code cell.
+- Code snippets should be grouped into sections according to the sections in the
+learning resource.
+- Each code snippet from the learning resource should be placed in its own code
+cell under the relevant section, with any necessary context provided in a
+markdown block above each code cell.
+- Follow [tidyverse](https://style.tidyverse.org/) style guide for R code
+formatting.
+- Whenever you need to reference a file in [learning_resources](http://_vscodecontentref_/1), use:
+```r
+file_path <- file.path(learning_resources_dir, "data", "filename.csv")
+```
+
+- Definitions:
+    - "Unit name" refers to the unit name, which is also the name of the folder
+    this python folder is in.
+    - "Chapter name" refers to the specific chapter that the code snippets are
+    in. Chapters are the highest level headings in the learning resource.
+    - "Section name" refers to subheadings within chapters that code snippets
+    are in.
+---
+
+# Basic Data Visualisation, How to make tables in R: Exercise solution
+
+The following code relates to the **Making tables in R** script in the
+**Basic Data Visualisation** learning resource on the [Analysis for Action]([PLACEHOLDER])
+platform.
+
+This is the code used to produce the exercise solution from the **Making tables in R** script. Compare your code and output against the code and output produced here to see how well you did. Note that your code and output do not need to match the solution exactly to be considered correct!
+
+Can you think of any other ways of making the table more accessible?
+
+The output should:
+
+* Show the size of vulnerable populations in Argentina, Malawi, Nepal, and the United Kingdom for the years 1982, 1987, and 1992
+* Include a summary column showing the mean average size of vulnerable populations across these three years
+* Include a spanner heading above the 1982, 1987, and 1992 columns called ‘Vulnerable population by year’
+* Include a stubhead label heading above the countries column called 'Developer'
+*	Have commas to separate thousands
+* Be formatted so that:
+  * The spanner heading is a dark green with a HEX code of #324027 and the text is white
+  * The stubhead label heading is a dark green with a HEX code of #324027 and the text is white and bold
+  * The column labels are an earthy green with a HEX code of #48553F and the text is white
+
+## Troubleshooting
+
+If you encounter any issues running the code snippets, consider the following
+troubleshooting steps:
+- Ensure you have followed the setup instructions in the
+[README.md](../../../README.md) file including `install.packages()` for
+required packages.
+- Run code from top to bottom to ensure all dependencies are met.
+- Restart your R session and clear all outputs.
+- For more detailed troubleshooting guidance, refer to the
+[troubleshooting document]([PLACEHOLDER]).
+
+## Setup
+
+Before running the code snippets, ensure you have:
+- followed the setup instructions in the [README.md](../../../README.md) file,
+- **[add further instructions as needed]**,
+- run the code block below.
+
+```{r setup, message=FALSE}
+# This chunk should include:
+# * library() calls for required packages
+# * paths to data files
+# * any other setup required
+
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(janitor)
+library(gt)
+library(magick)
+
+# Use here::here() to construct paths, do not setwd()
+here::here()
+vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
+```
+
+## Prepare the dataframe
+
+```{r}
+
+# Prepare and shape the data to include a summary column
+
+vuln_exercise_df <- vuln %>%
+  
+  filter(year %in% c("1982", "1987", "1992")) %>%
+  
+  filter(country %in% c("Argentina", "Malawi", "Nepal", "United Kingdom")) %>% # Selecting the countries in this order saves me having to re-order them later
+  
+  select(country, year, vulnerable_pop) %>%
+  
+  tidyr::pivot_wider(names_from = year, values_from = vulnerable_pop) %>%
+  
+  tidyr::drop_na()
+
+vuln_exercise_df <- janitor::clean_names(vuln_exercise_df)
+
+vuln_exercise_df <- vuln_exercise_df %>%
+  
+  rename_with(~ sub("^x", "", .x))
+
+# Add a column for mean average
+# Make sure columns are numeric first (otherwise it won't be possible to calculate an average)
+
+vuln_exercise_df <- vuln_exercise_df %>%
+  
+  mutate(
+    
+    `1982` = as.numeric(gsub(",", "", `1982`)),
+    
+    `1987` = as.numeric(gsub(",", "", `1987`)),
+    
+    `1992` = as.numeric(gsub(",", "", `1992`))
+    
+  ) %>%
+  
+  mutate(Average = rowMeans(across(c(`1982`, `1987`, `1992`)), na.rm = TRUE))
+
+
+```
+
+## Create and format the table as per requirements
+
+```{r}
+
+# Make the base table
+
+vuln_exercise <- vuln_exercise_df %>%
+  
+  gt(rowname_col = "country") %>%
+  
+  # Add a spanner heading 
+  
+  tab_spanner(label = gt::md("**Vulnerable population by year**"), columns = everything()) %>%
+  
+  # Add a stubhead label above the countries
+  
+  tab_stubhead(label = "Developers") %>%
+
+  # Format numbers to include commas
+
+  fmt_number(columns = everything(),
+
+             use_seps = TRUE,
+
+             decimals = 0) %>%
+
+  # Change the colour of the spanner / header and make the text white (spanners are already bold by default)
+
+  tab_style(
+    
+              style = list(
+                
+                cell_fill(color = "#324027"),
+                
+                cell_text(color = "white")
+                
+              ),
+              
+              locations = cells_column_spanners(everything())
+                
+              ) %>%
+  
+  # Change the colour of the stubhead label and make the text bold and white
+
+  tab_style(
+    
+              style = list(
+                
+                cell_fill(color = "#324027"),
+                
+                cell_text(weight = "bold", color = "white")
+                
+              ),
+              
+              locations = cells_stubhead()
+                
+              ) %>%
+
+  # Change the colour of the column labels and make the text white
+
+  tab_style(
+    
+              style = list(
+                                
+                cell_fill(color = "#48553F"),
+                
+                cell_text(color = 'white')
+                
+              ),
+              
+              locations = cells_column_labels()
+                
+              )
+
+vuln_exercise # Display the output
+
+```
+
+## Export the table as HTML
+
+```{r}
+
+# Save the table as HTML
+
+vuln_exercise %>%
+
+  gtsave(filename = "r_table_solution.html", path = "D:/TEMP/")
+```
+
+## Export the table as SVG
+
+```{r}
+
+# Save the table as SVG
+
+vuln_table %>%
+
+  gtsave(filename = "r_table_solution.png", path = "D:/TEMP/")
+
+vuln_pie_png <- image_read("D:/Temp/r_table_solution.png")
+
+vuln_table_svg <- image_convert(vuln_table_png, format = "svg")
+
+image_write(vuln_table_svg, "D:/Temp/r_table_solution.svg")
+```
+

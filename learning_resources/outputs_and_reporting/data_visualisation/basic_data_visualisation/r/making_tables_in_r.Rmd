@@ -1,0 +1,662 @@
+---
+title: "Basic Data Visualisation, How to make tables in R"
+output: html_document
+---
+
+---
+This block contains instructions on how to fill in this template.
+
+**Please delete this block when creating your own file.**
+
+This template should be used to create code snippet notebooks for each chapter
+in a learning resource. Follow the instructions below to complete the template:
+- Replace content in square brackets (e.g., [unit_name], [link], [chapter name])
+with the relevant information. For example the title block below could be changed
+from "[unit_name], [chapter_name] - Code snippets" to "Basic Data Visualisation,
+Creating Bar Charts - Code snippets".
+- In the setup section add any instructions for users to follow before running the
+code snippets, such as installing packages or downloading data files. Add any
+necessary import statements or setup code in the first code cell.
+- Code snippets should be grouped into sections according to the sections in the
+learning resource.
+- Each code snippet from the learning resource should be placed in its own code
+cell under the relevant section, with any necessary context provided in a
+markdown block above each code cell.
+- Follow [tidyverse](https://style.tidyverse.org/) style guide for R code
+formatting.
+- Whenever you need to reference a file in [learning_resources](http://_vscodecontentref_/1), use:
+```r
+file_path <- file.path(learning_resources_dir, "data", "filename.csv")
+```
+
+- Definitions:
+    - "Unit name" refers to the unit name, which is also the name of the folder
+    this python folder is in.
+    - "Chapter name" refers to the specific chapter that the code snippets are
+    in. Chapters are the highest level headings in the learning resource.
+    - "Section name" refers to subheadings within chapters that code snippets
+    are in.
+---
+
+## Basic Data Visualisation, How to make tables in R - Code examples
+
+The following code relates to the **How to make tables in R** section of the
+**Basic Data Visualisation** learning resource on the [Analysis for Action]([PLACEHOLDER])
+platform.
+
+Use this code to get to grips with the basics of making tables in R as per the best practice covered in the written guidance. You are welcome to copy and adapt the code to meet your needs, but make sure that any outputs also align with any style requirements for your organisation.
+
+The code applies each change separately and does not create any outputs.
+
+## Troubleshooting
+
+If you encounter any issues running the code snippets, consider the following
+troubleshooting steps:
+- Ensure you have followed the setup instructions in the
+[README.md](../../../README.md) file including `install.packages()` for
+required packages.
+- Run code from top to bottom to ensure all dependencies are met.
+- Restart your R session and clear all outputs.
+- For more detailed troubleshooting guidance, refer to the
+[troubleshooting document]([PLACEHOLDER]).
+
+## Setup
+
+Before running the code snippets, ensure you have:
+- followed the setup instructions in the [README.md](../../../README.md) file,
+- **[add further instructions as needed]**,
+- run the code block below.
+
+```{r setup, message=FALSE}
+# This chunk should include:
+# * library() calls for required packages
+# * paths to data files
+# * any other setup required
+
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(janitor)
+library(gt)
+library(magick)
+
+# Use here::here() to construct paths, do not setwd()
+here::here()
+vuln <- read_csv(here::here("learning_resources", "data", "vulnerable.csv"))
+```
+
+
+## Introduction to gt
+
+The main package you will use to create a table in this file is gt, which stands for ‘grammar of tables’. Similarly to ggplot2, which is used to create charts, it uses a layered style and renders outputs to HTML (or images if preferred).
+
+gt uses the following structure:
+
+* a table header - which contains a title and subtitle
+* a stub and stub head - which contains row labels
+* column labels - which contain column labels
+* the table body - which contains columns and rows of cells
+* and the table footer, which contains footnotes and source notes
+
+Note that to align with the best practice presented in the main guidance, some gt components will not be used. For example, it is recommended to include titles for data visualisations in body text rather than in images.
+
+
+## Prepare your data
+
+This code uses the 'vulnerable' dataset. 
+
+The raw data is too large to use in a demonstration table. You need to filter it to make a smaller dataframe first.
+
+```{r}
+# Prepare the data to make it suitable for a table
+
+vuln_for_select_countries_3y <- vuln %>%
+
+  filter(year %in% c("1997", "2002", "2007")) %>%
+
+  select(country, continent, year, vulnerable_pop) %>%
+
+  # Reshaping the data
+
+  tidyr::pivot_wider(names_from = year, values_from = vulnerable_pop) %>%
+
+  tidyr::drop_na() %>%
+
+         group_by(continent) %>%
+
+  # Selecting the top 2 values
+
+  dplyr::top_n(n = 2)
+
+
+# Cleaning the column names
+
+vuln_for_select_countries_3y <- janitor::clean_names(vuln_for_select_countries_3y)
+
+# Remove the x prefix for year names
+
+vuln_for_select_countries_3y <- vuln_for_select_countries_3y %>%
+  
+  rename_with(~ sub("^x", "", .x))
+
+# To Display the data
+
+vuln_for_select_countries_3y
+
+```
+
+## Make the base table
+
+Use the gt function to make a table.
+
+The best practice discussed in the main guidance suggests grouping rows where appropriate. Notice that, where rows have common values in a column, gt automatically groups them together. In this case the continent variable is used to group different countries.
+
+```{r}
+# Make a basic table
+# Data can be passed to function via the pipe operator
+# Data can also be directly to the gt function by specifying the data = argument
+
+# Creating a gt table
+
+vuln_table <- vuln_for_select_countries_3y %>%
+
+  gt()
+
+vuln_table
+
+```
+Once you have created the gt table object, you can style and edit it to meet your requirements. 
+
+The sections below look at how to make your table align with the best practice discussed in the main guidance.
+
+
+## Add labels
+
+You can use a ‘spanner’ and ‘stubhead’ to label your columns in a gt table.
+
+Should the columns not be adjacent to each other, tab_spanner() will automatically gather them together.
+
+With the columns argument we can use column names in double quotes ("<column>"), in vars() (vars(<column>)), or, we can use the following tidyselect expressions:
+•	contains(): contains a literal string
+•	matches(): matches a regular expression
+•	starts_with(): starts with a prefix
+•	ends_with(): ends with a suffix
+•	everything(): selects all columns
+
+```{r}
+# Label your columns
+
+vuln_table_labels <- vuln_for_select_countries_3y %>%
+  
+  gt(rowname_col = "country",
+     
+     groupname_col = "continent"
+             
+  ) %>%
+  
+  # Add a spanner heading
+  
+  tab_spanner(label = gt::md("**Years**"), columns = everything()
+              
+  ) %>%
+  
+  # Add a stub head heading
+  
+  tab_stubhead(label = gt::md("**Continent**")
+               
+  )
+
+vuln_table_labels
+
+```
+
+
+## Right-align figures
+
+Use cols_align() to set the alignment of columns. 
+
+Best practice is to align figures to the right, and fortunately, gt already does this by default. Below is some code if you ever need to change this.
+
+```{r}
+# Right align a column’s text
+
+vuln_table <- vuln_for_select_countries_3y %>%
+
+  gt(rowname_col = "country",
+
+    groupname_col = "continent") %>%
+
+  cols_align(align = "right",
+
+             columns = vars(`1997`, `2002`, `2007`)
+
+             )
+
+vuln_table
+
+```
+
+
+## Add commas, decimals, and suffixes
+
+You can use the fmt_*() functions to format the data in your table, including adding commas and specifying how many decimals you want to include.
+
+Some examples are shown below. Refer to the fmt documentation for a full list:
+
+•	fmt_number()
+•	fmt_date()
+•	fmt_currency()
+•	fmt_percent()
+•	fmt_scientific()
+
+You can also us the general fmt() which provides greater control in formatting raw data values than any of the specialized fmt_*().
+
+Note that decimals do not apply to the vulnerable dataframe as all the figures are already integers (i.e. full numbers). However, you can try adapting this code and applying it to a dataframe that does include more than two decimals to see it in action.
+
+
+```{r}
+# Format numbers to include commas
+
+vuln_table_commas <- vuln_for_select_countries_3y %>%
+
+  gt(rowname_col = "country",
+
+     groupname_col = "continent") %>%
+
+  fmt_number(columns = everything(),
+
+             use_seps = TRUE,
+
+             decimals = 0)
+
+vuln_table_commas
+
+```
+
+When dealing with large numbers e.g. millions, you may wish to use a suffix to simplify your table. It is a good idea to include decimals if so.
+
+```{r}
+# Format numbers to include a suffix
+
+vuln_table_suffix <- vuln_for_select_countries_3y %>%
+
+  gt(rowname_col = "country",
+
+     groupname_col = "continent") %>%
+
+  fmt_number(columns = everything(),
+
+             decimals = 2,
+
+             suffixing = TRUE)
+
+vuln_table_suffix
+
+```
+
+## Rearrange columns and rows
+
+Use cols_move to rearrange columns.
+
+On those occasions where you need to move columns this way or that way, you can make use of the cols_move() function. The movement procedure here takes one or more specified columns (in the columns argument) and places them to the right of a different column (the after argument). The ordering of the columns to be moved is preserved, as is the ordering of all other columns in the table.
+
+```{r}
+# Rearrange columns
+
+vuln_table_rearrange_cols <- vuln_for_select_countries_3y %>%
+
+  gt(rowname_col = "country",
+
+     groupname_col = "continent") %>%
+
+  cols_move(columns = c(`2002`, `1997`),
+
+            after = c(`2007`)
+
+            )
+
+vuln_table_rearrange_cols
+
+```
+
+Use row_group_order() to rearrange rows. In the example below, the continent variable is used, but country could be used just as well.
+
+```{r}
+# Manually rearrange the order of rows
+
+vuln_table_rearrange_rows <- vuln_for_select_countries_3y %>%
+
+  gt(rowname_col = "country",
+
+     groupname_col = "continent") %>%
+
+  row_group_order(groups = c("Africa",
+
+                             "Asia",
+
+                             "Americas",
+
+                             "Europe",
+
+                             "Oceania")
+
+                  )
+
+vuln_table_rearrange_rows
+
+```
+
+You can also rearrange rows to appear in ranked order i.e. from lowest to highest values, or vice versa, in a particular column. To do this, you need to modify your original dataframe, then build a table from the new dataframe.
+
+```{r}
+# Re-prepare the data, arranging rows in ranked order, then recreate the table
+
+vuln_for_select_countries_3y_ranked <- vuln %>%
+  
+  filter(year %in% c("1997", "2002", "2007")) %>%
+  
+  select(country, continent, year, vulnerable_pop) %>%
+  
+  tidyr::pivot_wider(names_from = year, values_from = vulnerable_pop) %>%
+  
+  tidyr::drop_na() %>%
+  
+  group_by(continent) %>%
+  
+  dplyr::top_n(n = 2)
+  
+vuln_for_select_countries_3y_ranked <- janitor::clean_names(vuln_for_select_countries_3y_ranked)
+
+vuln_for_select_countries_3y_ranked <- vuln_for_select_countries_3y_ranked %>%
+  
+  rename_with(~ sub("^x", "", .x))
+
+# Here the code sorts by continent name, then size of vulnerable population for each continent as of 2007 (largest to smallest)
+
+vuln_for_select_countries_3y_ranked <- vuln_for_select_countries_3y_ranked %>%
+  
+  arrange(desc(`2007`))
+
+# Recreate the table
+
+vuln_table_ranked <- vuln_for_select_countries_3y_ranked %>%
+  
+  gt()
+
+vuln_table_ranked
+
+```
+
+## Add summary rows and columns
+
+Use summary_rows() and grand_summary_rows() to add summary rows to your table:
+
+•	summary_rows() - add groupwise summary rows using aggregation functions
+•	grand_summary_rows() - add grand summary rows using aggregation functions
+
+```{r}
+# Add summary rows
+
+vuln_table_summary <- vuln_for_select_countries_3y %>%
+
+  gt(rowname_col = "country",
+
+     groupname_col = "continent") %>%
+
+  summary_rows(groups = everything(),
+
+               columns = everything(),
+
+               fns = list(my_total = "sum",
+
+                          my_mean = "mean")
+
+               )
+
+vuln_table_summary
+
+```
+
+Add grand summary rows to the gt table by using applying aggregation functions to the table data. The summary rows incorporate all of the available data, regardless of whether some of the data are part of row groups.
+
+```{r}
+# Add grand summary rows
+
+vuln_table_grand_summary <- vuln_for_select_countries_3y %>%
+
+  gt(rowname_col = "country",
+
+     groupname_col = "continent") %>%
+
+  grand_summary_rows(columns = everything(),
+
+                     fns = list(my_min = "min",
+
+                                my_max = "max",
+
+                                my_avg = "mean"))
+
+vuln_table_grand_summary
+
+```
+
+To add a summary column, you need to modify the original dataframe, then build a table from the new dataframe. 
+
+```{r}
+# Re-prepare the data to include a summary column
+
+vuln_for_select_countries_3y_avg <- vuln %>%
+  
+  filter(year %in% c("1997", "2002", "2007")) %>%
+  
+  select(country, continent, year, vulnerable_pop) %>%
+  
+  tidyr::pivot_wider(names_from = year, values_from = vulnerable_pop) %>%
+  
+  tidyr::drop_na() %>%
+  
+  group_by(continent) %>%
+  
+  dplyr::top_n(n = 2)
+
+vuln_for_select_countries_3y_avg <- janitor::clean_names(vuln_for_select_countries_3y_avg)
+
+vuln_for_select_countries_3y_avg <- vuln_for_select_countries_3y_avg %>%
+  
+  rename_with(~ sub("^x", "", .x))
+
+# Add a column for mean average
+# Make sure columns are numeric first (otherwise it won't be possible to calculate an average)
+
+vuln_for_select_countries_3y_avg <- vuln_for_select_countries_3y_avg %>%
+  
+  mutate(
+    
+    `1997` = as.numeric(gsub(",", "", `1997`)),
+    
+    `2002` = as.numeric(gsub(",", "", `2002`)),
+    
+    `2007` = as.numeric(gsub(",", "", `2007`))
+    
+  ) %>%
+  
+  mutate(average_vulnerable = rowMeans(across(c(`1997`, `2002`, `2007`)), na.rm = TRUE))
+
+
+# Recreate the table
+
+vuln_table_summary_col <- vuln_for_select_countries_3y_avg %>%
+  
+  gt()
+
+vuln_table_summary_col
+
+```
+
+## Change cell width
+
+You can change the width of the cells in your table using the cols_width function.
+
+```{r}
+# Change cell width
+
+vuln_table_wide <- vuln_for_select_countries_3y %>%
+
+  gt(rowname_col = "country",
+
+    groupname_col = "continent") %>%
+
+  cols_width(vars(`1997`) ~ px(120),
+
+             vars(`2002`) ~ px(100),
+             
+             vars(`2007`) ~ px(100),
+
+             TRUE ~ px(70)
+
+             )
+
+vuln_table_wide
+
+```
+
+## Change cell colours
+
+You can change the colours in your table to help rows, columns, or cells stand out. However, make sure you still adhere to the contrast ratio requirements discussed in the guidance on accessibility.
+
+The code below changes the colour of the header row.
+
+```{r}
+
+# Change the colour of the header row and make the text bold white
+
+vuln_table_colour <- vuln_for_select_countries_3y %>%
+  
+  gt(
+    
+    rowname_col = "country",
+    
+    groupname_col = "continent"
+    
+  ) %>%
+  
+  tab_style(
+    
+    style = list(
+      
+      cell_fill(color = "#324027"),
+      
+      cell_text(weight = "bold", color = "white") # To make the header text more visible against a dark background, it is reformatted to be bold and white.
+      
+    ),
+    
+    locations = cells_column_labels(
+      
+      columns = everything()
+      
+    )
+    
+  )
+
+vuln_table_colour
+
+```
+
+The code below highlights a specific row, in this case, the cell with the highest value.
+```{r}
+
+# Change the colour of the header row and highlight the cell with the highest value
+
+vuln_table_highlight <- vuln_for_select_countries_3y %>%
+  
+  gt(
+    
+    rowname_col = "country",
+    
+    groupname_col = "continent"
+    
+  ) %>%
+  
+  tab_style(
+    
+    style = list(
+      
+      cell_fill(color = "#324027"),
+      
+      cell_text(weight = "bold", color = "white")
+      
+    ),
+    
+    locations = cells_column_labels(
+      
+      columns = everything()
+      
+    )
+    
+  ) %>%
+  
+    tab_style(
+
+    style = list(
+
+	     cell_fill(color = "#D17E38"), # Change the colour of the cell
+
+	     cell_text(weight = "bold") # Make the text bold to help it stand out
+    ),
+
+
+    locations = cells_body(
+
+      columns = `1997`,
+
+      rows = `1997` == max(`1997`, na.rm = TRUE)
+      
+    )
+    
+  )
+
+vuln_table_highlight
+
+```
+## Export
+
+Once you are happy with your table, you will need to export it.
+
+The gtsave() function lets you export as either an HTML, PDF, PNG, LaTeX, or RTF file. Remember that for publications, exporting your table as an HTML file is best.
+
+By default your outputs will be saved to a folder called 'TEMP' in your D: drive, but feel free to change this.
+
+```{r}
+# Create and save a basic table as HTML
+
+vuln_table %>%
+
+  gtsave(filename = "r_table_test.html", path = "D:/TEMP/")
+
+```
+
+## Exercise
+
+Use this exercise to test what you’ve learned about making tables. You can adapt much of the code covered in this section, but some basic data manipulation will also be required which has not been covered here.
+
+Create a table in R. Use the vulnerable dataset as your input data.
+
+For an extra challenge, consider setting yourself an hour’s time limit to help simulate an emergency.
+
+The table should:
+
+* Show the size of vulnerable populations in Argentina, Malawi, Nepal, and the United Kingdom for the years 1982, 1987, and 1992
+* Include a summary column showing the mean average size of vulnerable populations across these three years
+* Include a spanner heading above the 1982, 1987, and 1992 columns called ‘Vulnerable population by year’
+* Include a stubhead label heading above the countries column called 'Developer'
+*	Have commas to separate thousands
+* Be formatted so that:
+  * The spanner heading is a dark green with a HEX code of #324027 and the text is white
+  * The stubhead label heading is a dark green with a HEX code of #324027 and the text is white and bold
+  * The column labels are an earthy green with a HEX code of #48553F and the text is white
+
+When you have finished making your table, compare it against the relevant code and solution in the 'exercise_solutions' subfolder. If you have followed all the guidance correctly, this is approximately how your output should look.
+
+
+

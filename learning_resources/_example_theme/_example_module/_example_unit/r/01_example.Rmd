@@ -1,0 +1,104 @@
+---
+title: "[unit name], [chapter name] - Code snippets"
+output: html_document
+---
+
+---
+This block contains instructions on how to fill in this template.
+
+**Please delete this block when creating your own file.**
+
+This template should be used to create code snippet notebooks for each chapter
+in a learning resource. Follow the instructions below to complete the template:
+- Replace content in square brackets (e.g., [unit_name], [link], [chapter name])
+with the relevant information. For example the title block below could be changed
+from "[unit_name], [chapter_name] - Code snippets" to "Basic Data Visualisation,
+Creating Bar Charts - Code snippets".
+- In the setup section add any instructions for users to follow before running the
+code snippets, such as installing packages or downloading data files. Add any
+necessary import statements or setup code in the first code cell.
+- Code snippets should be grouped into sections according to the sections in the
+learning resource.
+- Each code snippet from the learning resource should be placed in its own code
+cell under the relevant section, with any necessary context provided in a
+markdown block above each code cell.
+- Follow [tidyverse](https://style.tidyverse.org/) style guide for R code
+formatting.
+- Whenever you need to reference a file in [learning_resources](http://_vscodecontentref_/1), use:
+```r
+file_path <- file.path(learning_resources_dir, "data", "filename.csv")
+```
+
+- Definitions:
+    - "Unit name" refers to the unit name, which is also the name of the folder
+    this python folder is in.
+    - "Chapter name" refers to the specific chapter that the code snippets are
+    in. Chapters are the highest level headings in the learning resource.
+    - "Section name" refers to subheadings within chapters that code snippets
+    are in.
+---
+
+# [unit name], [chapter name] - Code examples
+
+The following code relates to the **[chapter name]** section of the
+**[unit name]** learning resource on the [Analysis for Action]([PLACEHOLDER])
+platform.
+
+Use this document to explore and run the code snippets provided in the learning
+resource.
+
+## Troubleshooting
+
+If you encounter any issues running the code snippets, consider the following
+troubleshooting steps:
+- Ensure you have followed the setup instructions in the
+[README.md](../../../README.md) file including `install.packages()` for
+required packages.
+- Run code from top to bottom to ensure all dependencies are met.
+- Restart your R session and clear all outputs.
+- For more detailed troubleshooting guidance, refer to the
+[troubleshooting document]([PLACEHOLDER]).
+
+## Setup
+
+Before running the code snippets, ensure you have:
+- followed the setup instructions in the [README.md](../../../README.md) file,
+- **[add further instructions as needed]**,
+- run the code block below.
+
+```{r setup, message=FALSE}
+# This chunk should include:
+# * library() calls for required packages
+# * paths to data files
+# * any other setup required
+library(here)
+
+# Use here::here() to construct paths, do not setwd()
+learning_resources_dir <- here::here("learning_resources")
+print(paste("Learning resources directory:", learning_resources_dir))
+```
+
+## [Section 1 name]
+
+[add a brief description of what the code below is doing]
+
+```{r section1a}
+# Add the first code snippet from the first section of the relevant learning resource here
+```
+
+[add a brief description of what the code below is doing]
+```{r section1b}
+# Add the next code snippet from the first section of the relevant learning resource here
+```
+
+## [Section 2 name]
+
+[add a brief description of what the code below is doing]
+
+```{r section2a}
+# Add your code for Section 2 here
+```
+
+[add more sections as needed]
+
+---

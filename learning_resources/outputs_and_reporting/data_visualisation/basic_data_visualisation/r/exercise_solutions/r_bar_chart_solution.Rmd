@@ -1,0 +1,220 @@
+---
+title: "Basic Data Visualisation, How to make bar charts in R: Exercise solution"
+output: html_document
+---
+
+---
+This block contains instructions on how to fill in this template.
+
+**Please delete this block when creating your own file.**
+
+This template should be used to create code snippet notebooks for each chapter
+in a learning resource. Follow the instructions below to complete the template:
+- Replace content in square brackets (e.g., [unit_name], [link], [chapter name])
+with the relevant information. For example the title block below could be changed
+from "[unit_name], [chapter_name] - Code snippets" to "Basic Data Visualisation,
+Creating Bar Charts - Code snippets".
+- In the setup section add any instructions for users to follow before running the
+code snippets, such as installing packages or downloading data files. Add any
+necessary import statements or setup code in the first code cell.
+- Code snippets should be grouped into sections according to the sections in the
+learning resource.
+- Each code snippet from the learning resource should be placed in its own code
+cell under the relevant section, with any necessary context provided in a
+markdown block above each code cell.
+- Follow [tidyverse](https://style.tidyverse.org/) style guide for R code
+formatting.
+- Whenever you need to reference a file in [learning_resources](http://_vscodecontentref_/1), use:
+```r
+file_path <- file.path(learning_resources_dir, "data", "filename.csv")
+```
+
+- Definitions:
+    - "Unit name" refers to the unit name, which is also the name of the folder
+    this R folder is in.
+    - "Chapter name" refers to the specific chapter that the code snippets are
+    in. Chapters are the highest level headings in the learning resource.
+    - "Section name" refers to subheadings within chapters that code snippets
+    are in.
+---
+
+# Basic Data Visualisation, How to make bar charts in R: Exercise solution
+
+The following code relates to the **Making bar charts in R** script in the
+**Basic Data Visualisation** learning resource on the [Analysis for Action]([PLACEHOLDER])
+platform.
+
+This is the code used to produce the exercise solution from the **Making bar charts in R** script. Compare your code and output against the code and output produced here to see how well you did. Note that your code and output do not need to match the solution exactly to be considered correct!
+
+Can you think of any other ways of making the bar chart more accessible?
+
+The bar chart should:
+
+-   Show the size of vulnerable populations in Argentina, Malawi, Nepal, and the United Kingdom in the year 1997
+-   Be formatted so that:
+    -   The x-axis label is: Country 
+    -   The y-axis label is: Vulnerable Population (Millions) 
+    -   The text size of the axis titles is 12
+    -   The panel background and plot background is HEX code #FFFFFF
+    -   The largest bar is HEX code #324028, the rest are HEX code #D4DDD6
+    -   The width of the bars is 0.6
+    -   The bars are ordered from largest to smallest
+    -   The horizontal gridlines are HEX code #D9D9D9 and size = 0.5
+    -   There are no vertical gridlines
+    -   The y-axis uses millions suffix (for example an axis break with a value of 6000000 would show as 6M)
+    -   The chart is exported as an .svg file with the file name:
+        vuln_pop_partner_countries 
+    -   The chart is saved to the D:/Temp folder
+    -   The save charted has an aspect ratio of 16:9
+
+## Troubleshooting
+
+If you encounter any issues running the code snippets, consider the following
+troubleshooting steps:
+- Ensure you have followed the setup instructions in the
+[README.md](../../../README.md) file including `install.packages()` for
+required packages.
+- Run code from top to bottom to ensure all dependencies are met.
+- Restart your R session and clear all outputs.
+- For more detailed troubleshooting guidance, refer to the
+[troubleshooting document]([PLACEHOLDER]).
+
+## Setup
+
+Before running the code snippets, ensure you have:
+- followed the setup instructions in the [README.md](../../../README.md) file,
+- **[add further instructions as needed]**,
+- run the code block below.
+
+```{r setup, message=FALSE}
+# This chunk should include:
+# * library() calls for required packages
+# * paths to data files
+# * any other setup required
+
+library(readr)
+library(here)
+library(dplyr)
+library(tidyr)
+library(janitor)
+library(gt)
+library(ggplot2) # The scripts uses ggplot2 version 4.0.0
+library(svglite)
+library(scales)
+library(ggiraph)
+library(htmlwidgets)
+
+vuln <- read_csv(here("learning_resources", "data", "vulnerable.csv"))
+```
+
+## Preparing the dataframe
+
+```{r}
+# Prepare your data to make it suitable for a bar chart
+
+vuln_1997_partner_countries <- vuln %>%
+  
+  filter(year %in% ("1997")) %>%
+  
+  filter(country %in% c("Argentina", "Malawi", "Nepal", "United Kingdom")) %>%
+  
+  select(country, vulnerable_pop) 
+
+# Order the data by population from largest to smallest
+
+vuln_1997_partner_countries <- vuln_1997_partner_countries %>% 
+  dplyr::arrange(desc(vulnerable_pop))
+
+vuln_1997_partner_countries$country <- factor(
+  vuln_1997_partner_countries$country,
+  levels = vuln_1997_partner_countries$country
+)
+
+# Create the data for the focus chart, extra row added which has TRUE for the largest population and FALSE for the others
+
+vuln_focus_1997 <- vuln_1997_partner_countries %>%
+  mutate(highlight = vulnerable_pop == max(vulnerable_pop))
+```
+
+# Creating the plot
+
+```{r}
+# Create the plot and specify the data on the x and y axis and set the fill for the focus chart
+vuln_bar <- ggplot(vuln_focus_1997, aes(x = country, y = vulnerable_pop, fill = highlight)) +
+  # Set bar width
+  geom_bar(stat = "identity", 
+           width = 0.6) +
+  # Use theme_minimal to increase contrast
+  theme_minimal() +
+  # Remove vertical gridlines
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()) +
+  # Add number suffixes
+  scale_y_continuous(labels = label_number(scale = 1e-6, suffix = "M")) +
+  # Set the title and axis titles
+  labs(
+    x = "Country", 
+    y = "Vulnerable Population (Millions)") +
+  # Set the text sizes
+  theme(
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+  ) +
+  # Set the colours for the focus chart
+  scale_fill_manual(values = c("TRUE" = "#324027", "FALSE" = "#949494"),
+                    guide = "none") +
+  # Set y-axis title to horizontal
+  theme(axis.title.y = element_text(angle = 0, 
+                                    hjust = 1, 
+                                    vjust = 1.03,
+                                    # Adjust margin to move the title to the right
+                                    margin = margin(r = -150)
+                                    ),
+        # Adjust plot margin
+        plot.margin = margin(t = 20, l = 5, r = 5, b = 5))
+```
+
+# Save as .html 
+
+```{r}
+vuln_bar_html <- girafe(
+  ggobj = vuln_bar
+)
+
+saveWidget(
+  vuln_bar_html,
+  file = here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "exercise_outputs",
+    "vuln_bar_solution.html"
+    )
+)
+```
+
+# Save as .svg
+
+```{r}
+ggsave(
+  # Set the file name
+  filename = "vuln_bar_solution.svg",
+  # Select the plot to save
+  plot = vuln_bar,
+  # Set the save path
+  path = here(
+    "learning_resources",
+    "outputs_and_reporting",
+    "data_visualisation",
+    "basic_data_visualisation",
+    "r",
+    "exercise_outputs"
+    ),
+  # Set aspect ratio of plot, an aspect ratio of 16:9 will fill 1920x1080 displays
+  width = 16,
+  height = 9
+)
+```
+
