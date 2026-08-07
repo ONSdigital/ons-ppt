@@ -1,0 +1,22 @@
+# numerical rules
+age >= 0
+age <= 60
+vaccination_status >= 0
+vaccination_status <=3 
+household_size >= 1
+2026 - dob_year >= age
+
+
+# categorical rules
+occupation_status %in% c("Student", "Employed", "Unemployed", "Retired")
+clinical_risk_category %in% c("Low", "Moderate", "High", "Very High")
+
+
+# mixed rules
+
+# under 18s should have marital status Never-married
+if (age < 18) marital_status == "Never-married"
+
+if ((2026 - dob_year) > age ) age >= (2026 - dob_year -1)
+
+
